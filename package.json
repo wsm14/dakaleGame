@@ -25,7 +25,6 @@
     "@antv/util": "^2.0.14",
     "ali-oss": "^6.10.0",
     "antd-mobile": "^5.0.0-rc.0",
-    "antd-mobile-v5": "^antd-mobile@^5.0.0-rc.0",
     "array-move": "^3.0.1",
     "immutability-helper": "^3.1.1",
     "jszip": "^3.7.0",
