@@ -25,7 +25,7 @@
     "@antv/util": "^2.0.14",
     "ali-oss": "^6.10.0",
     "antd-mobile": "^5.0.0-rc.0",
-    "antd-mobile-v5": "npm:antd-mobile@^5.0.0-rc.0",
+    "antd-mobile-v5": "^antd-mobile@^5.0.0-rc.0",
     "array-move": "^3.0.1",
     "immutability-helper": "^3.1.1",
     "jszip": "^3.7.0",
@@ -74,6 +74,7 @@
     "express": "^4.17.1",
     "gh-pages": "^3.0.0",
     "mockjs": "^1.0.1-beta3",
+    "postcss-px2rem": "^0.3.0",
     "prettier": "^2.0.1",
     "puppeteer-core": "^5.0.0",
     "stylelint": "^13.0.0"

@@ -2,11 +2,17 @@
 import { defineConfig } from 'umi';
 import routes from './router.config';
 import define from './env.config';
-
+import pxtorem from 'postcss-px2rem';
 const path = require('path');
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
+  extraPostCSSPlugins: [
+    pxtorem({
+      rootValue: 750, // 根据设计稿设置
+      propList: ['*'],
+    }),
+  ],
   hash: true,
   fastRefresh: {},
   history: { type: 'hash' },
