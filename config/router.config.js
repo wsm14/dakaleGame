@@ -7,6 +7,6 @@ export default [
   {
     path: '/register',
     name: '签到',
-    component: './register',
+    component: './register/scene',
   },
 ];
