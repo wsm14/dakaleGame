@@ -9,7 +9,7 @@ const { REACT_APP_ENV } = process.env;
 export default defineConfig({
   extraPostCSSPlugins: [
     pxtorem({
-      rootValue: 750, // 根据设计稿设置
+      remUnit: 100, // 根据设计稿设置
       propList: ['*'],
     }),
   ],
