@@ -1,12 +1,12 @@
 export default [
   {
     path: '/index',
-    name: '路由',
+    name: '选商品',
     component: './index',
   },
   {
-    path: '/register',
-    name: '签到',
-    component: './register/scene',
+    path: '/demo',
+    name: '路由',
+    component: './Demo',
   },
 ];

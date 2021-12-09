@@ -17,10 +17,13 @@ export default defineConfig({
   fastRefresh: {},
   history: { type: 'hash' },
   esbuild: {},
-  antd: {},
+  antd: {
+    mobile: false,
+  },
   dva: {
     hmr: true,
   },
+  inlineLimit: 10,
   alias: {
     '@public': path.resolve(__dirname, '../public'),
   },

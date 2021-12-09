@@ -1,0 +1,122 @@
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1.5;
+  .overlayContent {
+    width: 540px;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 40px;
+    flex-wrap: wrap;
+    .overlayContent_title {
+      font-size: 32px;
+      color: #333;
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+    }
+    .receiveInfo {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      .receiveInfo_addressImg {
+        width: 40px;
+        height: 48px;
+      }
+      .receiveInfo_content {
+        .receiveInfo_name {
+          font-weight: 600;
+          font-size: 32px;
+          color: #333;
+        }
+        .receiveInfo_mobile {
+          font-size: 24px;
+          color: #999;
+          font-weight: 500;
+          margin-left: 16px;
+        }
+        .receiveInfo_address {
+          width: 340px;
+          font-size: 26px;
+          color: #333;
+          margin-top: 24px;
+          word-break: break-all;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2; /* 这里是超出几行省略 */
+          overflow: hidden;
+        }
+      }
+      .receiveInfo_rightImg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+    .overlayContent_line {
+      width: 100%;
+      height: 1px;
+      background: #e5e5e5;
+      border-radius: 1px;
+      margin-top: 31px;
+    }
+    .overlay_goods {
+      display: flex;
+      margin-top: 36px;
+      img {
+        width: 120px;
+        height: 120px;
+      }
+      .overlay_goods_right {
+        margin-left: 17px;
+        .overlay_goods_name {
+          font-size: 28px;
+          color: #333;
+        }
+        .overlay_goods_remark {
+          font-size: 24px;
+          color: #999;
+        }
+        .overlay_goods_label {
+          margin-top: 8px;
+          padding: 6px 0px;
+          border-radius: 4px;
+          background: rgba(#ffae29, 0.1);
+          color: #ffae29;
+          display: inline-block;
+          line-height: 1;
+          span {
+            display: inline-block;
+            font-size: 20px;
+            transform: scale(0.8);
+          }
+        }
+      }
+    }
+    .receiveInfo_confirm {
+      display: flex;
+      justify-content: center;
+      .receiveInfo_button {
+        width: 360px;
+        height: 60px;
+        background: #ef476f;
+        border-radius: 30px;
+        font-size: 28px;
+        color: #ffffff;
+        border: none;
+        margin: 44px auto 0;
+      }
+    }
+  }
+
+  .closeImg {
+    margin-top: 40px;
+    text-align: center;
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+}

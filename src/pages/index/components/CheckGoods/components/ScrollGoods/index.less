@@ -1,0 +1,45 @@
+.scrollContent {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 700px;
+  overflow-x: auto;
+  margin-top: 64px;
+  margin-left: 32px;
+  .scrollGoods {
+    width: 280px;
+    height: 320px;
+    background: #ffffff;
+    box-shadow: 0px 2px 10px 0px #92dbff;
+    border-radius: 20px;
+    padding: 16px 16px 32px 16px;
+    margin-right: 24px;
+    margin-bottom: 24px;
+    .scrollGoods_checkImg {
+      width: 40px;
+      height: 40px;
+    }
+    .scrollGoods_contentImg {
+      text-align: center;
+      .scrollGoods_goodsImg {
+        width: 180px;
+        height: 180px;
+      }
+    }
+
+    .scrollGoods_name {
+      width: 240px;
+      font-size: 24px;
+      color: #999;
+      margin-top: 20px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
