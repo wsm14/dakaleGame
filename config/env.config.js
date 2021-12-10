@@ -1,26 +1,17 @@
 const target = 'https://devgateway.dakale.net';
 
-
 export default {
   dev: {
     define: {
-      APIURL: '', // 使用proxy代理 不配置
+      APIURL: 'https://devgateway.dakale.net',
     },
     proxy: {
-      '/admin': {
-        target: target,
-        changeOrigin: true,
-      },
       '/user': {
         target: target,
         changeOrigin: true,
       },
       '/common': {
         target: target,
-        changeOrigin: true,
-      },
-      '/media': {
-        target,
         changeOrigin: true,
       },
     },

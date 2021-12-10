@@ -1,0 +1,96 @@
+.topLayer_box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  background: transparent;
+  .public_center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .topLayer_title {
+    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 58px 32px 0;
+    .topLayer_img {
+      width: 48px;
+      height: 48px;
+      background: url(~@/assert/image/go_back.png) no-repeat;
+      background-size: 100% 100%;
+    }
+    .topLayer_title_desc {
+      width: 213px;
+      height: 56px;
+    }
+    .topLayer_title_reg {
+      width: 56px;
+      height: 56px;
+      background: url(~@/assert/image/registerIcon.png) no-repeat;
+      background-size: 100% 100%;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .topLayer_scoend_box {
+    display: flex;
+    align-items: center;
+    margin: 32px 32px 0;
+    .topLayer_scoend_beanInfo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 56px;
+      padding: 0 10px;
+      background: rgba(51, 51, 51, 0.3);
+      border-radius: 28px;
+    }
+
+    .topLayer_scoend_beanInfo::before {
+      display: block;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: url(~@/assert/image/userBean.png) no-repeat;
+      background-size: 100% 100%;
+      content: '';
+    }
+    .topLayer_scoend_swiper {
+      height: 56px;
+      padding: 0 12px;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 32px;
+      .swiper_box {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .topLayer_collect {
+      height: 56px;
+      margin-left: 16px;
+      padding: 12px 24px;
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 24px;
+      background: rgba(51, 51, 51, 0.3);
+      border-radius: 28px;
+    }
+    .topLayer_collect::before {
+      display: block;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      margin-right: 8px;
+      background: url(~@/assert/image/help.png) no-repeat;
+      background-size: 100% 100%;
+      content: '';
+    }
+  }
+}

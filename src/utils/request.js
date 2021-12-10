@@ -5,7 +5,8 @@
 import { extend } from 'umi-request';
 import { notification, Modal } from 'antd';
 import { history } from 'umi';
-import encrypt from './encrypt';
+import { encrypt } from './encrypt';
+import { toast } from './utils';
 
 notification.config({
   duration: 2,
@@ -65,7 +66,7 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use(async (url, options) => {
-  let { data = {}, params = {}, method = 'get' } = options;
+  let { data = {}, params = {}, method = 'get', headerOther = {} } = options;
   switch (method) {
     case 'get':
       params = encrypt(params);
@@ -80,7 +81,8 @@ request.interceptors.request.use(async (url, options) => {
   const headers = {
     'Content-Type': 'application/json;charset=utf-8',
     Accept: 'application/json',
-    appType: 'admin',
+    appType: 'user',
+    ...headerOther,
   };
 
   return {
@@ -106,10 +108,8 @@ request.interceptors.response.use(async (response) => {
     return false;
   }
   if (!success && response.status == 200) {
-    notification.info({
-      message: '提示',
-      description: resultDesc || errorHandler(response),
-    });
+    toast(resultDesc || errorHandler(response));
+
     return false;
   }
   return response;

@@ -2,7 +2,7 @@
 import { defineConfig } from 'umi';
 import routes from './router.config';
 import define from './env.config';
-import pxtorem from 'postcss-px2rem';
+import pxtorem from 'postcss-px2rem-exclude';
 const path = require('path');
 const { REACT_APP_ENV } = process.env;
 
@@ -11,21 +11,28 @@ export default defineConfig({
     pxtorem({
       remUnit: 100, // 根据设计稿设置
       propList: ['*'],
+      exclude: /node_modules|folder_name/i, //过滤插件
     }),
   ],
+
   hash: true,
   fastRefresh: {},
   history: { type: 'hash' },
   esbuild: {},
-  antd: {},
+  antd: { mobile: false },
   dva: {
     hmr: true,
   },
   alias: {
     '@public': path.resolve(__dirname, '../public'),
+    '@components': path.resolve(__dirname, '../components'),
+    '@assert': path.resolve(__dirname, '../assert'),
+    '@server': path.resolve(__dirname, '../server'),
+    '@utils': path.resolve(__dirname, '../utils'),
   },
   publicPath: './',
   lessLoader: { javascriptEnabled: true },
+  inlineLimit: 10,
   // chunks: ['vendors', 'umi'],
   chainWebpack: function (config, {}) {
     config.merge({
