@@ -1,25 +1,24 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import './index.less';
 import Hilo from 'hilojs';
-import { useDispatch } from 'umi';
+import { useDispatch, useSelector } from 'umi';
 import { planeSence } from '../Game/components/Scene/plane';
 import { HiloCreateSpirit } from '@/utils/game';
-import { createBitmap } from '@/utils/game';
+import { createBitmap, conversionSize } from '@/utils/game';
+import { fetchFreeGoodBeginGame } from '@/services/game';
 import Rules from '@/components/Rules';
-
-const timesWeight = ((window.innerWidth * 2) / 750).toFixed(2);
-const timesHeight = ((window.innerHeight * 2) / 1624).toFixed(2);
-
+let HandSpirite = null;
+let ticker = null;
 function index(props) {
-  const { imgObj } = props;
+  const { imgObj, getHomeDetail } = props;
+  const [stage, setStage] = useState(''); //舞台
   const containerRef = useRef();
   const dispatch = useDispatch();
+  const { packageObj, addressObj } = useSelector((state) => state.receiveGoods); //商品信息
 
   useEffect(() => {
     initStage();
   }, []);
-
-  let HandSpirite = null;
   //创建舞台
   const initStage = () => {
     const stage = new Hilo.Stage({
@@ -29,11 +28,12 @@ function index(props) {
       scaleX: 0.5,
       scaleY: 0.5,
     });
+    setStage(stage);
     stage.enableDOMEvent(Hilo.event.POINTER_START, true);
     tickerStage(stage);
 
     //画出动画
-    planeSence(stage, imgObj);
+    planeSence(stage, imgObj, packageObj);
 
     //画按钮
     addButtonStage(stage);
@@ -44,7 +44,7 @@ function index(props) {
 
   //监听舞台
   const tickerStage = (stage) => {
-    const ticker = new Hilo.Ticker(60);
+    ticker = new Hilo.Ticker(60);
     ticker.addTick(stage);
     ticker.addTick(Hilo.Tween);
     ticker.start();
@@ -57,40 +57,47 @@ function index(props) {
         id: 'button',
         type: 'Bitmap',
         image: imgObj.button.src,
-        width: 480,
-        height: 90,
-        x: 135 * timesWeight,
-        y: 1250 * timesHeight,
+        width: conversionSize(480),
+        height: conversionSize(90),
+        x: conversionSize(135),
+        y: conversionSize(_, 1250),
       },
     ];
     let mapItem = createBitmap({
       list,
     });
-    console.log(mapItem[0]);
-    mapItem[0].on(Hilo.event.POINTER_START, btnUpdata);
+    mapItem[0].on(Hilo.event.POINTER_START, () => {
+      begainGame(stage);
+    });
     stage.addChild(...mapItem);
   };
 
+  //手的精灵图动画
   const addHandSpirit = (stage) => {
     HandSpirite = new Hilo.Sprite({
       currentFrame: 0,
       interval: 24,
       timeBased: true,
-      x: 420 * timesWeight,
-      y: 1250 * timesHeight,
+      width: conversionSize(152),
+      height: conversionSize(136),
+      x: conversionSize(420),
+      y: conversionSize(_, 1250),
     });
     const beanAnimate = HiloCreateSpirit(imgObj.hand.src, 27, 27, 152, 136, 'hand');
     HandSpirite.addFrame(beanAnimate.getSprite('hand'));
     stage.addChild(HandSpirite);
   };
 
-  const btnUpdata = () => {
-    dispatch({
-      type: 'receiveGoods/save',
-      payload: {
-        type: 'game',
-      },
+  //开始游戏
+  const begainGame = async (stage) => {
+    const res = await fetchFreeGoodBeginGame({
+      packageId: packageObj.packageId,
+      addressId: addressObj.userAddressId,
     });
+    getHomeDetail();
+    stage.removeAllChildren();
+    ticker.removeTick(stage);
+    ticker.removeTick(Hilo.Tween);
   };
 
   return (

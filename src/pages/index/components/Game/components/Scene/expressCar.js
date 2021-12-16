@@ -1,12 +1,9 @@
 import Hilo from 'hilojs';
 import { setAnimate, createBitmap } from '@/utils/game';
-import { HiloCreateSpirit } from '@/utils/game';
+import { HiloCreateSpirit, conversionSize } from '@/utils/game';
+import { gameHeight } from '@/utils/utils';
 
-const windowWith = window.innerWidth;
-const windowHiehgt = window.innerHeight;
-const timesHeight = ((windowHiehgt * 2) / 1624).toFixed(2);
-
-export const expressCarSence = (stage, imgObj) => {
+export const expressCarSence = (stage, imgObj, freeGoodInfo) => {
   let background1 = null; //大卡车对象
   let background2 = null; //大卡车切图对象
   let expressCarSpirite = null; //大卡车精灵图对象
@@ -20,12 +17,12 @@ export const expressCarSence = (stage, imgObj) => {
         x: 0,
         y: 0,
         width: imgObj.expressCar.width,
-        height: windowHiehgt * 2,
+        height: window.innerHeight * 2,
         animate: {
           x: -imgObj.expressCar.width,
         },
         from: {
-          duration: 6000,
+          duration: 10000,
         },
       },
       {
@@ -34,14 +31,14 @@ export const expressCarSence = (stage, imgObj) => {
         image: imgObj.expressCar.src,
         x: imgObj.expressCar.width,
         y: 0,
-        width: windowWith * 2,
-        height: windowHiehgt * 2,
-        rect: [0, 0, windowWith * 2, imgObj.expressCar.height],
+        width: window.innerWidth * 2,
+        height: window.innerHeight * 2,
+        rect: [0, 0, window.innerWidth * 2, imgObj.expressCar.height],
         animate: {
           x: 0,
         },
         from: {
-          duration: 6000,
+          duration: 10000,
         },
       },
     ];
@@ -60,14 +57,36 @@ export const expressCarSence = (stage, imgObj) => {
       currentFrame: 0,
       interval: 24,
       timeBased: true,
+      width: conversionSize(750),
+      height: conversionSize(488),
       x: 0,
-      y: 600 * timesHeight,
+      y: conversionSize(550 + gameHeight),
     });
     let beanAnimate = HiloCreateSpirit(imgObj.expressCarSpirit.src, 28, 6, 750, 488, 'bigTuck');
     expressCarSpirite.addFrame(beanAnimate.getSprite('bigTuck'));
     stage.addChild(expressCarSpirite);
   };
+
+  //添加商品图片
+  const createPackage = () => {
+    const list = [
+      {
+        id: 'packageImg',
+        type: 'Bitmap',
+        image: freeGoodInfo.packageImg,
+        x: conversionSize(178),
+        y: conversionSize(677 + gameHeight),
+        width: conversionSize(120),
+        height: conversionSize(120),
+      },
+    ];
+    const mapItem = createBitmap({
+      list,
+    });
+    stage.addChild(...mapItem);
+  };
   addImgStage();
   createBigTruck();
-  return { background1, background1, expressCarSpirite };
+  createPackage();
+  return [background1, background2, expressCarSpirite];
 };

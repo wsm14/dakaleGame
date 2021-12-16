@@ -5,8 +5,13 @@ export default [
     component: './index',
   },
   {
-    path: '/demo',
-    name: '路由',
-    component: './Demo',
+    path: '/address',
+    name: '收货地址',
+    component: './Address',
+  },
+  {
+    path: '/rule',
+    name: '规则',
+    component: './Rule',
   },
 ];

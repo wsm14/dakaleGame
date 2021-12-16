@@ -19,6 +19,7 @@ import bigTruckSpirit from '@public/background/bigTruckSpirit.png';
 import smallTruckSpirit from '@public/background/smallTruckSpirit.png';
 import expressCarSpirit from '@public/background/expressCarSpirit.png';
 
+//下载图片
 export const imgList = [
   { id: 'hand', src: hand },
   { id: 'bg', src: lodingBg },
@@ -41,3 +42,6 @@ export const imgList = [
   { id: 'smallTruckSpirit', src: smallTruckSpirit },
   { id: 'expressCarSpirit', src: expressCarSpirit },
 ];
+
+//等级判断位置
+export const ARRIVEL_ADDRESS = ['集散中心', '调度中心', '中转中心', '配送中心'];

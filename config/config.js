@@ -2,7 +2,7 @@
 import { defineConfig } from 'umi';
 import routes from './router.config';
 import define from './env.config';
-import pxtorem from 'postcss-px2rem';
+import pxtorem from 'postcss-px2rem-exclude';
 const path = require('path');
 const { REACT_APP_ENV } = process.env;
 
@@ -11,7 +11,14 @@ export default defineConfig({
     pxtorem({
       remUnit: 100, // 根据设计稿设置
       propList: ['*'],
+      exclude: /node_modules|folder_name/i, //过滤插件
     }),
+  ],
+  headScripts: [
+    {
+      src: './jweixin.js',
+      defer: true,
+    },
   ],
   hash: true,
   fastRefresh: {},

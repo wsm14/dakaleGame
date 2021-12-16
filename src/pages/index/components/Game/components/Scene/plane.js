@@ -1,48 +1,48 @@
 import Hilo from 'hilojs';
 import { setAnimate, createBitmap, setPlaneAnimation } from '@/utils/game';
-import { HiloCreateSpirit } from '@/utils/game';
+import { HiloCreateSpirit, conversionSize } from '@/utils/game';
+import { gameHeight } from '@/utils/utils';
 
-const windowWith = window.innerWidth;
-const windowHiehgt = window.innerHeight;
-const timesHeight = ((windowHiehgt * 2) / 1624).toFixed(2);
+export const planeSence = (stage, imgObj, freeGoodInfo = {}) => {
+  //stage -- canvas     imgobj -- 图片集合    packageImg --产品信息
 
-export const planeSence = (stage, imgObj) => {
   let background1 = null; //飞机对象
   let background2 = null; //飞机切图对象
+  let background3 = null; //商品切图对象
   let planeSprite = null; //飞机精灵图对象
   let beanHandSprite = null; //豆子挥手精灵图对象
   //添加飞机背景图片
   const addImgStage = () => {
     const list = [
       {
-        id: 'planeBg',
+        id: 'planeBg1',
         type: 'Bitmap',
         image: imgObj.planeBg.src,
         x: 0,
         y: 0,
-        width: 3000,
-        height: windowHiehgt * 2,
+        width: imgObj.planeBg.width,
+        height: window.innerHeight * 2,
         animate: {
-          x: -3000,
+          x: -imgObj.planeBg.width,
         },
         from: {
-          duration: 6000,
+          duration: 10000,
         },
       },
       {
-        id: 'planeBg1',
+        id: 'planeBg2',
         type: 'Bitmap',
         image: imgObj.planeBg.src,
-        x: 3000,
+        x: imgObj.planeBg.width,
         y: 0,
-        width: windowWith * 2,
-        height: windowHiehgt * 2,
-        rect: [0, 0, windowWith * 2, 1624],
+        width: window.innerWidth * 2,
+        height: window.innerHeight * 2,
+        rect: [0, 0, window.innerWidth * 2, imgObj.planeBg.height],
         animate: {
           x: 0,
         },
         from: {
-          duration: 6000,
+          duration: 10000,
         },
       },
     ];
@@ -61,13 +61,20 @@ export const planeSence = (stage, imgObj) => {
       currentFrame: 0,
       interval: 24,
       timeBased: true,
-      x: 40,
-      y: 350 * timesHeight,
+      width: conversionSize(692),
+      height: conversionSize(680),
+      x: conversionSize(40),
+      y: conversionSize(280 + gameHeight),
     });
     let beanAnimate = HiloCreateSpirit(imgObj.plane.src, 4, 5, 692, 680, 'plane');
     planeSprite.addFrame(beanAnimate.getSprite('plane'));
-    setPlaneAnimation(planeSprite, 1500, { y: 320 * timesHeight }, { y: 350 * timesHeight });
     stage.addChild(planeSprite);
+    background3 = setPlaneAnimation(
+      planeSprite,
+      1500,
+      { y: conversionSize(280 + gameHeight) },
+      { y: conversionSize(290 + gameHeight) },
+    );
   };
 
   //豆子挥手
@@ -76,16 +83,45 @@ export const planeSence = (stage, imgObj) => {
       currentFrame: 0,
       interval: 24,
       timeBased: true,
-      y: 500 * timesHeight,
-      x: 450,
+      width: conversionSize(123),
+      height: conversionSize(146),
+      x: conversionSize(450),
+      y: conversionSize(440 - gameHeight),
     });
     let beanAnimate = HiloCreateSpirit(imgObj.beanHand.src, 88, 38, 123, 146, 'beanHand');
     beanHandSprite.addFrame(beanAnimate.getSprite('beanHand'));
-    setPlaneAnimation(beanHandSprite, 1500, { y: 500 * timesHeight }, { y: 530 * timesHeight });
+    setPlaneAnimation(
+      beanHandSprite,
+      1500,
+      { y: conversionSize(440 + gameHeight) },
+      { y: conversionSize(450 + gameHeight) },
+    );
     stage.addChild(beanHandSprite);
   };
+
+  //添加商品图片
+  const createPackage = () => {
+    const list = [
+      {
+        id: 'packageImg',
+        type: 'Bitmap',
+        image: freeGoodInfo.packageImg,
+        x: conversionSize(325),
+        y: conversionSize(792 + gameHeight),
+        width: conversionSize(120),
+        height: conversionSize(120),
+      },
+    ];
+    const mapItem = createBitmap({
+      list,
+    });
+    stage.addChild(...mapItem);
+    // setPlaneAnimation(mapItem[0], 1500, { y: conversionSize(790) }, { y: conversionSize(810) });
+  };
+
   addImgStage();
   createBeanHand();
   createPlane();
-  return { background1, background2, planeSprite, beanHandSprite };
+  createPackage();
+  return [background1, background2, planeSprite, background3];
 };

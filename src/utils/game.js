@@ -1,7 +1,19 @@
 import Hilo, { DOMElement } from 'hilojs';
 import { createTextureAtlas } from '@/components/createTextureAtlas';
 
+const timesWidth = window.innerWidth / 375;
+const computedY = window.innerHeight * 2;
+
 const timesHeight = ((window.innerHeight * 2) / 1624).toFixed(2);
+
+//画图尺寸换算
+export const conversionSize = (width, height) => {
+  if (width && Number(width)) {
+    return width * timesWidth;
+  } else if (height && Number(height)) {
+    return height * timesHeight;
+  }
+};
 
 //添加元素
 export const createBitmap = ({ list }) => {
@@ -43,39 +55,37 @@ export const HiloCreateSpirit = (path, length, num, width, height, id) => {
 };
 
 //生成随机的星星
-export const createStar = (stage, imgObj, bigStar) => {
+export const createStar = (stage, imgObj, bigStar, fn) => {
   const list = [];
   for (let i = 0; i < 5; i++) {
     let starObj = {
       id: `star${i}`,
       type: 'Bitmap',
       image: imgObj.star.src,
-      x: 620 + (i % 2 == 0 ? -20 : 20),
-      y: 170,
+      x:
+        stage.getChildById('beanBottle').x +
+        stage.getChildById('beanBottle').width / 2 +
+        (i % 2 == 0 ? -10 : 10),
+      y: stage.getChildById('beanBottle').y + stage.getChildById('beanBottle').height / 2,
       width: 38,
       height: 37,
       animate: {
-        x: 350,
-        y: 1150,
+        x: stage.getChildById('bigStar').x + stage.getChildById('bigStar').width / 2,
+        y: stage.getChildById('bigStar').y,
       },
       from: {
-        duration: 1000,
+        duration: 500,
         delay: 0 + i * 100,
         loop: false,
         onComplete: (e) => {
           e.target.removeFromParent(stage);
-          i === 4 &&
-            Hilo.Tween.fromTo(
+          if (i === 4) {
+            Hilo.Tween.remove(bigStar);
+            Hilo.Tween.to(
               bigStar,
               {
-                x: 305,
-                y: 1381 * timesHeight,
-                scaleX: 1,
-                scaleY: 1,
-              },
-              {
-                x: 320,
-                y: 1400 * timesHeight,
+                x: conversionSize(320),
+                y: computedY - conversionSize(200),
                 scaleX: 0.8,
                 scaleY: 0.8,
               },
@@ -85,8 +95,12 @@ export const createStar = (stage, imgObj, bigStar) => {
                 repeat: 2,
                 loop: true,
                 reverse: true,
+                onComplete: () => {
+                  fn();
+                },
               },
             );
+          }
         },
       },
     };
@@ -100,29 +114,36 @@ export const createStar = (stage, imgObj, bigStar) => {
 };
 
 //下方随机的星星
-export const createBottomStar = (stage, imgObj, fn) => {
+export const createBottomStar = (stage, imgObj, fn, fn1) => {
   const list = [];
   for (let i = 0; i < 5; i++) {
     let starObj = {
       id: `star${i}`,
       type: 'Bitmap',
       image: imgObj.star.src,
-      x: 340 + (i % 2 == 0 ? -10 : 10),
-      y: 1400 * timesHeight,
+      x:
+        stage.getChildById('bigStar').x +
+        stage.getChildById('bigStar').width / 2 +
+        (i % 2 == 0 ? -10 : 10),
+      y: stage.getChildById('bigStar').y,
       width: 38,
       height: 37,
+      alpha: 1,
       animate: {
-        x: 400,
-        y: 800 * timesHeight,
+        x: stage.getChildById('packageImg').x + stage.getChildById('packageImg').width / 2,
+        y: stage.getChildById('packageImg').y + stage.getChildById('packageImg').height / 2,
         alpha: 0,
       },
       from: {
-        duration: 1000,
+        duration: 500,
         delay: 0 + i * 100,
         loop: false,
         onComplete: (e) => {
           e.target.removeFromParent(stage);
-          fn && i === 4 && fn();
+          if (i === 4) {
+            fn && fn();
+            fn1 && fn1();
+          }
         },
       },
     };
@@ -159,7 +180,7 @@ export const setAnimate = (mapItem, list) => {
 
 //设置飞机和豆长精灵图的加速动画
 export const setPlaneAnimation = (target, times, mark1, mark2) => {
-  Hilo.Tween.fromTo(
+  const tween = Hilo.Tween.fromTo(
     target,
     { ...mark1 },
     { ...mark2 },
@@ -170,22 +191,16 @@ export const setPlaneAnimation = (target, times, mark1, mark2) => {
       reverse: true,
     },
   );
+  return tween;
 };
 
-//设置飞机背景图加速动画
-export const setPlanePuls = (target, times) => {
-  console.log(target, 'target');
-  console.log(
-    new Hilo.Tween(target, { x: 0, y: 0 }, { x: -3000 }, { duration: 6000 }).link(
-      Hilo.Tween.to(
-        target,
-        { x: -3000 },
-        {
-          duration: times,
-          loop: true,
-          ease: Hilo.Ease.Linear.EaseNone,
-        },
-      ),
-    ),
-  );
+//邀请人的数组
+export const filterList = (oldList, count = 2) => {
+  let list = [];
+  for (let i = 0; i < count; i++) {
+    if (oldList[i]) {
+      list.push(oldList[i]);
+    } else list.push({});
+  }
+  return list;
 };

@@ -1,6 +1,5 @@
 const target = 'https://devgateway.dakale.net';
 
-
 export default {
   dev: {
     define: {

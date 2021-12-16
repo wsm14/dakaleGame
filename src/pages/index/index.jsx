@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { connect, history } from 'umi';
+import { connect, useDispatch, useSelector, KeepAlive, useLocation } from 'umi';
 import './index.less';
 import { uploadResponents } from '@/components/uploadRes/index';
+import { reloadTab } from '@/utils/utils';
+import { getToken, hideTitle } from '@/utils/birdgeContent';
+import ReceiveModal from '@/components/ReceiveModal';
+import OrderModal from '@/components/OrderModal';
 import { imgList } from '@/common/goods';
 import Loding from './components/Loding';
 import CheckGoods from './components/CheckGoods';
 import StartSupply from './components/StartSupply';
 import Game from './components/Game';
 
-const LoginForm = ({ type, dispatch }) => {
+const LoginForm = ({ type }) => {
   const [state, setState] = useState();
   const [imgObj, setImgObj] = useState({});
+  const [token, setToken] = useState(null);
+  const { orderVisible, homeDetail } = useSelector((state) => state.receiveGoods);
+  const location = useLocation();
+  const { query = {} } = location;
+  const { gameInfo } = homeDetail;
+  const dispatch = useDispatch();
   useEffect(() => {
+    getStateToken();
     uploadResponents(
       imgList,
       (e) => {
@@ -19,23 +30,70 @@ const LoginForm = ({ type, dispatch }) => {
       },
       (_, val) => {
         setImgObj(val);
-        setTimeout(() => {
-          dispatch({
-            type: 'receiveGoods/save',
-            payload: {
-              type: 'game',
-            },
-          });
-        }, 500);
+        getHomeDetail();
+        reloadTab(getHomeDetail);
       },
     );
   }, []);
+
+  //获取整体的信息
+  const getHomeDetail = () => {
+    dispatch({
+      type: 'receiveGoods/fetchGetHomeDetail',
+      callback: (res) => {
+        const { pageFlag } = res;
+        const type = pageFlag === '0' ? 'checkGoods' : 'game';
+        dispatch({
+          type: 'receiveGoods/save',
+          payload: {
+            type: type,
+          },
+        });
+      },
+    });
+  };
+
+  const getStateToken = () => {
+    getToken((e) => {
+      if (e) {
+        setToken(e);
+      }
+    });
+    hideTitle();
+    // sessionStorage.setItem(
+    //   'dakaleToken',
+    //   'kSPxLBO9t41dQeyLbzplZOxIWbKZeLUHQUAMvPrvWPyydh53YpiAP6XIkzyvviG4',
+    // );
+  };
+
   return (
     <>
       {type === 'loding' && <Loding state={state} imgList={imgList}></Loding>}
       {type === 'checkGoods' && <CheckGoods></CheckGoods>}
-      {type === 'startSupply' && <StartSupply imgObj={imgObj}></StartSupply>}
-      {type === 'game' && <Game imgObj={imgObj}></Game>}
+      {type === 'startSupply' && (
+        <StartSupply imgObj={imgObj} getHomeDetail={getHomeDetail}></StartSupply>
+      )}
+      {type === 'game' && <Game imgObj={imgObj} getHomeDetail={getHomeDetail}></Game>}
+
+      {/* 确认订单弹窗 */}
+      <OrderModal
+        visible={orderVisible}
+        // pageFlag={pageFlag}
+        // query={query}
+        token={token}
+        getHomeDetail={getHomeDetail}
+        onClose={() => {
+          dispatch({
+            type: 'receiveGoods/save',
+            payload: {
+              orderVisible: false,
+            },
+          });
+        }}
+      ></OrderModal>
+
+      {/* 免费领取的弹窗 */}
+      <ReceiveModal getHomeDetail={getHomeDetail}></ReceiveModal>
     </>
   );
 };

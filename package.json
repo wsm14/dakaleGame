@@ -23,8 +23,9 @@
   "dependencies": {
     "@antv/data-set": "0.11.4",
     "@antv/util": "^2.0.14",
+    "ahooks": "^3.0.1",
     "ali-oss": "^6.10.0",
-    "antd-mobile": "^5.0.0-rc.2",
+    "antd-mobile": "^5.0.0-rc.5",
     "antd-mobile-v5": "npm:antd-mobile@next",
     "array-move": "^3.0.1",
     "hilojs": "^2.0.2",
@@ -46,6 +47,7 @@
     "react-helmet-async": "^1.0.4",
     "react-sortable-hoc": "^1.11.0",
     "umi": "^3.2.0",
+    "umi-plugin-keep-alive": "^0.0.1-beta.29",
     "umi-request": "^1.0.8",
     "use-merge-value": "^1.0.1"
   },
@@ -76,6 +78,7 @@
     "gh-pages": "^3.0.0",
     "mockjs": "^1.0.1-beta3",
     "postcss-px2rem": "^0.3.0",
+    "postcss-px2rem-exclude": "0.0.6",
     "prettier": "^2.0.1",
     "puppeteer-core": "^5.0.0",
     "stylelint": "^13.0.0"

@@ -5,7 +5,8 @@
 import { extend } from 'umi-request';
 import { notification, Modal } from 'antd';
 import { history } from 'umi';
-import encrypt from './encrypt';
+import { encrypt } from './encrypt';
+import { getLogin } from './birdgeContent';
 
 notification.config({
   duration: 2,
@@ -68,19 +69,24 @@ request.interceptors.request.use(async (url, options) => {
   let { data = {}, params = {}, method = 'get' } = options;
   switch (method) {
     case 'get':
+      params = { ...params, token: sessionStorage.getItem('dakaleToken') };
       params = encrypt(params);
       break;
     default:
+      data = { ...data, token: sessionStorage.getItem('dakaleToken') };
       data = encrypt(data);
       break;
   }
 
-  options = { ...options, data: JSON.stringify(data), params };
-
+  options = {
+    ...options,
+    data: JSON.stringify(data),
+    params,
+  };
   const headers = {
     'Content-Type': 'application/json;charset=utf-8',
     Accept: 'application/json',
-    appType: 'admin',
+    appType: 'user',
   };
 
   return {
@@ -95,14 +101,15 @@ request.interceptors.response.use(async (response) => {
   const { success, resultCode = '', resultDesc = '' } = data;
   const errorCode = ['5005', '1014'];
   if (errorCode.includes(resultCode)) {
-    Modal.warning({
-      title: resultDesc,
-      okText: '去登录',
-      onOk: () => {
-        Modal.destroyAll();
-        history.push('/login/index');
-      },
-    });
+    // Modal.warning({
+    //   title: resultDesc,
+    //   okText: '去登录',
+    //   onOk: () => {
+    //     Modal.destroyAll();
+    //     history.push('/login/index');
+    //   },
+    // });
+    getLogin();
     return false;
   }
   if (!success && response.status == 200) {

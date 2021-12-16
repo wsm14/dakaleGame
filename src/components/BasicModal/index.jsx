@@ -6,18 +6,21 @@ import closeIcon from '@public/closeIcon.png';
 
 function index(props) {
   const { children, modalProps } = props;
+  const { onClose } = modalProps;
   return (
     <>
       <Mask {...modalProps}>
-        <div className="basicModal">
-          {children}
-          <div className="basicModal_close">
-            <img
-              src={closeIcon}
-              onClick={() => {
-                onClose && onClose();
-              }}
-            ></img>
+        <div className="basicBox">
+          <div className="basicModal">
+            {children}
+            <div className="basicModal_close">
+              <img
+                src={closeIcon}
+                onClick={() => {
+                  onClose && onClose();
+                }}
+              ></img>
+            </div>
           </div>
         </div>
       </Mask>
