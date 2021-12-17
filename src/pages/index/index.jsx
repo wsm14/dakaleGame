@@ -3,7 +3,7 @@ import { connect, useDispatch, useSelector, KeepAlive, useLocation } from 'umi';
 import './index.less';
 import { uploadResponents } from '@/components/uploadRes/index';
 import { reloadTab } from '@/utils/utils';
-import { getToken, hideTitle } from '@/utils/birdgeContent';
+import { getToken, hideTitle, closeAnimate } from '@/utils/birdgeContent';
 import ReceiveModal from '@/components/ReceiveModal';
 import OrderModal from '@/components/OrderModal';
 import { imgList } from '@/common/goods';
@@ -23,6 +23,7 @@ const LoginForm = ({ type }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     getStateToken();
+    closeAnimate();
     uploadResponents(
       imgList,
       (e) => {
@@ -62,7 +63,7 @@ const LoginForm = ({ type }) => {
     hideTitle();
     // sessionStorage.setItem(
     //   'dakaleToken',
-    //   'kSPxLBO9t41dQeyLbzplZOxIWbKZeLUHQUAMvPrvWPyydh53YpiAP6XIkzyvviG4',
+    //   'ufKFHQCty4nkVdycmxGkMk268QlodY6V78aO8R5GFaJi9Fxhg0Ge8xB4SrD9BeTr',
     // );
   };
 

@@ -91,7 +91,8 @@ function index(props) {
         return (
           <div
             className="taskLine_right taskLine_button1"
-            onClick={() => {
+            onClick={(e) => {
+              console.log(11111111111111111, 'aaaaaaaaaaaa');
               openModal('nativeShareWork', strapId);
             }}
           >
@@ -266,20 +267,21 @@ function index(props) {
             </div>
 
             {/*任务*/}
-            {taskList.map((item) => (
-              <div className="taskLine" key={item.strapId}>
-                <div className="taskLine_left">
-                  <img src={item.image} alt="" />
-                  <div className="taskLine_left_info">
-                    <div className="taskLine_left_title">
-                      {item.name}({item.hasDoneTimes}/{item.times})
+            {taskList &&
+              taskList.map((item) => (
+                <div className="taskLine" key={item.strapId}>
+                  <div className="taskLine_left">
+                    <img src={item.image} alt="" />
+                    <div className="taskLine_left_info">
+                      <div className="taskLine_left_title">
+                        {item.name}({item.hasDoneTimes}/{item.times})
+                      </div>
+                      <div className="taskLine_left_description">{item.content}</div>
                     </div>
-                    <div className="taskLine_left_description">{item.content}</div>
                   </div>
+                  {checkButton(item)}
                 </div>
-                {checkButton(item)}
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </PopupModal>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popup } from 'antd-mobile-v5';
+import { Popup } from 'antd-mobile';
 import './index.less';
 
 function index(props) {
@@ -11,7 +11,7 @@ function index(props) {
         bodyStyle={{
           borderTopLeftRadius: '20px',
           borderTopRightRadius: '20px',
-          minHeight: '30vh',
+          // minHeight: '30vh',
         }}
         onMaskClick={onClose && onClose}
       >

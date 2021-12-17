@@ -6,7 +6,7 @@ import Rules from '@/components/Rules';
 import SwiperReceive from './components/SwiperReceive';
 import ScrollGoods from './components/ScrollGoods';
 import { fetchListGameRewardBarrage } from '@/services/game';
-import { set } from 'lodash';
+import homePic from '@public/usual/homePic.png';
 
 function index(props) {
   const { homeDetail, packageObj } = useSelector((state) => state.receiveGoods);
@@ -47,8 +47,7 @@ function index(props) {
       {/* 规则 */}
       <Rules></Rules>
       <div className="checkGoods_tips">
-        选择商品，包邮到家
-        <br /> 快选择心仪商品，开启收包裹之旅~
+        <img src={homePic} alt="" />
       </div>
       {/*左滑*/}
       <ScrollGoods list={freeGoodList}></ScrollGoods>

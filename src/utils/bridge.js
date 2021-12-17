@@ -140,7 +140,7 @@ function nativeOther() {
     getTop: 'getTopHeight',
     tabBar: 'goNativeRootPageFromIndex', //跳转主页
     shareWx: 'openWechat',
-    hideAnimate: 'hideLoadAnimation',
+    hideAnimate: 'hideLoadAnimation', //隐藏开始动画
     cobyText: 'copyPasteBoard',
   };
   this.wechat = {

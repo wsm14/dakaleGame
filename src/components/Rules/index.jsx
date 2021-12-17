@@ -15,10 +15,8 @@ function index() {
         <div
           className="topButton_rule"
           onClick={() => {
-            window.open(
-              'https://web-new.dakale.net/dev/game/receiveGame/index.html#/rule?newPage=true',
-              '_blank',
-            );
+            window.location.href =
+              'https://resource-new.dakale.net/dev/html/active/648822c6-8699-4925-7258-815987283a3a.html?newPage=true';
           }}
         >
           规则
