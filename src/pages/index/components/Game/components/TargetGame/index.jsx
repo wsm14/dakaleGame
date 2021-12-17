@@ -271,7 +271,7 @@ function index(props) {
   const spiritPlus = () => {
     // let times = 10000;
     const [background1, background2, Spirite1, background3] = spiritObj;
-    clearInterval(speedInterval);
+    clearInterval(speedSetTimeout);
     background1.isStart = false;
     background2.isStart = false;
 

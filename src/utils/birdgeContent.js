@@ -47,7 +47,7 @@ export const getToken = (fn) => {
     console.log(e);
     window.sessionStorage.setItem(
       'dakaleToken',
-      'kSPxLBO9t41dQeyLbzplZOxIWbKZeLUHQUAMvPrvWPyydh53YpiAP6XIkzyvviG4',
+      '795i9jn3i3XV9MuVBqmip4aPJokdg1ujX7kgjmElKUqccE3Aogjqr9T6kaaL31rg',
     );
     fn && fn('kSPxLBO9t41dQeyLbzplZOxIWbKZeLUHQUAMvPrvWPyydh53YpiAP6XIkzyvviG4');
   }

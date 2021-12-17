@@ -104,6 +104,7 @@ function index(props) {
           <div
             className="taskLine_right taskLine_button1"
             onClick={() => {
+              console.log(22222222222222);
               try {
                 linkTo({
                   wechat: { url: weChatUrl + `?strapId=${strapId}` },
