@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import Drawer from '@/components/drawer';
 import classNames from 'classnames';
-import { fetchTaskList } from '@/server/registerServers';
-import { linkTo } from '@/utils/birdgeContent';
+import { fetchTaskList, fetchTaskReward } from '@/server/registerServers';
+import { linkTo, deviceName } from '@/utils/birdgeContent';
+import { fetchCommand } from '@/server/registerServers';
 import './index.less';
+import { toast, cobyInfo, reloadTab } from '@/utils/utils';
 export default (props) => {
-  const { onClose, token, show } = props;
+  const { onClose, token, show, openWork, reload } = props;
+  const [reloading, setReloading] = useState(false);
   useEffect(() => {
     if (show) {
       fetchTask();
+      if (!reloading) {
+        setReloading(() => {
+          reloadTab(() => {
+            fetchTask();
+          });
+          return true;
+        });
+      }
     }
   }, [show]);
   const [list, setList] = useState([]);
 
   const templateBtn = (item) => {
-    const { taskStatus, jumpRule = '', strapId } = item;
+    const { taskStatus, jumpRule = '', strapId, taskId, receiveRule = '' } = item;
     let json = (jumpRule && JSON.parse(jumpRule)) || {};
+    let receiveJson = (receiveRule && JSON.parse(receiveRule)) || {};
+    const { type } = receiveJson;
     const { iosUrl, androidUrl, weChatUrl } = json;
     if (taskStatus === '0') {
       return (
@@ -23,17 +36,45 @@ export default (props) => {
           className="growPop_body_btn growPop_body_btn1"
           onClick={() => {
             try {
-              linkTo({
-                wechat: { url: weChatUrl + `?strapId=${strapId}` },
-                ios: {
-                  path: iosUrl,
-                  param: { strapId },
-                },
-                android: {
-                  path: androidUrl,
-                  strapId,
-                },
-              });
+              if (type !== 'invite') {
+                linkTo({
+                  wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods` },
+                  ios: {
+                    path: iosUrl,
+                    param: { strapId },
+                  },
+                  android: {
+                    path: androidUrl,
+                    strapId,
+                  },
+                });
+              } else {
+                if (deviceName() === 'miniProgram') {
+                  linkTo({
+                    wechat: {
+                      url: `/pages/share/gameHelp/index?subType=signTaskHelp&shareId=${strapId}`,
+                    },
+                  });
+                  return;
+                }
+                fetchCommand({
+                  commandType: 'signTaskHelp',
+                  token: token,
+                  relateId: strapId,
+                }).then((val) => {
+                  if (val) {
+                    const { command } = val.content;
+                    cobyInfo(command, () => {
+                      openWork(() => {
+                        return {
+                          visible: true,
+                          work: strapId,
+                        };
+                      });
+                    });
+                  }
+                });
+              }
             } catch (e) {
               console.log(e);
             }
@@ -43,9 +84,29 @@ export default (props) => {
         </div>
       );
     } else if (taskStatus === '1') {
-      return <div className="growPop_body_btn growPop_body_btn2">领取</div>;
+      return (
+        <div
+          onClick={() => {
+            fetchTaskReward({
+              token: token,
+              strapId,
+              taskId,
+              gameName: 'signGame',
+            }).then((val) => {
+              if (val) {
+                toast('领取成功');
+                reload();
+                fetchTask();
+              }
+            });
+          }}
+          className="growPop_body_btn growPop_body_btn2"
+        >
+          领取
+        </div>
+      );
     } else {
-      return <div className="growPop_body_btn growPop_body_btn2">已领取</div>;
+      return <div className="growPop_body_btn growPop_body_btn2 growPop_body_opcity">已领取</div>;
     }
   };
   const fetchTask = () => {
@@ -53,7 +114,6 @@ export default (props) => {
       token,
       gameName: 'signGame',
     }).then((val) => {
-      console.log(val);
       if (val) {
         const { taskList = [] } = val.content;
         setList(taskList);

@@ -27,6 +27,7 @@
     "antd-mobile": "^5.0.0-rc.2",
     "antd-mobile-v5": "npm:antd-mobile@next",
     "array-move": "^3.0.1",
+    "clipboard": "^2.0.8",
     "hilojs": "^2.0.2",
     "immutability-helper": "^3.1.1",
     "jszip": "^3.7.0",
@@ -47,6 +48,7 @@
     "react-helmet-async": "^1.0.4",
     "react-sortable-hoc": "^1.11.0",
     "umi": "^3.2.0",
+    "umi-plugin-keep-alive": "0.0.1-beta.29",
     "umi-request": "^1.0.8",
     "use-merge-value": "^1.0.1"
   },

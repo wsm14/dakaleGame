@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Hilo, { Stage, Tween, Sprite } from 'hilojs';
+import { history } from 'umi';
 import { createBitmap } from '@/components/createBitMap';
 import {
   HiloBeanInfo,
@@ -11,14 +12,22 @@ import {
   HiloLevel,
   HiloKeys,
 } from './components/spite';
-import { fetchSignInfo, fetchGameInfo, fakeReceiveFeedReward } from '@/server/registerServers';
+import {
+  fetchSignInfo,
+  fetchGameInfo,
+  fakeReceiveFeedReward,
+  fetchUserShareCommission,
+  fakeBlindBoxKeys,
+} from '@/server/registerServers';
 import TopLayer from './components/topLayer';
 import CheckPop from './components/checkPop';
 import PackPop from './components/packPop';
 import EatPop from './components/eatPop';
 import GrowPop from './components/growPop';
-import CobyMask from './components/cobyMask';
-import { toast, computedSeconds, pxComputed } from '@/utils/utils';
+import CobyMask from '@/components/cobyMask';
+import BottomContent from './components/BottomContent';
+import { getToken } from '@/utils/birdgeContent';
+import { toast, computedSeconds, pxComputed, reloadTab } from '@/utils/utils';
 import './index.less';
 let beanSprite = null;
 let bubble = null;
@@ -27,13 +36,21 @@ let textDesc = null;
 let level = null;
 let key = null;
 let stageObj = null;
-let token = 'zaccHVoeeBRh3dTE2CGrlcTgnE9lh7PA0havh3Oyr0QyQhXZSj0SMngEAUzqYuml';
+let token = '';
 export default ({ responent }) => {
   const [visible, setVisible] = useState(false);
   const [packVisible, setPackVisible] = useState(false);
   const [eatVisible, setEatVisible] = useState(false);
   const [growVisible, setGrowVisible] = useState(false);
-  const [cobyVisible, setCobyVisible] = useState(false);
+  const [cobyVisible, setCobyVisible] = useState({
+    time: null,
+    visible: false,
+  });
+  const [WorkVisible, setWorkVisible] = useState({
+    work: null,
+    visible: false,
+  });
+  const [userInfo, setUserInfo] = useState({});
   const [gameData, setGameData] = useState({});
   const [packData, setPackData] = useState({});
   const [loseCreateTime, setCreateTime] = useState({
@@ -55,7 +72,6 @@ export default ({ responent }) => {
     initStage();
   }, []);
   useEffect(() => {
-    console.log(feedReward);
     if (feedReward > 0) {
       createBubble(stageObj);
     }
@@ -85,7 +101,6 @@ export default ({ responent }) => {
     if (times) {
       return;
     } else {
-      console.log(loseCreateTime.timeLose);
       if (timeLose) {
         let num = 0;
         let time = setInterval(() => {
@@ -128,8 +143,27 @@ export default ({ responent }) => {
     stageObj = stage;
     initOther(stage);
     stage.enableDOMEvent(Hilo.event.POINTER_START, true);
-    fetchPack();
-    fetchGame();
+    getToken((res) => {
+      token = res;
+      if (res) {
+        fetchPack();
+        fetchGame();
+        fetchUserShare();
+      } else return;
+    });
+    reloadTab(() => {
+      if (!sessionStorage.getItem('dakale_token')) {
+        getToken((res) => {
+          fetchPack();
+          fetchGame();
+          fetchUserShare();
+        });
+      } else {
+        fetchPack();
+        fetchGame();
+        fetchUserShare();
+      }
+    });
   };
   //创建舞台
   const clickInEase = (id, fn) => {
@@ -166,13 +200,16 @@ export default ({ responent }) => {
     const pack = createBgInit(stageinfo, 4);
     const eat = createBgInit(stageinfo, 5);
     const grow = createBgInit(stageinfo, 6);
-    eat.on(Hilo.event.POINTER_START, () => {
+    eat.on(Hilo.event.POINTER_START, (e) => {
+      e.preventDefault();
       clickInEase(eat, () => setEatVisible(true));
     });
-    pack.on(Hilo.event.POINTER_START, () => {
+    pack.on(Hilo.event.POINTER_START, (e) => {
+      e.preventDefault();
       clickInEase(pack, () => setPackVisible(true));
     });
-    grow.on(Hilo.event.POINTER_START, () => {
+    grow.on(Hilo.event.POINTER_START, (e) => {
+      e.preventDefault();
       clickInEase(grow, () => setGrowVisible(true));
     });
   };
@@ -668,11 +705,8 @@ export default ({ responent }) => {
     stage.addChild(scene);
   };
   //创建右边的树
-
   const fetchPack = () => {
-    fetchSignInfo({
-      token: token,
-    }).then((val) => {
+    fetchSignInfo({}).then((val) => {
       if (val) {
         let { hasFillSignFlag, signRecordInfo = [] } = val.content;
         let listIndex = signRecordInfo
@@ -700,9 +734,7 @@ export default ({ responent }) => {
     });
   };
   const fetchGame = () => {
-    fetchGameInfo({
-      token: token,
-    }).then((val) => {
+    fetchGameInfo({}).then((val) => {
       if (val) {
         const { content } = val;
         setGameData({
@@ -712,15 +744,36 @@ export default ({ responent }) => {
     });
   };
   const fakeFeedReward = () => {
-    fakeReceiveFeedReward({
-      token: token,
-    }).then((val) => {
+    fakeReceiveFeedReward({}).then((val) => {
       if (val) {
         fetchGame();
       }
     });
   };
-
+  const fetchUserShare = () => {
+    fetchUserShareCommission({}).then((val = {}) => {
+      if (val) {
+        const { content = {} } = val;
+        const { configUserLevelInfo = {} } = content;
+        setUserInfo({ ...configUserLevelInfo });
+      }
+    });
+  };
+  const linkToBox = () => {
+    if (gameBalance / growValueLimit >= 1) {
+      fakeBlindBoxKeys({}).then((val) => {
+        if (val) {
+          toast('领取成功');
+          fetchGame();
+          setTimeout(() => {
+            history.push('/blind');
+          }, 1000);
+        }
+      });
+    } else {
+      history.push('/blind');
+    }
+  };
   return (
     <div className="content_box">
       <TopLayer data={gameData} regOpen={() => setVisible(true)} img={responent}></TopLayer>
@@ -778,6 +831,10 @@ export default ({ responent }) => {
         position={'bottom'}
         className="growPop_pack_box"
         bodyClassName={'growPop_pack_radius'}
+        openWork={setWorkVisible}
+        reload={() => {
+          fetchGame();
+        }}
         token={token}
         onClose={() => {
           setGrowVisible(false);
@@ -795,7 +852,12 @@ export default ({ responent }) => {
         </div>
       )}
 
-      <div className="level_layer">
+      <div
+        className="level_layer"
+        onClick={() => {
+          linkToBox();
+        }}
+      >
         <div className="level_layer_content">
           <div className="level_liner_infoBox">
             <div
@@ -809,7 +871,29 @@ export default ({ responent }) => {
           </div>
         </div>
       </div>
-      <CobyMask onClose={() => setCobyVisible(false)} show={cobyVisible}></CobyMask>
+      <CobyMask
+        data={{ value: cobyVisible.time }}
+        type="sign"
+        onClose={() =>
+          setCobyVisible({
+            time: null,
+            visible: false,
+          })
+        }
+        show={cobyVisible.visible}
+      ></CobyMask>
+      <CobyMask
+        data={{ value: WorkVisible.work }}
+        type="nativeShareWork"
+        onClose={() =>
+          setWorkVisible({
+            work: null,
+            visible: false,
+          })
+        }
+        show={WorkVisible.visible}
+      ></CobyMask>
+      <BottomContent userInfo={userInfo}></BottomContent>
     </div>
   );
 };

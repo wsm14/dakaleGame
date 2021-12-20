@@ -9,4 +9,9 @@ export default [
     name: '签到',
     component: './register/scene',
   },
+  {
+    path: '/blind',
+    name: '盲盒',
+    component: './register/blindBox',
+  },
 ];

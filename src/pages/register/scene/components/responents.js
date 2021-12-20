@@ -15,7 +15,7 @@ import layer_1 from '@/assert/image/layer_1bg.png';
 import bubble from '@/assert/image/bubble.png';
 import level from '@/assert/image/level.png';
 import key from '@/assert/image/key.png';
-
+import blindbg from '@/assert/image/blindbg.png';
 export const list = [
   { id: 'scene', noCache: true, src: bg },
   { id: 'qianScene', noCache: true, src: qianbg },
@@ -34,4 +34,5 @@ export const list = [
   { id: 'bubble', noCache: true, src: bubble },
   { id: 'level', noCache: true, src: level },
   { id: 'key', noCache: true, src: key },
+  { id: 'blindbg', noCache: true, src: blindbg },
 ];

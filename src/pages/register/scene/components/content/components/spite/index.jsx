@@ -35,10 +35,28 @@ export const HiloTree = (responent) => {
   const path = responent.get('left_tree').content;
   const createList = () => {
     let list = [];
-    for (let i = 0; i < 34; i++) {
-      let x = parseInt(i % 30);
-      let y = parseInt(i / 30);
-      list.push([x * 162, y * 232, 162, 232]);
+    for (let i = 0; i < 27; i++) {
+      let x = parseInt(i % 27);
+      let y = parseInt(i / 27);
+      if (i === 0) {
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+        list.push([x * 157, y * 232, 157, 232]);
+      } else {
+        list.push([x * 157, y * 232, 157, 232]);
+      }
     }
     return list;
   };
@@ -99,9 +117,9 @@ export const HiloEatBean = (responent) => {
   const createList = () => {
     let list = [];
     for (let i = 0; i < 91; i++) {
-      let x = parseInt(i % 19);
-      let y = parseInt(i / 19);
-      list.push([x * 252, y * 370, 252, 370]);
+      let x = parseInt(i % 21);
+      let y = parseInt(i / 21);
+      list.push([x * 230, y * 354, 230, 354]);
     }
     return list;
   };

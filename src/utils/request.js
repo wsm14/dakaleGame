@@ -7,7 +7,7 @@ import { notification, Modal } from 'antd';
 import { history } from 'umi';
 import { encrypt } from './encrypt';
 import { toast } from './utils';
-
+import { getLogin } from './birdgeContent';
 notification.config({
   duration: 2,
   placement: 'topRight',
@@ -67,12 +67,18 @@ const request = extend({
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use(async (url, options) => {
   let { data = {}, params = {}, method = 'get', headerOther = {} } = options;
+  params = {
+    ...params,
+  };
+  data = {
+    ...data,
+  };
   switch (method) {
     case 'get':
-      params = encrypt(params);
+      params = encrypt({ ...params, token: window.sessionStorage.getItem('dakale_token') });
       break;
     default:
-      data = encrypt(data);
+      data = encrypt({ ...data, token: window.sessionStorage.getItem('dakale_token') });
       break;
   }
 
@@ -97,15 +103,7 @@ request.interceptors.response.use(async (response) => {
   const { success, resultCode = '', resultDesc = '' } = data;
   const errorCode = ['5005', '1014'];
   if (errorCode.includes(resultCode)) {
-    Modal.warning({
-      title: resultDesc,
-      okText: '去登录',
-      onOk: () => {
-        Modal.destroyAll();
-        history.push('/login/index');
-      },
-    });
-    return false;
+    getLogin();
   }
   if (!success && response.status == 200) {
     toast(resultDesc || errorHandler(response));

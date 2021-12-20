@@ -2,63 +2,42 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="wap-font-scale" content="no" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, minimum-scale=1, maximum-scale=1,user-scalable=no"
     />
-    <meta name="google" content="notranslate" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Cache-Control" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="x-rim-auto-match" content="none" />
     <title></title>
     <script>
-      function resizeRoot() {
-        var Dpr = 1,
-          uAgent = window.navigator.userAgent;
-
-        //判断IOS 系统
-        var isIOS = uAgent.match(/iphone/i);
-
-        //计算APP宽度
-        var wWidth =
-            screen.width > 0
-              ? window.innerWidth >= screen.width || window.innerWidth == 0
-                ? screen.width
-                : window.innerWidth
-              : window.innerWidth,
-          wDpr,
-          wFsize;
-        if (window.devicePixelRatio) {
-          wDpr = window.devicePixelRatio;
-        } else {
-          //识别IOS分辨率方法
-          wDpr = isIOS ? (wWidth > 818 ? 3 : wWidth > 480 ? 2 : 1) : 1;
-        }
-
-        //计算IOS 系统宽度
-        if (isIOS) wWidth = screen.width;
-        wFsize = wWidth > 1080 ? 144 : wWidth / 7.5;
-        window.screenWidth_ = wWidth;
-
-        //赋值给html fontsize值
-        document.getElementsByTagName('html')[0].dataset.dpr = wDpr;
-        document.getElementsByTagName('html')[0].style.fontSize = wFsize + 'px';
-      }
-      //判断安卓手机浏览器低版本的用ready方法执行
-      function appsion() {
-        uAgent = window.navigator.userAgent;
-        var isIOS = uAgent.match(/iphone/i);
-        if (navigator.appVersion.substring(navigator.appVersion.length - 6) < 537 && !isIOS) {
-          document.ready = function () {
-            resizeRoot();
-          };
-        } else {
-          resizeRoot();
-        }
-      }
-      appsion();
-      //rem配置方法执行
+      !(function (t) {
+        var e = 750,
+          i = t.document,
+          n = i.documentElement,
+          o = 'orientationchange' in t ? 'orientationchange' : 'resize',
+          a = (function t() {
+            var i = n.getBoundingClientRect().width;
+            return (n.style.fontSize = 5 * Math.max(Math.min((i / e) * 20), 8.55) + 'px'), t;
+          })();
+        n.setAttribute(
+          'data-dpr',
+          t.navigator.appVersion.match(/iphone/gi) ? t.devicePixelRatio : 1,
+        ),
+          /iP(hone|od|ad)/.test(t.navigator.userAgent) &&
+            (i.documentElement.classList.add('ios'),
+            parseInt(t.navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/)[1], 10) >= 8 &&
+              i.documentElement.classList.add('hairline')),
+          i.addEventListener &&
+            (t.addEventListener(o, a, !1), i.addEventListener('DOMContentLoaded', a, !1));
+      })(window);
+      window.loginSuccess = function () {
+        console.log();
+      };
     </script>
     <link rel="icon" href="<%= context.config.publicPath +'favicon.png'%>" type="image/x-icon" />
   </head>

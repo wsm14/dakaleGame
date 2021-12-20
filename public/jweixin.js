@@ -824,4 +824,3 @@
         : i.addEventListener && i.addEventListener('WeixinJSBridgeReady', e, !1));
   }
 });
-console.log(11111);

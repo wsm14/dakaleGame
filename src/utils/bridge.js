@@ -118,6 +118,9 @@ function nativeOther() {
     mapGo: 'showMerchantNavigationLatAndLnt', //调取 app地图
     getTop: 'getIphoneSafeTopHeight',
     tabBar: 'goNativeRootPageFromIndex', //跳转主页
+    shareWx: 'skipAnyApplication',
+    hideAnimate: 'hideLoadAnimation',
+    cobyText: 'copyPasteBoard',
   };
   this.android = {
     close: 'finish', //关闭
@@ -137,6 +140,9 @@ function nativeOther() {
     mapGo: 'getNavi', //调取 app地图
     getTop: 'getTopHeight',
     tabBar: 'goNativeRootPageFromIndex', //跳转主页
+    shareWx: 'openWechat',
+    hideAnimate: 'hideLoadAnimation',
+    cobyText: 'copyPasteBoard',
   };
   this.wechat = {
     linkTo: 'navigateTo', //路径跳转
@@ -199,7 +205,9 @@ function nativeOther() {
       }
     } else if (that.getPhone() === 'miniProgram') {
       fnName = that.wechat[fnName];
-      wx.miniProgram[fnName]({ ...param.wechat });
+      if (fnName) {
+        wx.miniProgram[fnName]({ ...param.wechat });
+      }
     } else {
       fnName = that.ios[fnName];
       if (callback && typeof callback == 'function') {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Mask from '@/components/mask';
+
 import './index.less';
 export default (props) => {
   const { show, onClose, val = {}, beanSign, shareSign } = props;

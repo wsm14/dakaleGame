@@ -9,6 +9,7 @@ import {
   fetchCommand,
 } from '@/server/registerServers';
 import day from 'dayjs';
+import { deviceName, linkTo } from '@/utils/birdgeContent';
 import { toast, cobyInfo } from '@/utils/utils';
 import './index.less';
 export default (props) => {
@@ -47,15 +48,12 @@ export default (props) => {
       token,
       identification,
     }).then(async (val) => {
-      if (hasFillSignFlag === '0') {
-        setMaskVisible(() => {
-          setMaskData({ type: 'success', data: {} });
-          return true;
-        });
+      if (val) {
+        await reloadRequest();
+        await reload();
+        await setTime(5);
+        await onOpen();
       }
-      await reloadRequest();
-      await setTime(5);
-      await onOpen();
     });
   };
   const fakeSign = (item) => {
@@ -101,6 +99,14 @@ export default (props) => {
       }
     });
     let date = day(Date.now() - (nowNum - num) * 86400000).format('YYYY-MM-DD HH:mm:ss');
+    if (deviceName() === 'miniProgram') {
+      linkTo({
+        wechat: {
+          url: `/pages/gameHelp/goodThings/index?subType=fillSign&fillSignTime=${date}`,
+        },
+      });
+      return;
+    }
     fetchCommand({
       commandType: 'fillSign',
       extraParam: date,
@@ -117,7 +123,10 @@ export default (props) => {
             setMaskVisible(() => {
               return false;
             });
-            return true;
+            return {
+              visible: true,
+              time: date,
+            };
           });
         });
       }
@@ -150,6 +159,7 @@ export default (props) => {
                   signReminder: e ? '1' : '0',
                 }).then((val) => {
                   if (val) {
+                    toast(`${e ? '开启成功' : '关闭成功'}`);
                     reload();
                   }
                 });

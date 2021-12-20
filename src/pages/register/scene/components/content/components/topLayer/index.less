@@ -38,6 +38,27 @@
       }
     }
   }
+  .topLayer_blindBox {
+    height: 56px;
+    margin-left: 16px;
+
+    padding: 12px 24px;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 24px;
+    background: rgba(51, 51, 51, 0.3);
+    border-radius: 28px;
+  }
+  .topLayer_blindBox::before {
+    display: block;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    margin-right: 16px;
+    background: url(~@/assert/image/blind_box_icon.png) no-repeat;
+    background-size: 100% 100%;
+    content: '';
+  }
   .topLayer_scoend_box {
     display: flex;
     align-items: center;
@@ -91,6 +112,25 @@
       background: url(~@/assert/image/help.png) no-repeat;
       background-size: 100% 100%;
       content: '';
+    }
+  }
+  .bean_barrge_info {
+    position: absolute;
+    top: 257px;
+    right: 0;
+    left: 0;
+    width: 260px;
+    height: 78px;
+    margin: 0 auto;
+    line-height: 1;
+    background: url(~@/assert/image/bean_barrge_info.png) no-repeat;
+    background-size: 100% 100%;
+    .bean_barrge_desc {
+      padding: 6px 17px 12px;
+      color: #ffffff;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 30px;
     }
   }
 }
