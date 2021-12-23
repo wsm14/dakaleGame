@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PopupModal from '@/components/PopupModal';
-import { Button } from 'antd-mobile';
+import { Popup, Toast } from 'antd-mobile';
 import { linkTo } from '@/utils/birdgeContent';
 import { useUpdateEffect } from 'ahooks';
-import ShareModal from '@/components/ShareModal';
 import {
   fetchFreeGoodGetSignRecord,
   fetchFreeGoodSaveSign,
@@ -12,14 +11,13 @@ import {
   fetchTaskReceiveTaskReward,
 } from '@/services/game';
 import { reloadTab } from '@/utils/utils';
-
+import { deviceName } from '@/utils/birdgeContent';
 import './index.less';
 import taskTitle from '@public/usual/taskTitle.png';
 import taskClose from '@public/usual/taskClose.png';
 import starOn from '@public/usual/starOn.png';
 import starOff from '@public/usual/starOff.png';
 import taskOn from '@public/usual/taskOn.png';
-import { Toast } from 'antd-mobile';
 
 let timer = null;
 
@@ -29,21 +27,37 @@ function index(props) {
   const [taskList, setTaskList] = useState([]); //任务信息
   const [count, setCount] = useState(30); //倒计时
   const [taskStrapId, setTaskStrapId] = useState(''); //倒计时id
-  const countRef = useRef(false);
+  const [timeBol, setTimeBol] = useState(false);
+  const scrollRef = useRef();
+  const timerRef = useRef(1);
 
   useEffect(() => {
-    getSignContent();
+    setTimeout(() => {
+      document.getElementById('scrollId').scrollLeft = 10000;
+    }, 100);
+  }, [visible, signContent.length]);
+  useEffect(() => {
     getTaskList();
     reloadTab(getTaskList);
+    getSignContent();
   }, []);
   useUpdateEffect(() => {
-    timeOut();
-  }, [countRef.current]);
+    // console.log(timeBol, 'setTimeBol');
+    if (timerRef.current === 1) {
+      timerRef.current = 2;
+      timeOut();
+    }
+  }, [timeBol]);
 
   //签到信息
   const getSignContent = async () => {
     const res = await fetchFreeGoodGetSignRecord();
     const { content = {} } = res;
+    if (content.signDay > 5) {
+      for (let i = 1; i <= content.signDay - 5; i++) {
+        content.signInfo.push({ number: 5 + i, rewardStar: 15 });
+      }
+    }
     setSignContent(content);
   };
 
@@ -56,27 +70,35 @@ function index(props) {
 
   //任务列表
   const getTaskList = async () => {
+    const source = deviceName() == 'miniProgram' ? 'miniClock' : 'app';
     const res = await fetchTaskGetTaskList({
       gameName: 'freeGoodGame',
+      source: source,
     });
     const { content = {} } = res;
     const { taskList = [] } = content;
     let times, strapId1;
     taskList.forEach((item = {}) => {
       const { receiveRule, hasDoneTimes, taskStatus, strapId } = item;
-      const rule = JSON.parse(receiveRule);
+      const rule = JSON.parse(receiveRule) || {};
       const { condition = [] } = rule;
       if (condition.length && taskStatus == 0) {
-        times = condition[hasDoneTimes];
-        strapId1 = strapId;
-        countRef.current = !countRef.current;
+        // times = condition[hasDoneTimes];
+        // strapId1 = strapId;
+        setTaskStrapId(strapId);
+        if (timerRef.current === 1) {
+          clearInterval(timer);
+          setCount(condition[hasDoneTimes]);
+        }
+
+        setTimeBol(!timeBol);
+        // countRef.current = !countRef.current;
       }
     });
-    setTaskStrapId(strapId1);
-    setCount(times);
+    // setTaskStrapId(strapId1);
+    // setCount(times);
     setTaskList([...taskList]);
   };
-
   //判断显示的按钮
   const checkButton = (item) => {
     const { taskStatus, receiveRule, strapId, jumpRule } = item;
@@ -86,28 +108,34 @@ function index(props) {
     const { type } = rule;
     if (taskStatus === '0') {
       if (type === 'free') {
-        return <div className="taskLine_right taskLine_button1">{count}</div>;
+        return (
+          <div className="taskLine_right taskLine_button1">
+            {parseInt(count / 60) < 10 ? `0${parseInt(count / 60)}` : parseInt(count / 60)}:
+            {count % 60 < 10 ? `0${count % 60}` : count % 60}
+          </div>
+        );
       } else if (type === 'invite') {
         return (
-          <div
-            className="taskLine_right taskLine_button1"
-            onClick={(e) => {
-              console.log(11111111111111111, 'aaaaaaaaaaaa');
-              openModal('nativeShareWork', strapId);
-            }}
-          >
-            去完成
+          <div>
+            <div
+              className="taskLine_right taskLine_button1"
+              onClick={() => {
+                openModal('nativeShareWork', strapId);
+              }}
+            >
+              去完成
+            </div>
           </div>
         );
       } else {
         return (
-          <div
-            className="taskLine_right taskLine_button1"
-            onClick={() => {
-              console.log(22222222222222);
-              try {
+          <div>
+            {' '}
+            <div
+              className="taskLine_right taskLine_button1"
+              onClick={() => {
                 linkTo({
-                  wechat: { url: weChatUrl + `?strapId=${strapId}` },
+                  wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
                   ios: {
                     path: iosUrl,
                     param: { strapId },
@@ -117,12 +145,10 @@ function index(props) {
                     strapId,
                   },
                 });
-              } catch (e) {
-                console.log(e);
-              }
-            }}
-          >
-            去完成
+              }}
+            >
+              去完成
+            </div>
           </div>
         );
       }
@@ -138,7 +164,26 @@ function index(props) {
         </div>
       );
     } else if (taskStatus === '2') {
-      return <div className="taskLine_right taskLine_button3">已领取</div>;
+      return (
+        <div
+          className="taskLine_right taskLine_button3"
+          onClick={() => {
+            linkTo({
+              wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
+              ios: {
+                path: iosUrl,
+                param: { strapId },
+              },
+              android: {
+                path: androidUrl,
+                strapId,
+              },
+            });
+          }}
+        >
+          已领取
+        </div>
+      );
     }
   };
 
@@ -151,6 +196,7 @@ function index(props) {
         } else {
           // 3.2 倒计时为0时，清空倒计时
           clearInterval(timer);
+          timerRef.current = 1;
           downTask();
           return 0;
         }
@@ -188,6 +234,13 @@ function index(props) {
   const popupProps = {
     visible,
     onClose,
+    forceRender: true,
+
+    bodyStyle: {
+      borderTopLeftRadius: '20px',
+      borderTopRightRadius: '20px',
+    },
+    onMaskClick: onClose,
   };
 
   const {
@@ -197,7 +250,7 @@ function index(props) {
   } = signContent;
   return (
     <>
-      <PopupModal {...popupProps}>
+      <Popup {...popupProps}>
         <div className="taskPopup">
           {/* 标题 */}
           <img
@@ -214,48 +267,50 @@ function index(props) {
           <div className="taskContent">
             <div className="progress">
               <div className="taskSteps">
-                {signInfo.map((item, index) => {
-                  const flag = item.number <= signDay;
-                  return (
-                    <div className="taskSteps_strip" key={item.number}>
-                      <div
-                        className={`taskSteps_speed ${
-                          flag ? 'taskSteps_speed_color1' : 'taskSteps_speed_color2'
-                        }`}
-                      ></div>
-                      <div className="taskSteps_line">
+                <div className="taskSteps_scroll" ref={scrollRef} id="scrollId">
+                  {[...signInfo].map((item, index) => {
+                    const flag = item.number <= signDay;
+                    return (
+                      <div className="taskSteps_strip" key={`${item.number}${index}`}>
                         <div
-                          className={`taskSteps_line_num ${
-                            flag ? 'taskSteps_color1' : 'taskSteps_color2'
+                          className={`taskSteps_speed ${
+                            flag ? 'taskSteps_speed_color1' : 'taskSteps_speed_color2'
                           }`}
-                        >
-                          {item.rewardStar}
-                        </div>
-                        <img
-                          src={flag ? starOn : starOff}
-                          alt=""
-                          className=""
-                          className="taskSteps_line_img1"
-                        />
-                        <div className="taskSteps_line_days">
-                          {['1'].includes(signFlag) && signDay - 1 == index ? (
-                            <div className="taskSteps_line_today">
-                              <img
-                                src={taskOn}
-                                alt=""
-                                className=""
-                                className="taskSteps_line_img2"
-                              />
-                              <div>今天</div>
-                            </div>
-                          ) : (
-                            <div>第{item.number}天</div>
-                          )}
+                        ></div>
+                        <div className="taskSteps_line">
+                          <div
+                            className={`taskSteps_line_num ${
+                              flag ? 'taskSteps_color1' : 'taskSteps_color2'
+                            }`}
+                          >
+                            {item.rewardStar}
+                          </div>
+                          <img
+                            src={flag ? starOn : starOff}
+                            alt=""
+                            className=""
+                            className="taskSteps_line_img1"
+                          />
+                          <div className="taskSteps_line_days">
+                            {['1'].includes(signFlag) && signDay - 1 == index ? (
+                              <div className="taskSteps_line_today">
+                                <img
+                                  src={taskOn}
+                                  alt=""
+                                  className=""
+                                  className="taskSteps_line_img2"
+                                />
+                                <div>今天</div>
+                              </div>
+                            ) : (
+                              <div>第{item.number}天</div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
               <div
                 className={`taskLine_right ${
@@ -285,7 +340,7 @@ function index(props) {
               ))}
           </div>
         </div>
-      </PopupModal>
+      </Popup>
     </>
   );
 }

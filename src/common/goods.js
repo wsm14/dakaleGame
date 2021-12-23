@@ -1,4 +1,4 @@
-import lodingBg from '@public/LodingBg.png';
+import lodingBg from '@public/usual/LodingBg.png';
 import plane from '@public/background/plane.png';
 import planeBg from '@public/background/planeBg.png';
 import hand from '@public/background/hand.png';
@@ -15,9 +15,13 @@ import bigStar from '@public/background/bigStar.png';
 import smallTruck from '@public/background/smallTruck.png';
 import expressCar from '@public/background/expressCar.png';
 import bigTruck from '@public/background/bigTruck.png';
+import smallTruck1 from '@public/background/smallTruck1.png';
+import expressCar1 from '@public/background/expressCar1.png';
+import bigTruck1 from '@public/background/bigTruck1.png';
 import bigTruckSpirit from '@public/background/bigTruckSpirit.png';
 import smallTruckSpirit from '@public/background/smallTruckSpirit.png';
 import expressCarSpirit from '@public/background/expressCarSpirit.png';
+import back11 from '@public/background/back11.png';
 
 //下载图片
 export const imgList = [
@@ -41,6 +45,10 @@ export const imgList = [
   { id: 'bigTruckSpirit', src: bigTruckSpirit },
   { id: 'smallTruckSpirit', src: smallTruckSpirit },
   { id: 'expressCarSpirit', src: expressCarSpirit },
+  { id: 'back11', src: back11 },
+  { id: 'smallTruck1', src: smallTruck1 },
+  { id: 'expressCar1', src: expressCar1 },
+  { id: 'bigTruck1', src: bigTruck1 },
 ];
 
 //等级判断位置

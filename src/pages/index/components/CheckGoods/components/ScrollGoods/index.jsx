@@ -11,19 +11,22 @@ function index(props) {
   return (
     <div className="scrollContent">
       {list.map((item) => (
-        <div className="scrollGoods" key={item.packageId}>
+        <div
+          className="scrollGoods"
+          key={item.packageId}
+          onClick={() => {
+            dispatch({
+              type: 'receiveGoods/save',
+              payload: {
+                packageObj: item,
+              },
+            });
+          }}
+        >
           <div>
             <img
               src={packageObj.packageId == item.packageId ? checkon : checkoff}
               className="scrollGoods_checkImg"
-              onClick={() => {
-                dispatch({
-                  type: 'receiveGoods/save',
-                  payload: {
-                    packageObj: item,
-                  },
-                });
-              }}
             />
           </div>
           <div className="scrollGoods_contentImg">

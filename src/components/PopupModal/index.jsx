@@ -8,6 +8,7 @@ function index(props) {
     <>
       <Popup
         visible={visible}
+        destroyOnClose
         bodyStyle={{
           borderTopLeftRadius: '20px',
           borderTopRightRadius: '20px',

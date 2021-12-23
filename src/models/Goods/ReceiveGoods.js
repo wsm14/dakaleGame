@@ -9,6 +9,7 @@ const LoginForm = {
     packageObj: {}, //商品信息
     addressObj: {}, //地址信息
     orderVisible: false,
+    gameHeight: 70,
   },
   reducers: {
     save(state, { payload }) {

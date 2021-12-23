@@ -8,7 +8,6 @@ function index(props) {
   const { visible, onClose, type, data = {} } = props;
   const { show } = visible;
   const { value } = data;
-  console.log(show, data, value, type, 'aaaa');
   const btnType = {
     nativeShareWork: nativeShareWork,
     nativeShareClose: nativeShareClose,

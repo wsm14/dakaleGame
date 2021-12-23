@@ -1,17 +1,20 @@
 import Hilo, { DOMElement } from 'hilojs';
 import { createTextureAtlas } from '@/components/createTextureAtlas';
+import { deviceName } from '@/utils/birdgeContent';
+import math from '@/utils/math';
 
-const timesWidth = window.innerWidth / 375;
 const computedY = window.innerHeight * 2;
 
-const timesHeight = ((window.innerHeight * 2) / 1624).toFixed(2);
+const timesHeight = math.divide(math.multiply(window.innerHeight, 2), 1624);
+
+export const weappHeight = deviceName() == 'miniProgram' ? 100 : 0;
 
 //画图尺寸换算
 export const conversionSize = (width, height) => {
   if (width && Number(width)) {
-    return width * timesWidth;
+    return width * (window.innerWidth / 375);
   } else if (height && Number(height)) {
-    return height * timesHeight;
+    return math.multiply(height, timesHeight);
   }
 };
 
@@ -54,8 +57,34 @@ export const HiloCreateSpirit = (path, length, num, width, height, id) => {
   });
 };
 
+//生成精灵图
+export const HiloCreateSpiritbac = (path, length, num, width, height, id) => {
+  // path:图片地址
+  //length:所有的个数
+  //num:精灵图一张的个数
+  //width:宽度
+  //height:高度
+  //id:精灵图的id
+  const createList = () => {
+    let list = [];
+    for (let i = 0; i < length; i++) {
+      list.push([i * ((width - 750) / num), 0, 750, height]);
+    }
+    return list;
+  };
+  return createTextureAtlas({
+    image: path,
+    frames: createList(),
+    sprites: {
+      [id]: createList().map((val, index) => {
+        return index;
+      }),
+    },
+  });
+};
+
 //生成随机的星星
-export const createStar = (stage, imgObj, bigStar, fn) => {
+export const createStar = (stage, imgObj, bigStar, fn, gameHeight) => {
   const list = [];
   for (let i = 0; i < 5; i++) {
     let starObj = {
@@ -85,7 +114,7 @@ export const createStar = (stage, imgObj, bigStar, fn) => {
               bigStar,
               {
                 x: conversionSize(320),
-                y: computedY - conversionSize(200),
+                y: computedY - conversionSize(200 - gameHeight),
                 scaleX: 0.8,
                 scaleY: 0.8,
               },
@@ -118,7 +147,7 @@ export const createBottomStar = (stage, imgObj, fn, fn1) => {
   const list = [];
   for (let i = 0; i < 5; i++) {
     let starObj = {
-      id: `star${i}`,
+      id: `star`,
       type: 'Bitmap',
       image: imgObj.star.src,
       x:
@@ -126,8 +155,8 @@ export const createBottomStar = (stage, imgObj, fn, fn1) => {
         stage.getChildById('bigStar').width / 2 +
         (i % 2 == 0 ? -10 : 10),
       y: stage.getChildById('bigStar').y,
-      width: 38,
-      height: 37,
+      width: 70,
+      height: 69,
       alpha: 1,
       animate: {
         x: stage.getChildById('packageImg').x + stage.getChildById('packageImg').width / 2,
@@ -139,6 +168,7 @@ export const createBottomStar = (stage, imgObj, fn, fn1) => {
         delay: 0 + i * 100,
         loop: false,
         onComplete: (e) => {
+          stage.removeChild(stage.getChildById('star'));
           e.target.removeFromParent(stage);
           if (i === 4) {
             fn && fn();

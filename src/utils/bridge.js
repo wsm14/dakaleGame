@@ -118,6 +118,7 @@ function nativeOther() {
     mapGo: 'showMerchantNavigationLatAndLnt', //调取 app地图
     getTop: 'getIphoneSafeTopHeight',
     tabBar: 'goNativeRootPageFromIndex', //跳转主页
+    hideLoadAnimation: 'hideLoadAnimation',
     shareWx: 'skipAnyApplication',
     cobyText: 'copyPasteBoard',
   };

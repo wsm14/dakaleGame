@@ -2,8 +2,6 @@ import cityJson from '@/common/cityJson';
 import { cobyText } from '@/utils/birdgeContent';
 import { Toast } from 'antd-mobile';
 
-export const gameHeight = 70;
-
 // 获取城市名
 export const getCityName = (code) => {
   const cityIndex = cityJson.findIndex((item) => item.id === code);

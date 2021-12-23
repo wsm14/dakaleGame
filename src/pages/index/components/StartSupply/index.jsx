@@ -85,6 +85,9 @@ function index(props) {
     });
     const beanAnimate = HiloCreateSpirit(imgObj.hand.src, 27, 27, 152, 136, 'hand');
     HandSpirite.addFrame(beanAnimate.getSprite('hand'));
+    HandSpirite.on(Hilo.event.POINTER_START, () => {
+      begainGame(stage);
+    });
     stage.addChild(HandSpirite);
   };
 

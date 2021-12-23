@@ -7,6 +7,7 @@ import { notification, Modal } from 'antd';
 import { history } from 'umi';
 import { encrypt } from './encrypt';
 import { getLogin } from './birdgeContent';
+import { Toast } from 'antd-mobile';
 
 notification.config({
   duration: 2,
@@ -109,14 +110,16 @@ request.interceptors.response.use(async (response) => {
     //     history.push('/login/index');
     //   },
     // });
+    sessionStorage.removeItem('dakaleToken');
     getLogin();
     return false;
   }
   if (!success && response.status == 200) {
-    notification.info({
-      message: '提示',
-      description: resultDesc || errorHandler(response),
-    });
+    Toast.show({ content: resultDesc || errorHandler(response) });
+    // notification.info({
+    //   message: '提示',
+    //   description:resultDesc || errorHandler(response),
+    // });
     return false;
   }
   return response;

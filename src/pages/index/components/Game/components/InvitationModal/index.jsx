@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PopupModal from '@/components/PopupModal';
-import { Button } from 'antd-mobile';
-import { fetchFreeGoodGetTogetherList, fetchFreeGoodQuitTeam } from '@/services/game';
+import { Button, Toast } from 'antd-mobile';
+import { fetchFreeGoodGetTogetherList } from '@/services/game';
 import { filterList } from '@/utils/game';
-import ShareModal from '@/components/ShareModal';
+import SignOutModal from '@/components/SignOutModal';
 import './index.less';
 import friends from '@public/usual/friends.png';
 import taskClose from '@public/usual/taskClose.png';
@@ -15,12 +15,16 @@ function index(props) {
     onClose, //关闭事件
     processId, //进度id
     openModal,
+    supplyLevel, //等级
   } = props;
+  const [outVisible, setOutVisible] = useState(false);
   const [invitaList, setInvitaList] = useState([]); //邀请列表
 
   useEffect(() => {
-    getInvitaInfo();
-  }, []);
+    if (visible) {
+      getInvitaInfo();
+    }
+  }, [visible]);
 
   //获取助力列表
   const getInvitaInfo = async () => {
@@ -31,15 +35,6 @@ function index(props) {
     let { userList = [] } = content;
     userList = filterList(userList, 2);
     setInvitaList(userList);
-  };
-
-  //退出小队
-  const signOut = async () => {
-    const res = await fetchFreeGoodQuitTeam({
-      processIdStr: processId,
-    });
-    getInvitaInfo();
-    onClose();
   };
 
   const popupProps = {
@@ -69,7 +64,11 @@ function index(props) {
                 className="invita_one"
                 key={index + 1}
                 onClick={() => {
-                  !item.profile && openModal('nativeShareClose', processId);
+                  if (supplyLevel > 1) {
+                    !item.profile && openModal('nativeShareClose', processId);
+                  } else {
+                    Toast.show({ content: '达到第三阶段即可合力' });
+                  }
                 }}
               >
                 <img src={item.profile ? item.profile : invite} alt="" />
@@ -82,13 +81,28 @@ function index(props) {
           <div className="invita_rules">
             · 每邀请一名成员，运输加速5% <br />· 运输成功之后，成员每人均可获得本次包裹，包邮到家
             <br /> · 运输期间可随时邀请成员或者退出小队
+            <br />· 只有在第三阶段才能邀请好友合力，前两级邀请无效
           </div>
 
-          <Button className="invita_button" onClick={signOut}>
+          <Button
+            className="invita_button"
+            onClick={() => {
+              setOutVisible(true);
+            }}
+          >
             退出小队
           </Button>
         </div>
       </PopupModal>
+      {/* 是否退出助力的弹窗 */}
+      <SignOutModal
+        visible={outVisible}
+        onClose={() => {
+          setOutVisible(false);
+        }}
+        getInvitaInfo={getInvitaInfo}
+        processId={processId}
+      ></SignOutModal>
     </>
   );
 }

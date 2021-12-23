@@ -15,7 +15,6 @@ function index(props) {
   const { freeGoodInfo = {}, receiveStatus, receiveCount, totalCount, processId } = gameInfo;
 
   useEffect(() => {
-    console.log();
     if (receiveStatus == 1) {
       setVisible(true);
     }
@@ -42,14 +41,16 @@ function index(props) {
     onClose: () => {
       setVisible(false);
     },
-    opacity: 1,
+    opacity: 0.8,
   };
 
   return (
     <>
       <BasicModal modalProps={{ ...modalProps }}>
         <div className="receiveModal_content">
-          <div className="receiveModal_content_title">感谢您第{receiveCount}次领取成功</div>
+          <div className="receiveModal_content_title">
+            wow！感谢您第{receiveCount + 1}次领取成功
+          </div>
           <div className="receiveModal_content_img">
             <img src={freeGoodInfo.packageImg} alt="" />
           </div>

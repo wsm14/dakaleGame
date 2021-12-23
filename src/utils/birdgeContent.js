@@ -31,7 +31,7 @@ export const getToken = (fn) => {
         getLogin();
       } else {
         window.sessionStorage.setItem('dakaleToken', token);
-        fn && fn(token || 'kSPxLBO9t41dQeyLbzplZOxIWbKZeLUHQUAMvPrvWPyydh53YpiAP6XIkzyvviG4');
+        fn && fn(token);
       }
     } else {
       native.nativeInit('getToken', {}, (res) => {
@@ -44,10 +44,10 @@ export const getToken = (fn) => {
       });
     }
   } catch (e) {
-    console.log(e);
-    window.sessionStorage.setItem(
+    console.log(e, '1111111');
+    sessionStorage.setItem(
       'dakaleToken',
-      '795i9jn3i3XV9MuVBqmip4aPJokdg1ujX7kgjmElKUqccE3Aogjqr9T6kaaL31rg',
+      '9frOXnX2ELaN6rq4Trw7KnaJ2x8tvjtO2y34mU6xLlixfrqwXotTKTTPTjgAvg81',
     );
     fn && fn('kSPxLBO9t41dQeyLbzplZOxIWbKZeLUHQUAMvPrvWPyydh53YpiAP6XIkzyvviG4');
   }
@@ -205,6 +205,9 @@ export const nativeShareWork = (shareId) => {
         subType: 'freeTaskHelp',
       },
     },
+    wechat: {
+      url: `/pages/share/gameHelp/index?subType=freeTaskHelp&shareId=${shareId}`,
+    },
   });
 };
 
@@ -221,6 +224,9 @@ export const nativeShareClose = (shareId) => {
         shareType: 'game',
         shareId: shareId,
         subType: 'gameTogether',
+      },
+      wechat: {
+        url: `/pages/share/gameHelp/index?subType=gameTogether&shareId=${shareId}`,
       },
     },
   });
@@ -268,7 +274,7 @@ export const cobyText = (text) => {
 //打开微信分享
 export const closeAnimate = () => {
   try {
-    if (native.getPhone() === 'dakaleAndroid') {
+    if (native.getPhone() !== 'miniProgram') {
       native.nativeInit('hideAnimate');
     }
   } catch (e) {}
@@ -289,7 +295,7 @@ export const linkToMyGoods = () => {
       type: 'gameFree',
     },
     wechat: {
-      url: `/pages/blindBox/prize/index?type=gameFree`,
+      url: `/pages/blindBox/gamePrize/index?channel=gameFree`,
     },
   });
 };
@@ -304,7 +310,9 @@ export const linkToAddress = () => {
       path: 'AddressAdd',
     },
     wechat: {
-      url: `/pages/blindBox/prize/index?type=gameFree`,
+      url: `/pages/relay/community/delivery/index?mode=list`,
     },
   });
 };
+
+//关闭安卓动画

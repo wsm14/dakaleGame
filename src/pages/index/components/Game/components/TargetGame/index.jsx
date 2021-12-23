@@ -1,7 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './index.less';
-import Hilo from 'hilojs';
+import Hilo, { Tween } from 'hilojs';
 import { useSelector, KeepAlive } from 'umi';
+import { Swiper } from 'antd-mobile';
+import math from '@/utils/math';
 import {
   HiloCreateSpirit,
   conversionSize,
@@ -9,8 +11,9 @@ import {
   createStar,
   createBitmap,
   createBottomStar,
+  HiloCreateSpiritbac,
 } from '@/utils/game';
-import { cobyInfo, gameHeight } from '@/utils/utils';
+import { cobyInfo } from '@/utils/utils';
 import { useDebounce } from 'ahooks';
 import { planeSence } from '../Scene/plane';
 import { bigTruckSence } from '../Scene/bigTruck';
@@ -27,27 +30,23 @@ import TaskCloumn from '../TaskCloumn';
 import InvitationModal from '../InvitationModal';
 import Speed from '../Speed';
 import ShareModal from '@/components/ShareModal';
+import { deviceName, nativeShareWork, nativeShareClose, linkTo } from '@/utils/birdgeContent';
 
 const computedY = window.innerHeight * 2;
 let ticker = null; //定时器
 let spiritObj = []; //动画返回的对象
 let beanSprite = null;
 let speedSetTimeout = null; //飞机加速的定时器
-let speedInterval = null;
 let stage = null; //舞台
 let bigStar = null; //大星星的实例对象
-let bol = true;
-let times = 10000;
 function index(props) {
   const { imgObj, getHomeDetail } = props;
   const containerRef = useRef();
   const [invateVisible, setInvateVisible] = useState(''); //合力弹窗
   const [taskVisible, setTaskVisible] = useState(''); //任务弹窗
   const [shareVisible, setShareVisible] = useState({ show: false });
-  // const debouncedValue = useDebounce(starAnimate, { wait: 500 });
-  // console.log(debouncedValue, 'debouncedValue');
   //获取所有的数据
-  const { homeDetail } = useSelector((state) => state.receiveGoods); //所有的数据
+  const { homeDetail, gameHeight } = useSelector((state) => state.receiveGoods); //所有的数据
   const { gameInfo = {} } = homeDetail;
   const {
     processId, //进度id
@@ -66,6 +65,10 @@ function index(props) {
   useEffect(() => {
     initStage();
   }, []);
+
+  useEffect(() => {
+    addText(stage);
+  }, [starBean]);
 
   useUpdateEffect(() => {
     stage.removeAllChildren();
@@ -94,6 +97,9 @@ function index(props) {
 
     //添加补给瓶的动画
     createBean(stage);
+
+    //  添加文字
+    addText(stage);
   };
 
   //监听舞台
@@ -121,7 +127,6 @@ function index(props) {
       spiritObj = expressCarSence(stage, imgObj, freeGoodInfo);
     }
   };
-
   //添加任务和邀请
   const addAnimationStage = (stage) => {
     const list = [
@@ -149,7 +154,6 @@ function index(props) {
         image: imgObj.invateIcon.src,
         x: conversionSize(32),
         y: computedY - conversionSize(152 - gameHeight),
-        // visible: supplyLevel >= 3,
         width: conversionSize(120),
         height: conversionSize(120),
       },
@@ -169,7 +173,6 @@ function index(props) {
         image: imgObj.rectangle1.src,
         x: conversionSize(32),
         y: computedY - conversionSize(192 - gameHeight),
-        // visible: supplyLevel >= 3,
         width: conversionSize(120),
         height: conversionSize(42),
       },
@@ -188,16 +191,20 @@ function index(props) {
       list,
     });
     bigStar = mapItem[1];
+    console.log(mapItem, 'mapItem');
     mapItem[0].on(Hilo.event.POINTER_START, () => {
       starAnimate(mapItem[1], stage);
     });
     mapItem[1].on(Hilo.event.POINTER_START, () => {
       starAnimate(mapItem[1], stage);
     });
-    mapItem[2].on(Hilo.event.POINTER_START, () => {
+    mapItem[2].on(Hilo.event.POINTER_START, (e) => {
+      e.preventDefault();
       setInvateVisible(true);
     });
-    mapItem[3].on(Hilo.event.POINTER_START, () => {
+    mapItem[3].on(Hilo.event.POINTER_START, (e) => {
+      // e.stopPropagation();
+      e.preventDefault();
       setTaskVisible(true);
     });
 
@@ -215,7 +222,7 @@ function index(props) {
       width: conversionSize(160),
       height: conversionSize(180),
       x: conversionSize(558),
-      y: conversionSize(125),
+      y: conversionSize(175),
     });
     const beanAnimate = HiloCreateSpirit(imgObj.beanBottle.src, 33, 31, 160, 180, 'beanBottle');
     beanSprite.addFrame(beanAnimate.getSprite('beanBottle'));
@@ -226,7 +233,7 @@ function index(props) {
   const collarBean = async () => {
     const res = await fetchFreeGoodGetSupply();
     // console.log(stage, 'stage');
-    createStar(stage, imgObj, bigStar, getHomeDetail);
+    createStar(stage, imgObj, bigStar, getHomeDetail, gameHeight);
   };
 
   //设置大星星的动画
@@ -266,59 +273,200 @@ function index(props) {
     if (res.resultCode == 1) {
       createBottomStar(stage, imgObj, spiritPlus, getHomeDetail);
     }
+    // createBottomStar(stage, imgObj, spiritPlus, getHomeDetail);
   };
-  //背景图精灵图加速动画
+  //背景图加速动画
   const spiritPlus = () => {
-    // let times = 10000;
-    const [background1, background2, Spirite1, background3] = spiritObj;
-    clearInterval(speedSetTimeout);
-    background1.isStart = false;
-    background2.isStart = false;
-
-    // speedInterval = setInterval(() => {
-    //   if (bol) {
-    //     console.log(times, 'times1');
-    //     background1.duration = times;
-    //     background2.duration = times;
-    //     times -= 20;
-    //     Spirite1.interval = 1;
-    //     if (times < 5000) {
-    //       bol = false;
-    //     }
-    //   } else {
-    //     times += 20;
-    //     // times = 10000;
-    //     console.log(times, 'times2');
-    //     if (times >= 10000) {
-    //       background1.duration = times;
-    //       background2.duration = times;
-    //       Spirite1.interval = 24;
-    //       clearInterval(speedInterval);
-    //       bol = true;
-    //     }
-    //   }
-    // }, 100);
+    let [background1, background2, Spirite1] = spiritObj;
+    clearTimeout(speedSetTimeout);
+    console.log(background1);
+    const index = background1.currentFrame;
+    background2.goto(parseInt(index / 10) - 1);
+    background2.visible = true;
+    background1.visible = false;
     Spirite1.interval = 1;
-    background1.duration = 4000;
-    background2.duration = 4000;
+
     speedSetTimeout = setTimeout(() => {
+      background1.goto(parseInt(background2.currentFrame * 10));
+      background1.visible = true;
+      background2.visible = false;
       Spirite1.interval = 24;
-      background1.duration = 10000;
-      background2.duration = 10000;
-      getHomeDetail();
-    }, 2000);
+    }, 5000);
+    // clearTimeout(speedSetTimeout);
+    // const target = stage.getChildById('animationBac');
+    // const target1 = stage.getChildById('animationBac1');
+
+    // console.log(target);
+    // Hilo.Tween.remove(target);
+    // Hilo.Tween.remove(target1);
+    // const imgWidth = imgObj.planeBg.width;
+
+    // const num = target.x;
+    // const num1 = target1.x;
+
+    // speedSetTimeout = setTimeout(() => {
+    //   Spirite1.interval = 1;
+    //   Hilo.Tween.to(
+    //     target,
+    //     {
+    //       x: -imgWidth,
+    //     },
+    //     {
+    //       duration: math.divide(math.multiply(math.add(imgWidth, num), 3), 5),
+    //       ease: Hilo.Ease.Linear.EaseNone,
+    //       onComplete: (tween) => {
+    //         Hilo.Tween.fromTo(
+    //           tween.target,
+    //           {
+    //             x: 0,
+    //           },
+    //           {
+    //             x: num,
+    //           },
+    //           {
+    //             duration: math.divide(math.multiply(-num, 3), 5),
+    //             ease: Hilo.Ease.Linear.EaseNone,
+    //             loop: false,
+    //             onComplete: (tween) => {
+    //               Spirite1.interval = 24;
+    //               Hilo.Tween.to(
+    //                 tween.target,
+    //                 {
+    //                   x: -imgWidth,
+    //                 },
+    //                 {
+    //                   duration: math.multiply(math.add(imgWidth, tween.target.x), 3),
+    //                   ease: Hilo.Ease.Linear.EaseNone,
+    //                   loop: false,
+    //                   onComplete: (tween) => {
+    //                     Hilo.Tween.fromTo(
+    //                       tween.target,
+    //                       {
+    //                         x: 0,
+    //                       },
+    //                       {
+    //                         x: -imgWidth,
+    //                       },
+    //                       {
+    //                         duration: 9000,
+    //                         ease: Hilo.Ease.Linear.EaseNone,
+    //                         loop: true,
+    //                       },
+    //                     );
+    //                   },
+    //                 },
+    //               );
+    //             },
+    //           },
+    //         );
+    //       },
+    //     },
+    //   );
+
+    //   Hilo.Tween.to(
+    //     target1,
+    //     {
+    //       x: 0,
+    //     },
+    //     {
+    //       duration: math.divide(math.multiply(num1, 3), 5),
+    //       ease: Hilo.Ease.Linear.EaseNone,
+    //       onComplete: (tween) => {
+    //         Hilo.Tween.fromTo(
+    //           tween.target,
+    //           {
+    //             x: imgWidth,
+    //           },
+    //           {
+    //             x: num1,
+    //           },
+    //           {
+    //             duration: math.divide(math.multiply(math.subtract(imgWidth, num1), 3), 5),
+    //             ease: Hilo.Ease.Linear.EaseNone,
+    //             loop: false,
+    //             onComplete: (tween) => {
+    //               Hilo.Tween.to(
+    //                 tween.target,
+    //                 {
+    //                   x: 0,
+    //                 },
+    //                 {
+    //                   duration: math.multiply(num1, 3),
+    //                   ease: Hilo.Ease.Linear.EaseNone,
+    //                   loop: false,
+    //                   onComplete: (tween) => {
+    //                     Hilo.Tween.fromTo(
+    //                       tween.target,
+    //                       {
+    //                         x: imgWidth,
+    //                       },
+    //                       {
+    //                         x: 0,
+    //                       },
+    //                       {
+    //                         duration: 9000,
+    //                         ease: Hilo.Ease.Linear.EaseNone,
+    //                         loop: true,
+    //                       },
+    //                     );
+    //                   },
+    //                 },
+    //               );
+    //             },
+    //           },
+    //         );
+    //       },
+    //     },
+    //   );
+    // });
   };
+
+  //改变元素运动
 
   //打开弹窗并且复制口令
   const openModal = async (type, id) => {
-    const res = await fetchCommandGetCommand({
-      commandType: { nativeShareWork: 'freeTaskHelp', nativeShareClose: 'freeTogether' }[type],
-      relateId: id,
+    const btnType = {
+      nativeShareWork: 'freeTaskHelp',
+      nativeShareClose: 'gameTogether',
+    }[type];
+    if (deviceName() != 'miniProgram') {
+      const res = await fetchCommandGetCommand({
+        commandType: { nativeShareWork: 'freeTaskHelp', nativeShareClose: 'freeTogether' }[type],
+        relateId: id,
+      });
+      const { command } = res.content;
+      cobyInfo(command, { show: true, type, value: id }, (val) => {
+        setShareVisible(val);
+      });
+    } else {
+      linkTo({
+        wechat: {
+          url: `/pages/share/gameHelp/index?subType=${btnType}&shareId=${id}`,
+        },
+      });
+    }
+  };
+
+  const addText = (stage) => {
+    stage.removeChildById('myBean1');
+    const list = [
+      {
+        id: 'myBean1',
+        type: 'Text',
+        color: '#fff',
+        font: '28px arial',
+        text: `我的星豆${starBean}`,
+        maxWidth: conversionSize(400),
+        width: conversionSize(400),
+        textAlign: 'center',
+        x: conversionSize(170),
+        y: computedY - conversionSize(80 - gameHeight),
+      },
+    ];
+    const mapItem = createBitmap({
+      list,
     });
-    const { command } = res.content;
-    cobyInfo(command, { show: true, type, value: id }, (val) => {
-      setShareVisible(val);
-    });
+    stage.addChild(...mapItem);
   };
 
   return (
@@ -329,13 +477,27 @@ function index(props) {
       </div>
       {/* 领取文字 */}
       <div className="receiveText" onClick={subsidyFlag === '1' ? collarBean : null}>
-        {subsidyFlag === '1' ? `${subsidyNum}星豆` : `明日再领`}
+        {subsidyFlag === '1' ? (
+          `${subsidyNum}星豆`
+        ) : (
+          <Swiper
+            autoplay
+            direction="vertical"
+            loop
+            allowTouchMove={false}
+            indicator={() => null}
+            className="receiveText_swiper"
+          >
+            <Swiper.Item>明日领取</Swiper.Item>
+            <Swiper.Item>{subsidyNum}星豆</Swiper.Item>
+          </Swiper>
+        )}
       </div>
 
       {/* 剩余星豆 */}
-      <div className="surplusBean">
+      {/* <div className="surplusBean">
         我的星豆 <span>{starBean}</span>
-      </div>
+      </div> */}
 
       {/* 进度 */}
       <Speed processInfo={processInfo} cityCode={cityCode}></Speed>
@@ -358,6 +520,7 @@ function index(props) {
         }}
         processId={processId}
         openModal={openModal}
+        supplyLevel={supplyLevel}
       ></InvitationModal>
       {/* 分享弹窗 */}
       <ShareModal

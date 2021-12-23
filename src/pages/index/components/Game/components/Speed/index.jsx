@@ -25,7 +25,7 @@ function index(props) {
       />
       <div className="speed_info">
         {supplyLevel > 0 ? (
-          <div>运输再补给{(100 - supplyProcess / 100).toFixed(2)}%</div>
+          <div>运输再补给{(100 - supplyProcess / 100).toFixed(2)}%,即可到达</div>
         ) : (
           <div>再加{10 - supplyProcess}次补给，即可到达</div>
         )}

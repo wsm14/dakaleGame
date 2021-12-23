@@ -14,26 +14,26 @@ import rightPng from '@public/right.png';
 import { set } from '@umijs/deps/compiled/lodash';
 
 function index(props) {
-  const { visible = false, onClose, query = {}, pageFlag, getHomeDetail, token } = props;
+  const { visible = false, onClose, query = {}, pageFlag, getHomeDetail, time } = props;
   const { packageObj = {}, addressObj, homeDetail } = useSelector((state) => state.receiveGoods); //商品信息  地址信息
   const { gameInfo = {} } = homeDetail;
-  const { addressId, processId } = homeDetail;
+  const { addressId, processId } = gameInfo;
 
   const dispatch = useDispatch();
 
   const addressLength = Object.keys(addressObj).length;
   useEffect(() => {
-    if (token) {
+    if (time) {
       !addressLength && getAddress();
       if (!addressId && processId) {
         getGoodsDetail();
       }
     }
-  }, [token]);
+  }, [time, addressId, processId]);
   //获取默认地址
   const getAddress = async () => {
     const res = await fetchUserDefaultAddress();
-    const { content } = res;
+    const { content = {} } = res;
     const { userAddressInfo = {} } = content;
     dispatch({
       type: 'receiveGoods/save',
@@ -57,8 +57,10 @@ function index(props) {
   const confirmAddress = async () => {
     if (addressLength) {
       if (!addressId && processId) {
+        const { userAddressId } = addressObj;
         const res = await fetchFreeGoodSetRewardAddress({
           gameProcessId: processId,
+          addressId: userAddressId,
         });
         dispatch({
           type: 'receiveGoods/save',
@@ -120,9 +122,7 @@ function index(props) {
               <div className="overlay_goods_right">
                 <div className="overlay_goods_name">{packageObj.packageName}</div>
                 {/* <div className="overlay_goods_remark">一袋/250g</div> */}
-                <div className="overlay_goods_label">
-                  <span>100%超容易获得</span>
-                </div>
+                <div className="overlay_goods_label">100%超容易获得</div>
               </div>
             </div>
 

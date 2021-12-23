@@ -3,22 +3,21 @@ import { connect, useDispatch, useSelector, KeepAlive, useLocation } from 'umi';
 import './index.less';
 import { uploadResponents } from '@/components/uploadRes/index';
 import { reloadTab } from '@/utils/utils';
-import { getToken, hideTitle, closeAnimate } from '@/utils/birdgeContent';
+import { getToken, hideTitle, closeAnimate, deviceName } from '@/utils/birdgeContent';
 import ReceiveModal from '@/components/ReceiveModal';
 import OrderModal from '@/components/OrderModal';
 import { imgList } from '@/common/goods';
 import Loding from './components/Loding';
 import CheckGoods from './components/CheckGoods';
 import StartSupply from './components/StartSupply';
+import UsualModal from '@/components/UsualModal';
 import Game from './components/Game';
 
 const LoginForm = ({ type }) => {
   const [state, setState] = useState();
   const [imgObj, setImgObj] = useState({});
-  const [token, setToken] = useState(null);
   const { orderVisible, homeDetail } = useSelector((state) => state.receiveGoods);
-  const location = useLocation();
-  const { query = {} } = location;
+  const [time, setTimes] = useState(false);
   const { gameInfo } = homeDetail;
   const dispatch = useDispatch();
   useEffect(() => {
@@ -31,6 +30,14 @@ const LoginForm = ({ type }) => {
       },
       (_, val) => {
         setImgObj(val);
+        if (deviceName() == 'miniProgram') {
+          dispatch({
+            type: 'receiveGoods/save',
+            payload: {
+              gameHeight: 0,
+            },
+          });
+        }
         getHomeDetail();
         reloadTab(getHomeDetail);
       },
@@ -57,13 +64,13 @@ const LoginForm = ({ type }) => {
   const getStateToken = () => {
     getToken((e) => {
       if (e) {
-        setToken(e);
+        setTimes(true);
       }
     });
     hideTitle();
     // sessionStorage.setItem(
     //   'dakaleToken',
-    //   'ufKFHQCty4nkVdycmxGkMk268QlodY6V78aO8R5GFaJi9Fxhg0Ge8xB4SrD9BeTr',
+    //   '874MXiUXniOjQEu7LBN1htwM1RIVUlTaRSpTmh76N9PkNKWt5sucDXMogmuZxlTk',
     // );
   };
 
@@ -81,7 +88,7 @@ const LoginForm = ({ type }) => {
         visible={orderVisible}
         // pageFlag={pageFlag}
         // query={query}
-        token={token}
+        time={time}
         getHomeDetail={getHomeDetail}
         onClose={() => {
           dispatch({
@@ -95,6 +102,9 @@ const LoginForm = ({ type }) => {
 
       {/* 免费领取的弹窗 */}
       <ReceiveModal getHomeDetail={getHomeDetail}></ReceiveModal>
+
+      {/* 普通弹窗 */}
+      <UsualModal></UsualModal>
     </>
   );
 };

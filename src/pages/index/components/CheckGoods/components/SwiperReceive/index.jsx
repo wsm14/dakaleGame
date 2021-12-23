@@ -4,8 +4,8 @@ import './index.less';
 
 function index(props) {
   const { list = [] } = props;
-  const verticalItems = list.map((item) => (
-    <Swiper.Item className="verticalContent_box" key={item.userProfile}>
+  const verticalItems = list.map((item, index) => (
+    <Swiper.Item className="verticalContent_box" key={`${index}1`}>
       <div className="verticalContent">
         <img src={item.userProfile} />
         <div>{item.barrageDesc}</div>
