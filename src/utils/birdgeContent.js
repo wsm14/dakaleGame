@@ -55,7 +55,7 @@ export const getToken = (fn) => {
 //获取token
 export const getLogin = () => {
   if (native.getPhone() === 'miniProgram') {
-    native.nativeInit('linkTo', {
+    native.nativeInit('redirectTo', {
       wechat: {
         url: `/pages/auth/index`,
       },

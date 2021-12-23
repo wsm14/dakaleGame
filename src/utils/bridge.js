@@ -147,6 +147,7 @@ function nativeOther() {
   this.wechat = {
     linkTo: 'navigateTo', //路径跳转
     getUserLocationInfo: 'getLocation', //获取用户定位信息
+    redirectTo: 'redirectTo',
   };
   this.getPhone = function () {
     const u = navigator.userAgent.toLowerCase();
