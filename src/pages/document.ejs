@@ -33,6 +33,10 @@
           i.addEventListener &&
             (t.addEventListener(o, a, !1), i.addEventListener('DOMContentLoaded', a, !1));
       })(window);
+      window.loginSuccess = function () {
+        window.location.reload();
+        console.log();
+      };
     </script>
     <!-- <link rel="icon" href="<%= context.config.publicPath +'favicon.png'%>" type="image/x-icon" /> -->
   </head>

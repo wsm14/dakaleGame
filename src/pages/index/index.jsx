@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect, useDispatch, useSelector, KeepAlive, useLocation } from 'umi';
 import './index.less';
 import { uploadResponents } from '@/components/uploadRes/index';
 import { reloadTab } from '@/utils/utils';
+import { fetchFreeGoodMainPage } from '@/services/game';
 import { getToken, hideTitle, closeAnimate, deviceName } from '@/utils/birdgeContent';
 import ReceiveModal from '@/components/ReceiveModal';
 import OrderModal from '@/components/OrderModal';
@@ -21,31 +22,15 @@ const LoginForm = ({ type }) => {
   const { gameInfo } = homeDetail;
   const dispatch = useDispatch();
   useEffect(() => {
+    reloadTab(() => {
+      getHomeDetail();
+    });
     getStateToken();
     closeAnimate();
-    uploadResponents(
-      imgList,
-      (e) => {
-        setState(e);
-      },
-      (_, val) => {
-        setImgObj(val);
-        if (deviceName() == 'miniProgram') {
-          dispatch({
-            type: 'receiveGoods/save',
-            payload: {
-              gameHeight: 0,
-            },
-          });
-        }
-        getHomeDetail();
-        reloadTab(getHomeDetail);
-      },
-    );
   }, []);
 
   //获取整体的信息
-  const getHomeDetail = () => {
+  const getHomeDetail = async () => {
     dispatch({
       type: 'receiveGoods/fetchGetHomeDetail',
       callback: (res) => {
@@ -62,16 +47,31 @@ const LoginForm = ({ type }) => {
   };
 
   const getStateToken = () => {
-    getToken((e) => {
-      if (e) {
-        setTimes(true);
-      }
-    });
+    uploadResponents(
+      imgList,
+      (e) => {
+        setState(e);
+      },
+      (_, val) => {
+        setImgObj(val);
+        if (deviceName() == 'miniProgram') {
+          dispatch({
+            type: 'receiveGoods/save',
+            payload: {
+              gameHeight: 0,
+            },
+          });
+        }
+        getToken((e) => {
+          if (e) {
+            getHomeDetail();
+            setTimes(true);
+          }
+        });
+      },
+    );
+
     hideTitle();
-    // sessionStorage.setItem(
-    //   'dakaleToken',
-    //   '874MXiUXniOjQEu7LBN1htwM1RIVUlTaRSpTmh76N9PkNKWt5sucDXMogmuZxlTk',
-    // );
   };
 
   return (
