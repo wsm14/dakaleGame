@@ -1,0 +1,65 @@
+.reportPage {
+  width: 100vw;
+  height: 100vh;
+  background-size: 100% 100% !important;
+  position: relative;
+  .reportContent {
+    width: 556px;
+    padding: 35px 0 24px 40px;
+    background: rgba(#000, 0.2);
+    border-radius: 30px;
+    position: absolute;
+    left: 32px;
+    bottom: 194px;
+    div {
+      font-size: 28px;
+      font-weight: 400;
+      color: #ffffff;
+      line-height: 48px;
+      opacity: 0;
+      animation: opacity 2s linear paused forwards;
+    }
+    span {
+      font-weight: 500;
+      color: #ffd637;
+    }
+  }
+}
+
+.background0 {
+  background: url(~@public/image/swiper0.png);
+}
+
+.background1 {
+  background: url(~@public/image/swiper1.png);
+}
+
+.background2 {
+  background: url(~@public/image/swiper2.png);
+}
+.background3 {
+  background: url(~@public/image/swiper3.png);
+}
+.background4 {
+  background: url(~@public/image/swiper4.png);
+}
+
+.report_marginSlide {
+  margin: 0 10px;
+}
+
+.report_margin {
+  margin-top: 24px;
+}
+.fontSize48 {
+  font-size: 48px;
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
