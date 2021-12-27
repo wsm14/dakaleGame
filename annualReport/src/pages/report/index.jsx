@@ -6,7 +6,7 @@ import ReportIcon from './components/ReportIcon';
 import topIcon from '@public/image/topIcon.png';
 
 function index() {
-  const [pageIndex, setPageIndex] = useState(0); //当前跳转到第几页
+  const [pageIndex, setPageIndex] = useState(0); //跳转到第几页
   const list = [0, 1, 2, 3, 4, 5];
   return (
     <>
