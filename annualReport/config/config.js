@@ -75,6 +75,11 @@ export default defineConfig({
         },
       },
     });
+    config.module
+      .rule('media')
+      .test(/\.(mp3|4)$/)
+      .use('file-loader')
+      .loader(require.resolve('file-loader'));
   },
   nodeModulesTransform: {
     type: 'none',
