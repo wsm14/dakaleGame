@@ -8,31 +8,32 @@ import music from '@public/image/music.mp3';
 
 function index() {
   const audioRef = useRef();
+  const iconRef = useRef();
   const [bol, setBol] = useState(false);
-  // useEffect(() => {
-  //   audioRef.current.play();
-  //   audioRef.current.muted = false;
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      iconRef.current.click();
+    }, 1000);
+  }, []);
+
   const check = () => {
     if (bol) {
       audioRef.current.pause();
-      audioRef.current.muted = false;
     } else {
       audioRef.current.play();
-      audioRef.current.muted = false;
     }
     setBol(!bol);
   };
   return (
     <>
-      <audio src={music} autoPlay muted ref={audioRef} />
+      <video src={music} ref={audioRef} />
 
       {/* 分享图标 */}
       <div className="shareIcon">
         <img src={shareIcon} alt="" />
       </div>
       {/* 音乐图标 */}
-      <div className="musicIcon" onClick={check}>
+      <div className="musicIcon" onClick={check} ref={iconRef}>
         {bol ? <img src={musicIcon} alt="" /> : <img src={musicIcon1} alt="" />}
       </div>
     </>

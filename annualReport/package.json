@@ -28,6 +28,7 @@
     "antd-mobile": "^5.0.0-rc.5",
     "antd-mobile-v5": "npm:antd-mobile@next",
     "array-move": "^3.0.1",
+    "file-loader": "^6.2.0",
     "hilojs": "^2.0.2",
     "immutability-helper": "^3.1.1",
     "jszip": "^3.7.0",

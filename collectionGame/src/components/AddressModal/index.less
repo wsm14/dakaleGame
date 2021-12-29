@@ -1,0 +1,88 @@
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1.5;
+  .overlayContent {
+    width: 540px;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 40px;
+    flex-wrap: wrap;
+    .overlayContent_title {
+      font-size: 32px;
+      color: #333;
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+    }
+    .receiveInfo {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      .receiveInfo_addressImg {
+        width: 40px;
+        height: 48px;
+      }
+      .receiveInfo_content {
+        .receiveInfo_name {
+          font-weight: 600;
+          font-size: 32px;
+          color: #333;
+          line-height: 42px;
+        }
+        .receiveInfo_mobile {
+          font-size: 24px;
+          color: #999;
+          font-weight: 500;
+          margin-left: 16px;
+        }
+        .receiveInfo_address {
+          width: 340px;
+          font-size: 26px;
+          color: #333;
+          margin-top: 24px;
+          word-break: break-all;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2; /* 这里是超出几行省略 */
+          overflow: hidden;
+        }
+      }
+      .receiveInfo_rightImg {
+        width: 32px;
+        height: 32px;
+        margin-top: 5px;
+      }
+    }
+    .receiveInfo_confirm {
+      display: flex;
+      justify-content: center;
+      .receiveInfo_button {
+        width: 360px;
+        height: 60px;
+        background: #ef476f;
+        border-radius: 30px;
+        font-size: 28px;
+        color: #ffffff;
+        border: none;
+        margin: 44px auto 0;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .closeImg {
+    margin-top: 40px;
+    text-align: center;
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+}
