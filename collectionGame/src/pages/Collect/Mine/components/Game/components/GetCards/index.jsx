@@ -5,16 +5,21 @@ import TitleBlock from '@/components/TitleBlock';
 import Cloud from '@/components/Cloud';
 import TurnTable from './components/TurnTable';
 import TaskCloumn from './components/TaskCloumn';
+import { nativeClose } from '@/utils/birdgeContent';
 
 import getCard_button from '@public/loading/getCard_button.png';
 import getCard_script from '@public/loading/getCard_script.png';
 
 function index() {
+  //点击返回按钮
+  const goBack = () => {
+    nativeClose();
+  };
   return (
     <>
       <div className="getCards">
         <div className="getCards_topImg">
-          <TitleBlock></TitleBlock>
+          <TitleBlock back={goBack}></TitleBlock>
           <div className="getCards_doubleImg">
             <img
               src={getCard_button}

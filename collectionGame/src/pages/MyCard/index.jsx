@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './index.less';
+import { history } from 'umi';
 import Cloud from '@/components/Cloud';
 import TitleBlock from '@/components/TitleBlock';
 import lantern from '@public/loading/lantern.png';
@@ -13,13 +14,18 @@ function index() {
   };
   //合成卡
   const closeCard = () => {
-    console.log(111111);
+    console.log(111);
+  };
+
+  //点击返回按钮
+  const goBack = () => {
+    history.goBack();
   };
   return (
     <>
+      {/* 标题栏 */}
+      <TitleBlock type="title" back={goBack}></TitleBlock>
       <div className="myCard">
-        {/* 标题栏 */}
-        <TitleBlock type="title"></TitleBlock>
         {/* 上方图片 */}
         <div className="myCard_topImg">
           <img src={lantern} alt="" />
@@ -55,7 +61,7 @@ function index() {
                   }}
                 >
                   <div className="beanCard_width">
-                    <img src={card1} alt="" className="beanCard_img" />
+                    <img src={card1} className="beanCard_img" />
                     <div className="beanCard_num">
                       <div>2</div>
                     </div>
