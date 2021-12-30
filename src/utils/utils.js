@@ -148,3 +148,10 @@ export const reloadTab = (callback) => {
     }
   });
 };
+export const filterStrList = (str) => {
+  if (!str || str.length == 0) {
+    return [];
+  }
+  return str.split(',');
+};
+//字符串标签 轉數組

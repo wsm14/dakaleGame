@@ -103,6 +103,7 @@ request.interceptors.response.use(async (response) => {
   const { success, resultCode = '', resultDesc = '' } = data;
   const errorCode = ['5005', '1014'];
   if (errorCode.includes(resultCode)) {
+    sessionStorage.removeItem('dakale_token');
     getLogin();
   }
   if (!success && response.status == 200) {

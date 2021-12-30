@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Mask from '@/components/mask';
-import { backgroundObj } from '@/utils/utils';
+import { backgroundObj, filterStrList } from '@/utils/utils';
 import {
   linkToCoupon,
   linkToWallet,
@@ -30,15 +30,20 @@ export default (props) => {
   const templateContent = {
     bean: (
       <div>
-        <div className="blindPop_profile" style={backgroundObj(prizeImg)}></div>
+        <div className="blindPop_profile" style={backgroundObj(filterStrList(prizeImg)[1])}></div>
         <div className="blindPop_name">{prizeName}</div>
       </div>
     ),
-    commerce: <div className="blindPop_profile" style={backgroundObj(prizeImg)}></div>,
+    commerce: (
+      <div className="blindPop_profile" style={backgroundObj(filterStrList(prizeImg)[1])}></div>
+    ),
     rightGood: (
       <div>
         <div className="blindPop_shopView">
-          <div className="blindPop_shopLogo" style={backgroundObj(prizeImg)}></div>
+          <div
+            className="blindPop_shopLogo"
+            style={backgroundObj(filterStrList(prizeImg)[1])}
+          ></div>
           <div className="blindPop_shopContent">
             <div className="blindPop_shop_name font_hide">{prizeName}</div>
             <div className="blindPop_shop_user">
@@ -67,7 +72,7 @@ export default (props) => {
           onClick={() => {
             linkTo({
               ios: {
-                path: 'DKLExquisiteChosenHomeViewController ',
+                path: 'DKLExquisiteChosenHomeViewController',
               },
               android: {
                 path: 'ShopAround',
@@ -81,7 +86,7 @@ export default (props) => {
           去使用抵扣
         </div>
         <div className="blindPop_shop_desc">
-          {prizeName}可直接抵扣{parseInt(prizeName)}元
+          {prizeName}可直接抵扣{parseInt(prizeName) / 100}元
         </div>
       </div>
     ),

@@ -7,7 +7,7 @@
   .blind_title {
     display: flex;
     align-items: center;
-    padding: 60px 32px 0;
+    padding: 75px 32px 0;
   }
   .blind_title::before {
     width: 48px;
@@ -17,10 +17,11 @@
     content: '';
   }
   .blind_titleName {
+    width: 218px;
+    height: 42px;
     margin-left: 188px;
-    color: #ffffff;
-    font-size: 40px;
-    text-shadow: 0px 2px 4px #799a29;
+    background: url(~@/assert/image/blind_boxTitle.png) no-repeat;
+    background-size: 100% 100%;
   }
   .blind_bean_success {
     width: 173px;
@@ -30,6 +31,36 @@
     position: absolute;
     top: 248px;
     left: 56px;
+  }
+  .animate_1 {
+    animation-name: animateToast1;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  @keyframes animateToast1 {
+    from {
+      transform: translateX(0px);
+    }
+    to {
+      transform: translateX(40px);
+    }
+  }
+  .animate_2 {
+    animation-name: animateToast2;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  @keyframes animateToast2 {
+    from {
+      transform: translateX(0px);
+    }
+    to {
+      transform: translateX(-40px);
+    }
   }
 
   .blind_bean_boxStyle2 {
@@ -82,7 +113,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 159px;
+    min-width: 198px;
     height: 60px;
     padding: 0 18px 0 26px;
     color: #ffffff;
@@ -99,6 +130,7 @@
     background-size: 100% 100%;
   }
   .blind_bean_three {
+    padding: 0 0.26rem 0 0.18rem !important;
     background: url(~@/assert/image/blink_toast_three.png) no-repeat;
     background-size: 100% 100%;
   }
@@ -109,12 +141,24 @@
   .blind_bean_toastPosition1 {
     position: absolute;
     top: 0;
-    right: -198px;
+    right: -218px;
   }
+
+  .blind_bean_toastCheckPosition1 {
+    position: absolute;
+    top: 0;
+    right: -218px;
+  }
+  .blind_bean_toastCheckPosition2 {
+    position: absolute;
+    top: 0;
+    left: -218px;
+  }
+
   .blind_bean_toastPosition2 {
     position: absolute;
     top: 0;
-    left: -198px;
+    left: -208px;
   }
   .blind_key_info {
     display: flex;

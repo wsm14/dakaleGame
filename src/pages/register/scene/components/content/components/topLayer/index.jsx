@@ -1,15 +1,18 @@
 import React from 'react';
 import { Swiper, Switch } from 'antd-mobile';
-import { nativeClose, linkRule, linkToWallet } from '@/utils/birdgeContent';
+import { nativeClose, linkRule, linkToWallet, deviceName } from '@/utils/birdgeContent';
 import { history } from 'umi';
 import './index.less';
 export default ({ img, regOpen, data = {} }) => {
   const { remindFlag, bean = 0, noUseKeys, continuitySignDay } = data;
-
   return (
     <div className="topLayer_box">
       <div className="topLayer_title">
-        <div className={`topLayer_img`} onClick={() => nativeClose()}></div>
+        <div
+          style={{ visibility: deviceName() === 'miniProgram' ? 'hidden' : 'visible' }}
+          className={`topLayer_img`}
+          onClick={() => nativeClose()}
+        ></div>
         <img src={img && img.get('registerFont').src} className={`topLayer_title_desc`} />
         <div className="topLayer_title_reg" onClick={regOpen}></div>
       </div>
@@ -29,7 +32,7 @@ export default ({ img, regOpen, data = {} }) => {
             className="topLayer_scoend_swiper"
           >
             <Swiper.Item className="swiper_box public_center">
-              <div>{bean && (bean / 100).toFixed(2)}元</div>
+              <div className="topLayer_scoend_fontFamily">{bean && (bean / 100).toFixed(2)}元</div>
             </Swiper.Item>
             <Swiper.Item className="swiper_box public_center">
               <div>{bean}卡豆</div>
@@ -42,7 +45,7 @@ export default ({ img, regOpen, data = {} }) => {
             linkRule();
           }}
         >
-          赚豆秘籍
+          签到秘籍
         </div>
         <div
           onClick={() => {

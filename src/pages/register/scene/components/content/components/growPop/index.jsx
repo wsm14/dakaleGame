@@ -41,10 +41,11 @@ export default (props) => {
                   wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods` },
                   ios: {
                     path: iosUrl,
-                    param: { strapId },
+                    param: { strapId, browserType: 'pickUpMerge' },
                   },
                   android: {
                     path: androidUrl,
+                    browserType: 'pickUpMerge',
                     strapId,
                   },
                 });
@@ -106,11 +107,63 @@ export default (props) => {
         </div>
       );
     } else {
-      return <div className="growPop_body_btn growPop_body_btn2 growPop_body_opcity">已领取</div>;
+      return (
+        <div
+          onClick={() => {
+            try {
+              if (type !== 'invite') {
+                linkTo({
+                  wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods` },
+                  ios: {
+                    path: iosUrl,
+                    param: { strapId },
+                  },
+                  android: {
+                    path: androidUrl,
+                    strapId,
+                  },
+                });
+              } else {
+                if (deviceName() === 'miniProgram') {
+                  linkTo({
+                    wechat: {
+                      url: `/pages/share/gameHelp/index?subType=signTaskHelp&shareId=${strapId}`,
+                    },
+                  });
+                  return;
+                }
+                fetchCommand({
+                  commandType: 'signTaskHelp',
+                  token: token,
+                  relateId: strapId,
+                }).then((val) => {
+                  if (val) {
+                    const { command } = val.content;
+                    cobyInfo(command, () => {
+                      openWork(() => {
+                        return {
+                          visible: true,
+                          work: strapId,
+                        };
+                      });
+                    });
+                  }
+                });
+              }
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+          className="growPop_body_btn growPop_body_btn2 growPop_body_opcity"
+        >
+          已领取
+        </div>
+      );
     }
   };
   const fetchTask = () => {
     fetchTaskList({
+      source: deviceName() === 'miniProgram' ? 'miniGroup' : 'app',
       token,
       gameName: 'signGame',
     }).then((val) => {

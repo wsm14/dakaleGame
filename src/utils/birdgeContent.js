@@ -29,7 +29,7 @@ export const linkRule = () => {
     });
   } else {
     window.location.href =
-      'https://resource-new.dakale.net/product/html/active/771c4177-4995-4735-9537-376a674bb083.html?newPage=true';
+      'https://resource-new.dakale.net/product/html/active/771c4177-4995-4735-9537-376a674bb083.html?newPage=true&showTitle=true';
   }
 };
 export const nativeClose = () => {
@@ -46,7 +46,7 @@ export const getToken = (fn) => {
         fn && fn(token);
       }
     } else {
-      native.nativeInit('getToken', {}, (res)   => {
+      native.nativeInit('getToken', {}, (res) => {
         if (res && res.length > 0) {
           window.sessionStorage.setItem('dakale_token', res);
           fn && fn(res);
@@ -151,7 +151,7 @@ export const linkToPrize = () => {
       type: 'gameSign',
     },
     wechat: {
-      url: `/pages/blindBox/prize/index`,
+      url: `/pages/blindBox/gamePrize/index?channel=gameSign`,
     },
   });
 };

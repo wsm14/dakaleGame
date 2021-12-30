@@ -83,6 +83,83 @@ export default ({ userInfo }) => {
     });
   };
   //获取特惠列表
+  // const templateActive = (item) => {
+  //   const {
+  //     commission,
+  //     goodsImg,
+  //     goodsName,
+  //     merchantName,
+  //     lat,
+  //     lnt,
+  //     merchantLogo,
+  //     oriPrice,
+  //     realPrice,
+  //     ownerIdString,
+  //     specialActivityIdString,
+  //     paymentModeObject,
+  //   } = item;
+  //   const { bean, cash, type = 'defaultMode' } = paymentModeObject;
+  //   return (
+  //     <div
+  //       className="bottom_shop_box"
+  //       onClick={() => {
+  //         Router({
+  //           routerName: 'favourableDetails',
+  //           args: {
+  //             merchantId: ownerIdString,
+  //             specialActivityId: specialActivityIdString,
+  //           },
+  //         });
+  //       }}
+  //       key={specialActivityIdString}
+  //     >
+  //       <div className="bottom_shop_img" style={backgroundObj(goodsImg)}></div>
+  //       <div className="bottom_shop_content">
+  //         <div className="bottom_shop_goodsName font_noHide">{goodsName}</div>
+  //         {type !== 'defaultMode' ? (
+  //           <>
+  //             <div className="bottom_shop_oldPrice1">
+  //               <div className="bottom_shop_oldLabel">原价:</div>
+  //               <div className="bottom_shop_oldcout">¥{oriPrice}</div>
+  //             </div>
+  //             <div className="bottom_qy_price font_hide">
+  //               <div className="bottom_qy_label">卡豆价:</div>
+  //               <div className="bottom_qy_bean">
+  //                 ¥{cash}+{bean}卡豆
+  //               </div>
+  //             </div>
+  //           </>
+  //         ) : (
+  //           <>
+  //             {' '}
+  //             <div className="bottom_shop_realPrice">
+  //               <div className="bottom_shop_realLabel">优惠价:</div>
+  //               <div className="bottom_shop_price">¥{realPrice}</div>
+  //             </div>
+  //             <div className="bottom_shop_oldPrice">
+  //               <div className="bottom_shop_oldLabel">原价:</div>
+  //               <div className="bottom_shop_oldcout">¥{oriPrice}</div>
+  //             </div>
+  //             <div className="bottom_kol_info">
+  //               <div className="bottom_kol_s">
+  //                 <div className="bottom_kol_bean">
+  //                   ¥{computedPrice(realPrice, payBeanCommission)}
+  //                 </div>
+  //               </div>
+  //               {shareCommission > 0 && commission > 0 && (
+  //                 <div className="bottom_kol_z font_hide">
+  //                   <div className="bottom_kol_money font_hide">
+  //                     ¥{computedPrice(commission, shareCommission)}
+  //                   </div>
+  //                 </div>
+  //               )}
+  //             </div>
+  //           </>
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // };
   const template = (item) => {
     const {
       commission,
@@ -104,7 +181,7 @@ export default ({ userInfo }) => {
         onClick={() => {
           linkTo({
             ios: {
-              path: 'DKLAroundDiscountGoodsDetailViewController ',
+              path: 'DKLAroundDiscountGoodsDetailViewController',
               param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
             },
             android: {
@@ -210,8 +287,9 @@ export default ({ userInfo }) => {
           <div className="bottom_qy_price font_hide">
             <div className="bottom_qy_label">卡豆价:</div>
             <div className="bottom_qy_bean">
-              ¥{cash}+{bean}卡豆
+              ¥{cash}+{bean}
             </div>
+            <div className="bottom_qy_font1">卡豆</div>
           </div>
         </div>
       </div>
@@ -306,11 +384,11 @@ export default ({ userInfo }) => {
           </Swiper>
         </div>
       </div>
-      <Swiper autoplay={true} loop={true} className="BottomContent_banner">
+      {/* <Swiper autoplay={true} loop={true} className="BottomContent_banner">
         <Swiper.Item className="BottomContent_banner_box">
           <img className="BottomContent_banner_box" src={reloadImg} />
         </Swiper.Item>
-      </Swiper>
+      </Swiper> */}
       {hotList.length > 0 && (
         <>
           <div className="BottomContent_goods_box">
@@ -321,7 +399,7 @@ export default ({ userInfo }) => {
                 onClick={() => {
                   linkTo({
                     ios: {
-                      path: 'DKLExquisiteChosenHomeViewController ',
+                      path: 'DKLExquisiteChosenHomeViewController',
                     },
                     android: {
                       path: 'ShopAround',
@@ -332,7 +410,7 @@ export default ({ userInfo }) => {
                   });
                 }}
               >
-                更多
+                <div>更多</div>
               </div>
             </div>
           </div>
@@ -343,7 +421,7 @@ export default ({ userInfo }) => {
           </div>
         </>
       )}
-      {beanList.length > 0 && (
+      {/* {beanList.length > 0 && (
         <>
           <div className="BottomContent_goods_box">
             <div className="BottomContent_goods_title">
@@ -353,7 +431,7 @@ export default ({ userInfo }) => {
                 onClick={() => {
                   linkTo({
                     ios: {
-                      path: 'DKLExquisiteChosenHomeViewController ',
+                      path: 'DKLExquisiteChosenHomeViewController',
                     },
                     android: {
                       path: 'ShopAround',
@@ -364,7 +442,7 @@ export default ({ userInfo }) => {
                   });
                 }}
               >
-                更多
+                <div>更多</div>
               </div>
             </div>
           </div>
@@ -374,7 +452,7 @@ export default ({ userInfo }) => {
             })}
           </div>
         </>
-      )}
+      )} */}
       {gameList.length > 0 && (
         <>
           <div className="BottomContent_goods_box">
@@ -385,7 +463,7 @@ export default ({ userInfo }) => {
                 onClick={() => {
                   linkTo({
                     ios: {
-                      path: 'DKLExquisiteChosenHomeViewController ',
+                      path: 'DKLExquisiteChosenHomeViewController',
                     },
                     android: {
                       path: 'ShopAround',
@@ -396,7 +474,7 @@ export default ({ userInfo }) => {
                   });
                 }}
               >
-                更多
+                <div>更多</div>
               </div>
             </div>
           </div>

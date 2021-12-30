@@ -16,7 +16,7 @@ export default (props) => {
       <div className="cobyMask_box">
         <div className="cobyMask_height"></div>
         <div className="cobyMask_icon"></div>
-        <div className="cobyMask_desc">将口令复制给微信好友，好友打开app识别口令即可补签成功</div>
+        <div className="cobyMask_desc">将口令复制给微信好友，好友打开app识别口令即可{type==='sign'?'补签':'助力'}成功</div>
         <div className="cobyMask_btn">
           <div
             className="cobyMask_btn_left"

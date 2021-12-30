@@ -77,7 +77,7 @@ export default ({ responent }) => {
     }
   }, [feedReward]);
   useEffect(() => {
-    if (gameBalance > 0) {
+    if (gameBalance >= 0) {
       createKeys(stageObj);
     }
   }, [gameBalance]);
@@ -493,10 +493,10 @@ export default ({ responent }) => {
         currentFrame: 0,
         interval: 24,
         timeBased: true,
-        y: pxComputed(328),
+        y: pxComputed(338),
         x: pxComputed(248),
-        width: pxComputed(252),
-        height: pxComputed(370),
+        width: pxComputed(238),
+        height: pxComputed(351),
         loop: true,
       });
       let beanAnimate = HiloEatBean(responent);
@@ -595,11 +595,18 @@ export default ({ responent }) => {
       x: (window.innerWidth / 375) * 510,
       width: pxComputed(123),
       height: pxComputed(127),
-      loop: Number(gameBalance) / Number(growValueLimit) < 1 ? false : true,
+      loop:
+        !Number(gameBalance) / Number(growValueLimit) ||
+        Number(gameBalance) / Number(growValueLimit) < 1
+          ? false
+          : true,
     });
     let beanAnimate = HiloKeys(responent);
     key.addFrame(beanAnimate.getSprite('key'));
-    if (Number(gameBalance) / Number(growValueLimit) < 1) {
+    if (
+      !Number(gameBalance) / Number(growValueLimit) ||
+      Number(gameBalance) / Number(growValueLimit) < 1
+    ) {
       key.goto(0);
       key.stop();
     } else {
@@ -624,9 +631,13 @@ export default ({ responent }) => {
       height: pxComputed(76),
       loop: false,
     });
+
     let beanAnimate = HiloLevel(responent);
     level.addFrame(beanAnimate.getSprite('level'));
     level.goto(0);
+    level.setFrameCallback(11, (res) => {
+      level.goto(0);
+    });
     if (!flag) {
       level.stop();
     }
@@ -642,7 +653,7 @@ export default ({ responent }) => {
       interval: 24,
       timeBased: true,
       y: pxComputed(320),
-      x: pxComputed(214),
+      x: pxComputed(206),
       width: pxComputed(300),
       height: pxComputed(400),
     });
@@ -851,7 +862,11 @@ export default ({ responent }) => {
           <div className="eatPop_house_icon"></div>
         </div>
       )}
-
+      {gameBalance / growValueLimit >= 1 && (
+        <div className="key_toastinfo">
+          <div className="bean_barrge_desc">已完成成长任务,请领取钥匙开启盲盒奖励</div>
+        </div>
+      )}
       <div
         className="level_layer"
         onClick={() => {

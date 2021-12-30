@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Drawer from '@/components/drawer';
-import { Switch } from 'antd-mobile';
+import Switch from './components/Switch';
 import Signature from './../signature';
 import {
   fakeSignInfo,
@@ -76,6 +76,7 @@ export default (props) => {
     }).then((val) => {
       if (val) {
         reloadRequest();
+        reload();
         setMaskVisible(() => {
           setMaskData({
             type: 'success',
@@ -102,7 +103,7 @@ export default (props) => {
     if (deviceName() === 'miniProgram') {
       linkTo({
         wechat: {
-          url: `/pages/gameHelp/goodThings/index?subType=fillSign&fillSignTime=${date}`,
+          url: `/pages/share/gameHelp/index?subType=fillSign&fillSignTime=${date}`,
         },
       });
       return;
