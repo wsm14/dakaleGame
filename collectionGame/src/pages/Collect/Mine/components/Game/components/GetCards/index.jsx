@@ -5,6 +5,7 @@ import TitleBlock from '@/components/TitleBlock';
 import Cloud from '@/components/Cloud';
 import TurnTable from './components/TurnTable';
 import TaskCloumn from './components/TaskCloumn';
+import BeanCardModal from '@/components/BeanCardModal';
 import { nativeClose } from '@/utils/birdgeContent';
 
 import getCard_button from '@public/loading/getCard_button.png';
@@ -42,6 +43,9 @@ function index() {
           <TaskCloumn></TaskCloumn>
         </div>
       </div>
+      {/* 福卡弹窗 */}
+      <BeanCardModal></BeanCardModal>
+
       <Cloud></Cloud>
     </>
   );
