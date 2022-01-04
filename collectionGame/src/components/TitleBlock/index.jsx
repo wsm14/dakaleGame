@@ -12,12 +12,26 @@ function index(props) {
   } = props;
   const flag = deviceName() == 'miniProgram';
   return (
-    <div className={`titleBlock ${!flag ? 'topPadding' : null}`}>
-      {flag ? <div></div> : <img src={backImg} alt="" className="backImg" onClick={back} />}
-      <div className="titleBlock_content">
-        {type === 'check' ? <img src={titleImg} alt="" /> : type === 'title' ? '我的福豆' : null}
-      </div>
-    </div>
+    <>
+      {!flag && (
+        <div className={`titleBlock topPadding`}>
+          {flag ? <div></div> : <img src={backImg} alt="" className="backImg" onClick={back} />}
+          <div className="titleBlock_content">
+            {type === 'check' ? (
+              <img src={titleImg} alt="" />
+            ) : type === 'title' ? (
+              '我的福豆'
+            ) : null}
+          </div>
+        </div>
+      )}
+    </>
+    // <div className={`titleBlock ${!flag ? 'topPadding' : null}`}>
+    //   {flag ? <div></div> : <img src={backImg} alt="" className="backImg" onClick={back} />}
+    //   <div className="titleBlock_content">
+    //     {type === 'check' ? <img src={titleImg} alt="" /> : type === 'title' ? '我的福豆' : null}
+    //   </div>
+    // </div>
   );
 }
 

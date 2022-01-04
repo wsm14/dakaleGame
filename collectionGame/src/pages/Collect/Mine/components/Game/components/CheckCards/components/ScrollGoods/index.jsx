@@ -1,22 +1,32 @@
 import React, { useState } from 'react';
 import './index.less';
 import { useSelector, useDispatch } from 'umi';
+import backImg from '@public/loading/back.png';
 
 function index(props) {
-  const { list = [] } = props;
+  const { list = [], checkCard } = props;
   const [cardIndex, setCardIndex] = useState();
-  const { packageObj } = useSelector((state) => state.receiveGoods); //商品信息
-  const dispatch = useDispatch();
   return (
     <div className="scrollContent">
       {list.map((item, index) => (
         <div
           className="scrollCards"
-          key={item.packageId}
+          key={`${index}1`}
           onClick={() => {
-            setCardIndex(index);
+            if (!cardIndex) {
+              setCardIndex(index);
+              checkCard(item);
+            }
           }}
         >
+          <img
+            src={item.cardImg}
+            className={`scrollCards-front ${cardIndex == index ? 'rotateY360' : null}`}
+          />
+          <img
+            src={backImg}
+            className={`scrollCards-back ${cardIndex == index ? 'rotateY180' : null}`}
+          />
           <div className={`scrollCards-front ${cardIndex == index ? 'rotateY360' : null}`}></div>
           <div className={`scrollCards-back ${cardIndex == index ? 'rotateY180' : null}`}></div>
         </div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'umi';
 import './index.less';
 import { Button, Toast } from 'antd-mobile';
 import SwiperReceive from './components/SwiperReceive';
@@ -8,36 +7,30 @@ import TitleBlock from '@/components/TitleBlock';
 import AddressModal from '@/components/AddressModal';
 
 import Cloud from '@/components/Cloud';
-import { fetchListGameRewardBarrage } from '@/services/game';
+import { fetchListGameRewardBarrage, fetchBeginGatherGame } from '@/services/game';
 import BlessWord from '@public/loading/BlessWord.png';
 
 function index(props) {
-  const { homeDetail, packageObj } = useSelector((state) => state.receiveGoods);
-  const dispatch = useDispatch();
-  const [barrageList, setBarrageList] = useState([]); //游戏弹幕
   const {
-    freeGoodList = [], //商品列表
-  } = homeDetail;
+    gameDetail = {}, //详情数据
+    getGameDetail, //获取详情接口
+  } = props;
+
+  const { cardList = [] } = gameDetail;
+  const [cardInfo, setCardInfo] = useState({});
+  const [barrageList, setBarrageList] = useState([]); //游戏弹幕
+  const cardLength = Object.keys(cardInfo).length;
 
   useEffect(() => {
     // getBrrageList();
   }, []);
 
-  const checkCards = () => {
-    if (Object.keys(packageObj).length) {
-      dispatch({
-        type: 'receiveGoods/save',
-        payload: {
-          orderVisible: true,
-        },
-      });
-    } else {
-      Toast.show({
-        content: '请选择商品',
-      });
-    }
+  //选择卡片
+  const checkCard = (val) => {
+    setCardInfo(val);
   };
 
+  //获取轮播数据
   const getBrrageList = async () => {
     const res = await fetchListGameRewardBarrage({
       size: 10,
@@ -45,6 +38,15 @@ function index(props) {
     const { gameBarrageList = [] } = res.content;
     setBarrageList([...gameBarrageList]);
   };
+
+  //确认按钮
+  const cardsOk = async () => {
+    const res = await fetchBeginGatherGame({
+      identification: cardInfo.identification,
+    });
+    getGameDetail();
+  };
+
   return (
     <div className="checkCards">
       {/* 标题栏 */}
@@ -53,10 +55,10 @@ function index(props) {
         <img src={BlessWord} alt="" />
       </div>
       {/*左滑*/}
-      <ScrollGoods list={[1, 2, 3, 4, 5, 6]}></ScrollGoods>
+      <ScrollGoods list={cardList} checkCard={checkCard}></ScrollGoods>
       {/* 确认按钮 */}
-      <div className="mailButton" onClick={checkCards}>
-        确认领取，开始集福豆
+      <div className="mailButton" onClick={cardLength ? cardsOk : null}>
+        <div style={{ opacity: cardLength ? '1' : '0.5' }}>确认领取，开始集福豆</div>
       </div>
       {/* 领取轮播 */}
       <SwiperReceive list={[1, 2, 3, 4]}></SwiperReceive>
@@ -64,7 +66,7 @@ function index(props) {
       <Cloud></Cloud>
 
       {/* 确认地址弹窗 */}
-      <AddressModal></AddressModal>
+      {/* <AddressModal></AddressModal> */}
     </div>
   );
 }

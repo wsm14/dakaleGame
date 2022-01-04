@@ -1,81 +1,220 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.less';
 import { history } from 'umi';
 import Cloud from '@/components/Cloud';
 import TitleBlock from '@/components/TitleBlock';
+import {
+  fetchGatherGetMyHarvest,
+  fetchGatherExchangeCard,
+  fetchGathergetLuckReward,
+  fetchCommandGetCommand,
+} from '@/services/game';
+import { formatTime } from '@/utils/utils';
+import { linkToMyGoods, deviceName } from '@/utils/birdgeContent';
+import { cobyInfo } from '@/utils/utils';
+import CloseModal from './components/CloseModal';
+import ShareModal from '@/components/ShareModal';
+
 import lantern from '@public/loading/lantern.png';
-import card1 from '@public/loading/card1.png';
 
 function index() {
-  const [cardInfo, setCardInfo] = useState({});
+  const [cardDetail, setCardDetail] = useState({}); //整体信息
+  const [cardInfo, setCardInfo] = useState({}); //一张卡的信息
+  const [visible, setVisible] = useState(false); //合成福卡弹窗
+  const [shareVisible, setShareVisible] = useState({ show: false }); //转赠弹窗
+  useEffect(() => {
+    getCardDetail();
+  }, []);
+
+  const getCardDetail = async () => {
+    const res = await fetchGatherGetMyHarvest();
+    const { cardList = [] } = res.content;
+    //获取福卡
+    const lastChild = cardList.pop();
+    if (lastChild.hasNums > 0) {
+      cardList.unshift(lastChild);
+    }
+    const cardFlag = cardList.every((item) => item.hasNums > 0);
+    setCardDetail(res.content);
+
+    // setLastChild(lastChild);
+    // setCardFlag(cardFlag);
+
+    setCardInfo({
+      lastChild: lastChild,
+      checkInfo: cardList[0],
+      cardFlag: cardFlag,
+    });
+  };
+
   //选择卡
   const checkCard = (item) => {
-    setCardInfo(item);
+    setCardInfo({ ...cardInfo, checkInfo: item });
   };
   //合成卡
-  const closeCard = () => {
-    console.log(111);
+  const closeCard = async () => {
+    setVisible(true);
+    const res = await fetchGatherExchangeCard();
+    getCardDetail();
   };
 
   //点击返回按钮
   const goBack = () => {
     history.goBack();
   };
+
+  //开奖
+  const openPrize = async () => {
+    const res = await fetchGathergetLuckReward();
+    getCardDetail();
+  };
+
+  //我的记录
+  const myRecord = () => {
+    linkToMyGoods();
+  };
+
+  //转赠好友
+  const giveFriend = async () => {
+    const { checkInfo } = cardInfo;
+    console.log(checkInfo);
+    if (deviceName() != 'miniProgram') {
+      const res = await fetchCommandGetCommand({
+        commandType: 'luckCardGiveOther',
+        relateId: checkInfo.identification,
+      });
+      if (res.success) {
+        const { command } = res.content;
+        cobyInfo(command, { show: true, value: checkInfo.identification }, (val) => {
+          setShareVisible(val);
+        });
+      }
+    } else {
+      linkTo({
+        wechat: {
+          url: `/pages/share/gameHelp/index?subType=${btnType}&shareId=${id}`,
+        },
+      });
+    }
+  };
+
+  const {
+    cardList = [],
+    prizeOpenTime, //开奖时间
+    totalLuckCard, //多少人集齐
+  } = cardDetail;
+
+  const {
+    lastChild = {}, //福卡信息
+    checkInfo = {}, //选择卡的信息
+    cardFlag = {}, //是否可以合成
+  } = cardInfo;
+
+  const getTime = formatTime(prizeOpenTime);
   return (
     <>
       {/* 标题栏 */}
       <TitleBlock type="title" back={goBack}></TitleBlock>
       <div className="myCard">
         {/* 上方图片 */}
-        <div className="myCard_topImg">
+        <div className="myCard_topImg" onClick={myRecord}>
           <img src={lantern} alt="" />
         </div>
         {/* 下方内容 */}
         <div className="myCard_content">
           {/* 我的福豆 */}
           <div className="myCardInfo">
-            <div className="myCardInfo_num">178,541人已集齐，1月31日 22:00开奖</div>
+            <div className="myCardInfo_num">
+              {totalLuckCard}人已集齐，{getTime.month}月{getTime.day}日 {getTime.hour}:
+              {getTime.minutes}开奖
+            </div>
             <div className="myCardInfo_center">
-              <img src={card1} alt="" className="myCardInfo_center_img" />
-              {/* <div className="openPrize">
-              <div className="openPrize_time">1月31日 22:00开奖</div>
-              <div className="openPrize_open"></div>
-            </div> */}
-              {/* <div className="alreadyOpen">
-              <div className="alreadyOpen_money">
-                188.88<span>元</span>
-              </div>
-              <div className="alreadyOpen_bean">18888卡豆已存入卡豆账户</div>
-            </div> */}
+              {checkInfo.isLuckCard === '1' ? (
+                <>
+                  {checkInfo.luckPrize === 0 ? (
+                    <div className="openPrize">
+                      <div className="openPrize_time">
+                        {getTime.month}月{getTime.day}日 {getTime.hour}:{getTime.minutes}开奖
+                      </div>
+                      <div className="openPrize_open" onClick={openPrize}></div>
+                    </div>
+                  ) : (
+                    <div className="alreadyOpen">
+                      <div className="alreadyOpen_money">
+                        {(checkInfo.luckPrize / 100).toFixed(2)}
+                        <span>元</span>
+                      </div>
+                      <div className="alreadyOpen_bean">
+                        {checkInfo.luckPrize}卡豆已存入卡豆账户
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <img src={checkInfo.cardImg} alt="" className="myCardInfo_center_img" />
+              )}
             </div>
             <div className="myCardInfo_area">
-              <div className="myCardInfo_shareFriends">转赠好友</div>
+              {checkInfo.isLuckCard === '1' ? null : (
+                <div className="myCardInfo_shareFriends" onClick={giveFriend}>
+                  转赠好友
+                </div>
+              )}
             </div>
 
             <div className="myCardInfo_mation">
-              {[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 5 }].map((item) => (
+              {cardList.map((item) => (
                 <div
-                  className={`beanCard ${cardInfo.id === item.id ? 'beanCard_border' : null}`}
+                  className={`beanCard ${
+                    checkInfo.identification === item.identification ? 'beanCard_border' : null
+                  }`}
                   onClick={() => {
                     checkCard(item);
                   }}
+                  key={item.identification}
                 >
                   <div className="beanCard_width">
-                    <img src={card1} className="beanCard_img" />
-                    <div className="beanCard_num">
-                      <div>2</div>
-                    </div>
+                    <img
+                      src={item.cardNarrowImg}
+                      className={`beanCard_img ${item.hasNums > 0 ? null : 'beanCard_opacity'}`}
+                    />
+                    {item.hasNums > 0 && (
+                      <div className="beanCard_num">
+                        <div>{item.hasNums}</div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="myCardInfo_synthesis" onClick={closeCard}>
-              合成福豆卡
-            </div>
-            {/* <div className="myCardInfo_alreadySynthesis">恭喜您已合成</div> */}
+            {lastChild.hasNums > 0 ? (
+              <div className="myCardInfo_alreadySynthesis">恭喜您已合成</div>
+            ) : (
+              <div className="myCardInfo_synthesis" onClick={cardFlag ? closeCard : null}>
+                <div style={{ opacity: cardFlag ? '1' : '0.5' }}>合成福豆卡</div>
+              </div>
+            )}
+
+            {/*  */}
           </div>
         </div>
       </div>
+
+      {/* 转赠好友弹窗 */}
+      <ShareModal
+        visible={shareVisible}
+        onClose={() => {
+          setShareVisible({ show: false });
+        }}
+      ></ShareModal>
+
+      {/* 合成弹窗 */}
+      <CloseModal
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+      ></CloseModal>
       <Cloud></Cloud>
     </>
   );

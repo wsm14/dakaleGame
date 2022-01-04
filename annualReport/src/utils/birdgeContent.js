@@ -315,4 +315,11 @@ export const linkToAddress = () => {
   });
 };
 
+//生成海报
+export const makeB = (val) => {
+  native.nativeInit('saveFile', {
+    android: { url: val },
+  });
+};
+
 //关闭安卓动画

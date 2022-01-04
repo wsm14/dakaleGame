@@ -7,6 +7,7 @@ import lastImg5 from '@public/image/lastImg5.png';
 function index(props) {
   const { index, pageIndex } = props;
   const textRef = useRef();
+  const imgRef = useRef();
 
   useEffect(() => {
     if (index === pageIndex) {
@@ -126,7 +127,7 @@ function index(props) {
         break;
       case 5:
         elementDom = (
-          <div className="reportData_bac">
+          <div className="reportData_bac" ref={imgRef}>
             <div className="reportData_content">
               <div className="reportData_top">
                 <div className="consumption">

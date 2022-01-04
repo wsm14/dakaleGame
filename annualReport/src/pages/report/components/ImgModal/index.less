@@ -1,0 +1,159 @@
+.reportData_bac {
+  width: 100vw;
+  height: 100vh;
+  background: url(~@public/image/lastImg1.png) no-repeat;
+  background-size: 100% 100%;
+  padding-top: 20px;
+  .reportData_content {
+    width: 726px;
+    height: 1134px;
+    background: url(~@public/image/img1.png) no-repeat;
+    background-size: 100% 100%;
+    margin: 0 auto;
+    padding: 109px 43px 0;
+    .reportData_top {
+      display: flex;
+      justify-content: center;
+      .consumption {
+        &:nth-child(1) {
+          margin-right: 76px;
+        }
+        .consumption_title {
+          font-size: 24px;
+          font-weight: 400;
+          color: #999999;
+          line-height: 24px;
+          text-align: center;
+        }
+        .consumption_num {
+          font-size: 40px;
+          font-weight: bold;
+          color: #333333;
+          line-height: 40px;
+          text-align: center;
+          margin-top: 24px;
+        }
+      }
+    }
+    .saveMoney {
+      margin-top: 32px;
+      div {
+        text-align: center;
+      }
+      .saveMoney_title {
+        font-size: 24px;
+        font-weight: 400;
+        color: #999999;
+        line-height: 24px;
+      }
+      .saveMoney_num {
+        font-size: 64px;
+        font-weight: bold;
+        color: #ef476f;
+        line-height: 64px;
+        margin-top: 24px;
+      }
+    }
+    .reportData_center {
+      width: 640px;
+      height: 200px;
+      background: rgba(#06c0c2, 0.06);
+      border-radius: 20px;
+      display: flex;
+      padding: 20px 40px;
+      margin-top: 32px;
+      img {
+        width: 140px;
+        height: 160px;
+        margin-right: 60px;
+      }
+      .reportData_center_money {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        div {
+          font-size: 28px;
+          font-weight: 400;
+          color: #ef476f;
+          line-height: 28px;
+          span {
+            font-weight: bold;
+            margin: 0 8px 0 24px;
+          }
+        }
+        div:nth-child(2) {
+          color: #06bfc1;
+          margin-top: 32px;
+        }
+      }
+    }
+    .report_ranking {
+      font-size: 48px;
+      font-weight: 500;
+      color: #ef476f;
+      line-height: 48px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .report_exceed {
+      font-size: 24px;
+      font-weight: 400;
+      color: #333333;
+      line-height: 24px;
+      text-align: center;
+      margin-top: 24px;
+      span {
+        color: #ef476f;
+      }
+    }
+    .report_line {
+      height: 1px;
+      background: #e5e5e5;
+      border-radius: 1px;
+      margin-top: 39px;
+    }
+    .report_keyWord {
+      width: 230px;
+      font-size: 32px;
+      color: #333333;
+      line-height: 32px;
+      margin: 40px auto 0;
+      font-weight: bold;
+      position: relative;
+    }
+    .report_keyWord::before {
+      position: absolute;
+      background: #333;
+      content: '';
+      height: 2px;
+      top: 50%;
+      width: 40px;
+      left: -60px;
+    }
+    .report_keyWord::after {
+      position: absolute;
+      background: #333;
+      content: '';
+      height: 2px;
+      top: 50%;
+      width: 40px;
+      right: -50px;
+    }
+    .report_evaluate {
+      font-size: 64px;
+      font-weight: 500;
+      color: #06bec0;
+      line-height: 64px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .report_summary {
+      font-size: 24px;
+      font-weight: 400;
+      color: #999999;
+      line-height: 40px;
+      margin-top: 24px;
+      text-align: center;
+    }
+  }
+}

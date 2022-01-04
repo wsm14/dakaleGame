@@ -83,9 +83,10 @@ export async function fetchTaskDoneTask(data) {
 }
 
 // get 免费领商品游戏 - 领取任务奖励
-export async function fetchTaskReceiveTaskReward(params) {
+export async function fetchTaskReceiveTaskReward(data) {
   return request('/user/game/task/receiveTaskReward', {
-    params,
+    method: 'POST',
+    data,
   });
 }
 

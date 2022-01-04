@@ -1,4 +1,4 @@
-import { fetchFreeGoodMainPage } from '@/services/game';
+// import { fetchFreeGoodMainPage } from '@/services/game';
 
 const LoginForm = {
   namespace: 'receiveGoods',
@@ -21,16 +21,16 @@ const LoginForm = {
   },
   effects: {
     *fetchGetHomeDetail({ payload, callback }, { call, put }) {
-      const response = yield call(fetchFreeGoodMainPage, payload);
-      if (!response) return;
-      const { content } = response;
-      yield put({
-        type: 'save',
-        payload: {
-          homeDetail: content,
-        },
-      });
-      callback && callback(content);
+      // const response = yield call(fetchFreeGoodMainPage, payload);
+      // if (!response) return;
+      // const { content } = response;
+      // yield put({
+      //   type: 'save',
+      //   payload: {
+      //     homeDetail: content,
+      //   },
+      // });
+      // callback && callback(content);
     },
     *fetchSetAddressObj({ payload, callback }, { call, put }) {
       yield put({

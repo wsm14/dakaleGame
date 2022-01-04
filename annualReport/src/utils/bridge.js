@@ -123,6 +123,7 @@ function nativeOther() {
     cobyText: 'copyPasteBoard',
   };
   this.android = {
+    saveFile: 'saveFile', //保存图片
     close: 'finish', //关闭
     hideTitle: 'hideTitle', //隐藏头部
     linkTo: 'goNativePage', //路径跳转

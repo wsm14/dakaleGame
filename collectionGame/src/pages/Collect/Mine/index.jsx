@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { uploadResponents } from '@/components/uploadRes/index';
 import { imgList } from '@/common/goods';
+import { closeAnimate } from '@/utils/birdgeContent';
 import Loding from './components/Loding';
 import Game from './components/Game';
 
@@ -9,6 +10,7 @@ function index() {
   const [loadFlag, setLoadFlag] = useState(false);
 
   useEffect(() => {
+    closeAnimate();
     getLoading();
   }, []);
 
@@ -19,9 +21,7 @@ function index() {
         setState(e);
       },
       (_, val) => {
-        setTimeout(() => {
-          setLoadFlag(true);
-        }, 1000);
+        setLoadFlag(true);
       },
     );
   };

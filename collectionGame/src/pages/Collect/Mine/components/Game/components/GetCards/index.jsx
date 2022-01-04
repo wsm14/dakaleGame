@@ -5,13 +5,17 @@ import TitleBlock from '@/components/TitleBlock';
 import Cloud from '@/components/Cloud';
 import TurnTable from './components/TurnTable';
 import TaskCloumn from './components/TaskCloumn';
-import BeanCardModal from '@/components/BeanCardModal';
 import { nativeClose } from '@/utils/birdgeContent';
 
 import getCard_button from '@public/loading/getCard_button.png';
 import getCard_script from '@public/loading/getCard_script.png';
 
-function index() {
+function index(props) {
+  const { openModal, gameDetail, getGameDetail } = props;
+  const { gameInfo = {} } = gameDetail;
+  const {
+    gameBalance, //抽奖次数
+  } = gameInfo;
   //点击返回按钮
   const goBack = () => {
     nativeClose();
@@ -37,15 +41,16 @@ function index() {
         {/* 下面部分 */}
         <div className="getCards_content">
           {/* 转盘 */}
-          <TurnTable></TurnTable>
+          <TurnTable
+            openModal={openModal}
+            getGameDetail={getGameDetail}
+            gameBalance={gameBalance}
+          ></TurnTable>
           <div className="getMore"></div>
           {/* 任务列表 */}
-          <TaskCloumn></TaskCloumn>
+          <TaskCloumn getGameDetail={getGameDetail}></TaskCloumn>
         </div>
       </div>
-      {/* 福卡弹窗 */}
-      <BeanCardModal></BeanCardModal>
-
       <Cloud></Cloud>
     </>
   );

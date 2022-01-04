@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { LuckyWheel } from '@lucky-canvas/react';
 import './index.less';
-import { CHECK_TYPE } from '@/common/goods';
+import { Toast } from 'antd-mobile';
+import { fetchGatherLuckDraw } from '@/services/game';
 import { conversionWidth } from '@/utils/game';
 import contentWord1 from '@public/loading/contentWord1.png';
 import contentWord2 from '@public/loading/contentWord2.png';
@@ -10,9 +11,13 @@ import turnButton from '@public/loading/turnButton.png';
 import reunion from '@public/loading/reunion.png';
 import turnBac from '@public/loading/turnBac.png';
 
-function index() {
+function index(props) {
+  const { openModal, gameBalance, getGameDetail } = props;
+  const gameNum = useRef(0);
+  useEffect(() => {
+    gameNum.current = gameBalance;
+  }, [gameBalance]);
   const [checkType, setCheckType] = useState('turntable'); //导航类型 turntable--转盘  share--分享;
-  const [number, setNumber] = useState(5);
   const myLucky = useRef();
   const turnDetail = {
     blocks: [
@@ -42,7 +47,7 @@ function index() {
         pointer: true,
         fonts: [
           {
-            text: `还剩${number}次`,
+            text: `还剩${gameBalance}次`,
             fontSize: '8px',
             fontColor: '#FEE2B3',
             top: `${conversionWidth(10)}px`,
@@ -61,6 +66,13 @@ function index() {
     ],
   };
 
+  const luckDrawEnd = async () => {
+    const res = await fetchGatherLuckDraw();
+    const { cardInfo = {} } = res.content;
+    openModal(cardInfo);
+    getGameDetail();
+  };
+  console.log(gameNum.current);
   return (
     <>
       {/*转盘  */}
@@ -109,26 +121,28 @@ function index() {
                 onStart={() => {
                   // 点击抽奖按钮会触发star回调
                   // 调用抽奖组件的play方法开始游戏
-                  myLucky.current.play();
-                  // 模拟调用接口异步抽奖
-                  setTimeout(() => {
-                    // 假设后端返回的中奖索引是 0
-                    const index = 0;
-                    setNumber((val) => val - 1);
-                    // 调用stop停止旋转并传递中奖索引
-                    myLucky.current.stop(index);
-                  }, 2500);
+                  console.log(gameNum.current, myLucky.current);
+                  if (gameNum.current > 0) {
+                    myLucky.current.play();
+                    // 模拟调用接口异步抽奖
+                    setTimeout(() => {
+                      // 假设后端返回的中奖索引是 0
+                      const index = 0;
+                      // 调用stop停止旋转并传递中奖索引
+                      myLucky.current.stop(index);
+                    }, 1000);
+                  } else {
+                    Toast.show({
+                      content: '抽奖次数不足',
+                    });
+                  }
                 }}
                 onEnd={(prize) => {
                   // 抽奖结束会触发end回调
-                  console.log(prize);
+                  luckDrawEnd();
                 }}
               ></LuckyWheel>
             </div>
-            {/* <div className="remainTimes">
-              <div className="remainTimes_prize">抽奖</div>
-              <div className="remainTimes_num">还剩2次</div>
-            </div> */}
             <img src={turnBac} alt="" className="turnTable_bac" />
           </div>
         ) : (
