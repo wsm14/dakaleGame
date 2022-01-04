@@ -1,0 +1,28 @@
+.loding {
+  width: 100vw;
+  height: 100vh;
+  background: url(~@public/usual/LodingBg.png) no-repeat center;
+  background-size: 100% 100%;
+  .progress {
+    width: 580px;
+    height: 48px;
+    background-color: rgba(#333, 0.1);
+    position: absolute;
+    margin: 0 auto;
+    bottom: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+  }
+  .progress_content {
+    width: 0;
+    background: linear-gradient(270deg, #ffde4b 0%, #ffda52 100%);
+    box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    height: 40px;
+    transition: 0.5s;
+  }
+}

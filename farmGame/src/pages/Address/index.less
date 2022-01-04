@@ -1,0 +1,120 @@
+.addressBox {
+  padding-bottom: 128px;
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f5f5;
+  .address_backImg {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    // background: transparent;
+    padding-top: 70px;
+    div {
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .address_backClick {
+      img {
+        width: 48px;
+        height: 48px;
+        margin-left: 32px;
+        z-index: 2;
+      }
+    }
+
+    .address_mine {
+      position: absolute;
+      width: 100%;
+      font-size: 36px;
+      font-weight: 600;
+      color: #333333;
+      text-align: center;
+      line-height: 88px;
+    }
+  }
+  .addressContent {
+    // background: #f5f5f5;
+    // min-height: calc(100vh - 250px);
+    padding: 32px;
+    .addressBlock {
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      .addressBlock_img {
+        width: 48px;
+        height: 48px;
+      }
+      .addressBlock_info {
+        margin-left: 24px;
+        .addressBlock_name {
+          font-size: 28px;
+          font-weight: 500;
+          color: #333333;
+          line-height: 28px;
+          span {
+            font-size: 24px;
+            font-weight: 400;
+            color: #999999;
+            line-height: 28px;
+          }
+        }
+        .addressBlock_area {
+          width: 482px;
+          font-size: 24px;
+          font-weight: 400;
+          color: #333333;
+          line-height: 36px;
+          margin-top: 12px;
+        }
+      }
+    }
+  }
+  .addressFixed {
+    position: fixed;
+    bottom: 0;
+    width: 750px;
+    height: 128px;
+    background: #fff;
+    padding: 24px 32px;
+    .addressFixed_button {
+      width: 100%;
+      height: 100%;
+      background: #07c0c2;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      div {
+        font-size: 32px;
+        font-weight: 400;
+        color: #ffffff;
+        line-height: 32px;
+        margin-top: 3px;
+      }
+      img {
+        width: 48px;
+        height: 48px;
+      }
+    }
+  }
+  .emptyAddress {
+    img {
+      width: 300px;
+      height: 300px;
+    }
+    text-align: center;
+    font-size: 28px;
+    font-weight: 400;
+    color: #999999;
+    line-height: 28px;
+    div {
+      margin-top: 32px;
+    }
+  }
+}
