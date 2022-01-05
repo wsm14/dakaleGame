@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { LuckyWheel } from '@lucky-canvas/react';
 import './index.less';
 import { Toast } from 'antd-mobile';
+import html2canvas from 'html2canvas';
 import { fetchGatherLuckDraw } from '@/services/game';
 import { conversionWidth } from '@/utils/game';
+import PosterModal from '@/components/PosterModal';
 import contentWord1 from '@public/loading/contentWord1.png';
 import contentWord2 from '@public/loading/contentWord2.png';
 import turnImg from '@public/loading/turn.png';
@@ -13,7 +15,8 @@ import turnBac from '@public/loading/turnBac.png';
 
 function index(props) {
   const { openModal, gameBalance, getGameDetail } = props;
-  const gameNum = useRef(0);
+  const posterRef = useRef(); //海报的ref
+  const gameNum = useRef(0); //剩余次数
   useEffect(() => {
     gameNum.current = gameBalance;
   }, [gameBalance]);
@@ -72,7 +75,38 @@ function index(props) {
     openModal(cardInfo);
     getGameDetail();
   };
-  console.log(gameNum.current);
+
+  const makePoster = () => {
+    console.log(posterRef.current);
+    html2canvas(posterRef.current, {
+      allowTaint: false,
+      useCORS: true,
+    }).then(function (canvas) {
+      // toImage
+      const base64 = canvas.toDataURL('image/png');
+      // // base64转换blob
+      const arr = base64.split(',');
+      console.log(base64);
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      // eslint-disable-next-line no-plusplus
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      const fileblob = new Blob([u8arr], { type: mime });
+      URL.createObjectURL(fileblob);
+      // makeB(URL.createObjectURL(fileblob));
+      console.log('file', URL.createObjectURL(fileblob));
+      // const alink = document.createElement('a');
+      // alink.href = dataImg.src;
+      // alink.download = 'testImg.jpg';
+      // console.log(dataImg);
+      // alink.click();
+    });
+  };
+
   return (
     <>
       {/*转盘  */}
@@ -149,10 +183,13 @@ function index(props) {
           <div className="getCardsRight">
             <img src={contentWord2} alt="" className="getCardsRight_word" />
             <img src={reunion} alt="" className="getCardsRight_reunion" />
-            <div className="getCardsRight_button">邀请好友送福豆</div>
+            <div className="getCardsRight_button" onClick={makePoster}>
+              邀请好友送福豆
+            </div>
           </div>
         )}
       </div>
+      <PosterModal ref={posterRef}></PosterModal>
     </>
   );
 }

@@ -39,9 +39,10 @@ export async function fetchGatherExchangeCard(data) {
 }
 
 // get 集碎片 - 开奖
-export async function fetchGathergetLuckReward(params) {
-  return request('/user/game/gathergetLuckReward', {
-    params,
+export async function fetchGathergetLuckReward(data) {
+  return request('/user/game/gather/getLuckReward', {
+    method: 'POST',
+    data,
   });
 }
 

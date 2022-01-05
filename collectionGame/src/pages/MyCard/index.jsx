@@ -178,7 +178,7 @@ function index() {
                       src={item.cardNarrowImg}
                       className={`beanCard_img ${item.hasNums > 0 ? null : 'beanCard_opacity'}`}
                     />
-                    {item.hasNums > 0 && (
+                    {item.hasNums > 0 && item.isLuckCard !== '1' && (
                       <div className="beanCard_num">
                         <div>{item.hasNums}</div>
                       </div>

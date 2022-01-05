@@ -26,9 +26,11 @@ function index(props) {
 
   //跳转app
   const goApp = (item) => {
-    const { jumpRule } = item;
+    const { jumpRule, strapId } = item;
     let json = (jumpRule && JSON.parse(jumpRule)) || {};
-    const { iosUrl, androidUrl, weChatUrl } = json;
+    console.log(json);
+    const { jumpUrl } = json;
+    const { iosUrl, androidUrl, weChatUrl } = jumpUrl;
     linkTo({
       wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
       ios: {

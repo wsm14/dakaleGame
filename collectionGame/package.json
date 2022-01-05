@@ -30,6 +30,7 @@
     "antd-mobile-v5": "npm:antd-mobile@next",
     "array-move": "^3.0.1",
     "hilojs": "^2.0.2",
+    "html2canvas": "^1.4.0",
     "immutability-helper": "^3.1.1",
     "jszip": "^3.7.0",
     "lodash": "^4.17.11",

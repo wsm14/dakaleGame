@@ -34,7 +34,15 @@ function index(props) {
                 history.push('/myCard');
               }}
             />
-            <img src={getCard_script} alt="" className="getCards_script" />
+            <img
+              src={getCard_script}
+              alt=""
+              className="getCards_script"
+              onClick={() => {
+                window.location.href =
+                  'https://resource-new.dakale.net/product/html/rule/64c02191-8838-4301-4c46-18409012033c.html?shareKey=1473476250744676353?newPage=true&&showTitle=true';
+              }}
+            />
           </div>
         </div>
 

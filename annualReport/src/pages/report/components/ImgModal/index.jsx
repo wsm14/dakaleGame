@@ -22,25 +22,24 @@ function index() {
     }).then(function (canvas) {
       // toImage
       const base64 = canvas.toDataURL('image/png');
-      // base64转换blob
-      const arr = base64.split(',');
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      // eslint-disable-next-line no-plusplus
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      const fileblob = new Blob([u8arr], { type: mime });
-      URL.createObjectURL(fileblob);
-      makeB(URL.createObjectURL(fileblob));
-      console.log('file', URL.createObjectURL(fileblob));
-      //   const alink = document.createElement('a');
-      //   alink.href = dataImg.src;
-      //   alink.download = 'testImg.jpg';
-      //   console.log(dataImg);
-      //   alink.click();
+      // // base64转换blob
+      // const arr = base64.split(',');
+      // const mime = arr[0].match(/:(.*?);/)[1];
+      // const bstr = atob(arr[1]);
+      // let n = bstr.length;
+      // const u8arr = new Uint8Array(n);
+      // // eslint-disable-next-line no-plusplus
+      // while (n--) {
+      //   u8arr[n] = bstr.charCodeAt(n);
+      // }
+      // const fileblob = new Blob([u8arr], { type: mime });
+      // URL.createObjectURL(fileblob);
+      makeB(base64);
+      // console.log('file', URL.createObjectURL(fileblob));
+      // const alink = document.createElement('a');
+      // alink.href = base64;
+      // alink.download = 'testImg.jpg';
+      // alink.click();
     });
   };
 
