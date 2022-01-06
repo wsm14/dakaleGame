@@ -23,11 +23,6 @@ const index = (props) => {
   return (
     <>
       <audio src={music} ref={audioRef} loop />
-
-      {/* 分享图标 */}
-      <div className="shareIcon">
-        <img src={shareIcon} alt="" />
-      </div>
       {/* 音乐图标 */}
       <div className="musicIcon" onClick={check}>
         {audioFlag ? <img src={musicIcon} alt="" /> : <img src={musicIcon1} alt="" />}

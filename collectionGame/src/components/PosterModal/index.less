@@ -1,11 +1,37 @@
 .posterBox {
-  width: 100vw;
-  height: 100vh;
+  width: 750px;
+  height: 1334px;
   background: url(~@public/image/poster.png) no-repeat;
   background-size: 100% 100%;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999;
-  visibility: hidden;
+  z-index: -1;
+  .posterBox_float {
+    position: absolute;
+    left: 50%;
+    top: 300px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .posterBox_headImg {
+      width: 100px;
+      height: 100px;
+      border: 2px solid #ffffff;
+      border-radius: 100%;
+    }
+    .posterBox_nickName {
+      font-size: 28px;
+      font-weight: 500;
+      color: #333333;
+      line-height: 28px;
+      margin-top: 10px;
+    }
+    .posterBox_qcode {
+      width: 277px;
+      height: 277px;
+      margin-top: 45px;
+    }
+  }
 }

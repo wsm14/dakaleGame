@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { Mask } from 'antd-mobile';
+import React, { useRef, useState, useEffect } from 'react';
+import { Mask, ImageUploader } from 'antd-mobile';
 import html2canvas from 'html2canvas';
 import { makeB } from '@/utils/birdgeContent';
 import './index.less';
@@ -11,8 +11,11 @@ import lastImg3 from '@public/image/lastImg3.png';
 
 function index() {
   const imgRef = useRef();
+
+  const [file, setFile] = useState('');
+
   useEffect(() => {
-    makeImage();
+    // makeImage();
   }, []);
 
   const makeImage = () => {
@@ -23,23 +26,55 @@ function index() {
       // toImage
       const base64 = canvas.toDataURL('image/png');
       // // base64转换blob
-      // const arr = base64.split(',');
-      // const mime = arr[0].match(/:(.*?);/)[1];
-      // const bstr = atob(arr[1]);
-      // let n = bstr.length;
-      // const u8arr = new Uint8Array(n);
-      // // eslint-disable-next-line no-plusplus
-      // while (n--) {
-      //   u8arr[n] = bstr.charCodeAt(n);
-      // }
-      // const fileblob = new Blob([u8arr], { type: mime });
+      const arr = base64.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      // eslint-disable-next-line no-plusplus
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      const fileblob = new Blob([u8arr], { type: mime });
       // URL.createObjectURL(fileblob);
-      makeB(base64);
+      console.log(URL.createObjectURL(fileblob));
+
+      makeB(URL.createObjectURL(fileblob));
       // console.log('file', URL.createObjectURL(fileblob));
       // const alink = document.createElement('a');
       // alink.href = base64;
       // alink.download = 'testImg.jpg';
       // alink.click();
+    });
+  };
+
+  const makeImage1 = () => {
+    html2canvas(imgRef.current, {
+      allowTaint: false,
+      useCORS: true,
+    }).then(function (canvas) {
+      // toImage
+      const base64 = canvas.toDataURL('image/png');
+      // console.log('file', URL.createObjectURL(fileblob));
+      const alink = document.createElement('a');
+      alink.href = base64;
+      alink.download = 'testImg.jpg';
+      alink.click();
+    });
+  };
+
+  const makeImageUpload = () => {
+    if (!file) return;
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const alink = document.createElement('a');
+        alink.href = reader.result;
+        alink.download = 'downUploadImg.jpg';
+        alink.click();
+      };
+      reader.onerror = (error) => reject(error);
     });
   };
 
@@ -96,6 +131,14 @@ function index() {
             <div className="report_summary">
               今年会有机遇，也会有挑战，可能一夜暴富
               <br /> 也可能一举成名，当然离不开哒卡乐
+            </div>
+            <div>
+              <button onClick={makeImage}>点击事件！！！！！！</button>
+              <button onClick={makeImage1}>点击下载方法！！！！</button>
+            </div>
+            <div>
+              <input accept="image/*" type={'file'} onChange={(e) => setFile(e.target.files[0])} />
+              <button onClick={makeImageUpload}>点击下载上传的大文件</button>
             </div>
           </div>
         </div>

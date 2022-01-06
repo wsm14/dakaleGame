@@ -3,7 +3,7 @@ import { LuckyWheel } from '@lucky-canvas/react';
 import './index.less';
 import { Toast } from 'antd-mobile';
 import html2canvas from 'html2canvas';
-import { fetchGatherLuckDraw } from '@/services/game';
+import { fetchGatherLuckDraw, fetchShareGetNewShareInfo } from '@/services/game';
 import { conversionWidth } from '@/utils/game';
 import PosterModal from '@/components/PosterModal';
 import contentWord1 from '@public/loading/contentWord1.png';
@@ -14,7 +14,8 @@ import reunion from '@public/loading/reunion.png';
 import turnBac from '@public/loading/turnBac.png';
 
 function index(props) {
-  const { openModal, gameBalance, getGameDetail } = props;
+  const { openModal, gameBalance, gameDetail, getGameDetail } = props;
+  const [shareImg, setShareImg] = useState();
   const posterRef = useRef(); //海报的ref
   const gameNum = useRef(0); //剩余次数
   useEffect(() => {
@@ -76,35 +77,29 @@ function index(props) {
     getGameDetail();
   };
 
-  const makePoster = () => {
-    console.log(posterRef.current);
-    html2canvas(posterRef.current, {
-      allowTaint: false,
-      useCORS: true,
-    }).then(function (canvas) {
-      // toImage
-      const base64 = canvas.toDataURL('image/png');
-      // // base64转换blob
-      const arr = base64.split(',');
-      console.log(base64);
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      // eslint-disable-next-line no-plusplus
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      const fileblob = new Blob([u8arr], { type: mime });
-      URL.createObjectURL(fileblob);
-      // makeB(URL.createObjectURL(fileblob));
-      console.log('file', URL.createObjectURL(fileblob));
-      // const alink = document.createElement('a');
-      // alink.href = dataImg.src;
-      // alink.download = 'testImg.jpg';
-      // console.log(dataImg);
-      // alink.click();
+  const makePoster = async () => {
+    const res = await fetchShareGetNewShareInfo({
+      shareType: 'gameTask',
     });
+    const { shareInfo = {} } = res.content;
+    setShareImg(shareInfo.qcodeUrl);
+
+    setTimeout(() => {
+      html2canvas(posterRef.current, {
+        useCORS: true,
+        scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2,
+      }).then((canvas) => {
+        // toImage
+        let base64 = canvas.toDataURL('image/png');
+        base64 = `shareType=wechat,${base64}`;
+        let oA = document.createElement('a');
+        oA.download = ''; // 设置下载的文件名，默认是'下载'
+        oA.href = base64;
+        document.body.appendChild(oA);
+        oA.click();
+        oA.remove(); // 下载之后把创建的元素删除
+      });
+    }, 300);
   };
 
   return (
@@ -189,7 +184,7 @@ function index(props) {
           </div>
         )}
       </div>
-      <PosterModal ref={posterRef}></PosterModal>
+      <PosterModal ref={posterRef} gameDetail={gameDetail} shareImg={shareImg}></PosterModal>
     </>
   );
 }

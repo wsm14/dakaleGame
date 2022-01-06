@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
-// get 查询用户默认地址
-export async function fetchUserDefaultAddress(params) {
-  return request('/user/user/address/getUserDefaultAddress', {
+// get 年度报告
+export async function fetchReportGetAnnualReport(params) {
+  return request('/user/annual/report/getAnnualReport', {
     params,
   });
 }

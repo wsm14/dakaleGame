@@ -5,7 +5,7 @@ import kcopy from '@public/image/kcopy.png';
 import BasicModal from '@/components/BasicModal';
 
 function index(props) {
-  const { visible, onClose, type } = props;
+  const { visible, onClose } = props;
   const { show, value } = visible;
 
   const modalProps = {
@@ -34,7 +34,7 @@ function index(props) {
             >
               去微信粘贴
             </div>
-            <div
+            {/* <div
               className="ShareModal_content_button"
               onClick={() => {
                 nativeShareWork && nativeShareWork(value);
@@ -42,7 +42,7 @@ function index(props) {
               }}
             >
               直接邀请
-            </div>
+            </div> */}
           </div>
         </div>
       </BasicModal>

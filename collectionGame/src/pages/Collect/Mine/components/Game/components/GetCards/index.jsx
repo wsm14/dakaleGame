@@ -53,6 +53,7 @@ function index(props) {
             openModal={openModal}
             getGameDetail={getGameDetail}
             gameBalance={gameBalance}
+            gameDetail={gameDetail}
           ></TurnTable>
           <div className="getMore"></div>
           {/* 任务列表 */}

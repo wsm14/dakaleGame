@@ -98,3 +98,10 @@ export async function fetchGatherReceiveOthersCard(data) {
     data,
   });
 }
+
+// get 集碎片 - 分享接口(新)
+export async function fetchShareGetNewShareInfo(params) {
+  return request('/common/share/getNewShareInfo', {
+    params,
+  });
+}

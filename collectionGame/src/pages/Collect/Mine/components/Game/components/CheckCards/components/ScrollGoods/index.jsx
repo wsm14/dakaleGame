@@ -13,10 +13,11 @@ function index(props) {
           className="scrollCards"
           key={`${index}1`}
           onClick={() => {
-            if (!cardIndex) {
-              setCardIndex(index);
-              checkCard(item);
-            }
+            console.log(item);
+            // if (!cardIndex) {
+            setCardIndex(index);
+            checkCard(item);
+            // }
           }}
         >
           <img
@@ -27,8 +28,8 @@ function index(props) {
             src={backImg}
             className={`scrollCards-back ${cardIndex == index ? 'rotateY180' : null}`}
           />
-          <div className={`scrollCards-front ${cardIndex == index ? 'rotateY360' : null}`}></div>
-          <div className={`scrollCards-back ${cardIndex == index ? 'rotateY180' : null}`}></div>
+          {/* <div className={`scrollCards-front ${cardIndex == index ? 'rotateY360' : null}`}></div>
+          <div className={`scrollCards-back ${cardIndex == index ? 'rotateY180' : null}`}></div> */}
         </div>
       ))}
     </div>

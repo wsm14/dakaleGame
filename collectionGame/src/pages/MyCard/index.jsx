@@ -77,25 +77,25 @@ function index() {
   //转赠好友
   const giveFriend = async () => {
     const { checkInfo } = cardInfo;
-    console.log(checkInfo);
-    if (deviceName() != 'miniProgram') {
-      const res = await fetchCommandGetCommand({
-        commandType: 'luckCardGiveOther',
-        relateId: checkInfo.identification,
-      });
-      if (res.success) {
-        const { command } = res.content;
-        cobyInfo(command, { show: true, value: checkInfo.identification }, (val) => {
-          setShareVisible(val);
-        });
-      }
-    } else {
-      linkTo({
-        wechat: {
-          url: `/pages/share/gameHelp/index?subType=${btnType}&shareId=${id}`,
-        },
+    // if (deviceName() != 'miniProgram') {
+    const res = await fetchCommandGetCommand({
+      commandType: 'luckCardGiveOther',
+      relateId: checkInfo.identification,
+    });
+    if (res.success) {
+      const { command } = res.content;
+      cobyInfo(command, { show: true, value: checkInfo.identification }, (val) => {
+        setShareVisible(val);
+        getCardDetail();
       });
     }
+    // } else {
+    //   linkTo({
+    //     wechat: {
+    //       url: `/pages/share/gameHelp/index?subType=${btnType}&shareId=${checkInfo.identification}`,
+    //     },
+    //   });
+    // }
   };
 
   const {
@@ -203,6 +203,7 @@ function index() {
       {/* 转赠好友弹窗 */}
       <ShareModal
         visible={shareVisible}
+        getCardDetail={getCardDetail}
         onClose={() => {
           setShareVisible({ show: false });
         }}

@@ -46,9 +46,9 @@ export const getToken = (fn) => {
   } catch (e) {
     sessionStorage.setItem(
       'dakaleToken',
-      'VyRTcn6pLRmlrFSmAwymahVE8S6LsHhY2uZmuqCTeyXIUcVqVkgu5A5H2HuFfXIh',
+      'mtqS6CTcVztPwIsRTfnav2FDPCe5w2xK5i6Q4doepKnagI6tEvHqd1tQxFKuBSi5',
     );
-    fn && fn('VyRTcn6pLRmlrFSmAwymahVE8S6LsHhY2uZmuqCTeyXIUcVqVkgu5A5H2HuFfXIh');
+    fn && fn('mtqS6CTcVztPwIsRTfnav2FDPCe5w2xK5i6Q4doepKnagI6tEvHqd1tQxFKuBSi5');
   }
 };
 //获取token
@@ -286,15 +286,15 @@ export const linkToMyGoods = () => {
     ios: {
       path: 'smallClockRewardList',
       param: {
-        channelStyle: 'gameFree',
+        channelStyle: 'gatherCardGame',
       },
     },
     android: {
       path: 'ScanClockPrize',
-      type: 'gameFree',
+      type: 'gatherCardGame',
     },
     wechat: {
-      url: `/pages/blindBox/gamePrize/index?channel=gameFree`,
+      url: `/pages/blindBox/gamePrize/index?channel=gatherCardGame`,
     },
   });
 };

@@ -5,9 +5,9 @@ import SwiperReceive from './components/SwiperReceive';
 import ScrollGoods from './components/ScrollGoods';
 import TitleBlock from '@/components/TitleBlock';
 import AddressModal from '@/components/AddressModal';
-
 import Cloud from '@/components/Cloud';
 import { fetchListGameRewardBarrage, fetchBeginGatherGame } from '@/services/game';
+import { nativeClose } from '@/utils/birdgeContent';
 import BlessWord from '@public/loading/BlessWord.png';
 
 function index(props) {
@@ -50,7 +50,7 @@ function index(props) {
   return (
     <div className="checkCards">
       {/* 标题栏 */}
-      <TitleBlock type="check"></TitleBlock>
+      <TitleBlock type="check" back={nativeClose}></TitleBlock>
       <div className="checkCards_Img">
         <img src={BlessWord} alt="" />
       </div>
@@ -61,7 +61,7 @@ function index(props) {
         <div style={{ opacity: cardLength ? '1' : '0.5' }}>确认领取，开始集福豆</div>
       </div>
       {/* 领取轮播 */}
-      <SwiperReceive list={[1, 2, 3, 4]}></SwiperReceive>
+      {/* <SwiperReceive list={[1, 2, 3, 4]}></SwiperReceive> */}
       {/* 云 */}
       <Cloud></Cloud>
 
