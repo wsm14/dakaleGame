@@ -14,4 +14,9 @@ export default [
     name: '盲盒',
     component: './register/blindBox',
   },
+  {
+    path: '/coupon',
+    name: '新人专享福利',
+    component: './appActive/coupon',
+  },
 ];

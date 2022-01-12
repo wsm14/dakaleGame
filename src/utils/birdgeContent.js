@@ -282,3 +282,33 @@ export const closeAnimate = () => {
   } catch (e) {}
 };
 //关闭安卓动画
+export const linkToPhone = () => {
+  try {
+    linkTo({
+      ios: {
+        path: 'DKLTelephoneRechargeViewController ',
+      },
+      android: {
+        path: 'PhoneRecharge',
+      },
+      // wechat: {
+      //   url: `/pages/coupon/wraparound/index`,
+      // },
+    });
+  } catch (e) {}
+};
+export const linkToMember = () => {
+  try {
+    linkTo({
+      ios: {
+        path: 'DKLMemberRechargeViewController',
+      },
+      android: {
+        path: 'MemberRecharge',
+      },
+      // wechat: {
+      //   url: `/pages/coupon/wraparound/index`,
+      // },
+    });
+  } catch (e) {}
+};
