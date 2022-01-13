@@ -102,24 +102,12 @@ request.interceptors.response.use(async (response) => {
   const { success, resultCode = '', resultDesc = '' } = data;
   const errorCode = ['5005', '1014'];
   if (errorCode.includes(resultCode)) {
-    // Modal.warning({
-    //   title: resultDesc,
-    //   okText: '去登录',
-    //   onOk: () => {
-    //     Modal.destroyAll();
-    //     history.push('/login/index');
-    //   },
-    // });
     sessionStorage.removeItem('dakaleToken');
     getLogin();
     return false;
   }
   if (!success && response.status == 200) {
     Toast.show({ content: resultDesc || errorHandler(response) });
-    // notification.info({
-    //   message: '提示',
-    //   description:resultDesc || errorHandler(response),
-    // });
     return false;
   }
   return response;

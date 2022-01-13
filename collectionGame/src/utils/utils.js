@@ -53,11 +53,27 @@ export const reloadTab = (callback) => {
 
 //获取年月日
 export const formatTime = (time) => {
-  var date = new Date(time);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hour = date.getHours();
-  const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-  return { year, month, day, hour, minutes };
+  if (time) {
+    time = time.replace(/\-/g, '/');
+    let date = new Date(time);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+    return { year, month, day, hour, minutes };
+  }
+};
+
+//获取年月日1
+export const formatTime1 = (time) => {
+  if (time) {
+    let date = new Date(time);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+    return { year, month, day, hour, minutes };
+  }
 };

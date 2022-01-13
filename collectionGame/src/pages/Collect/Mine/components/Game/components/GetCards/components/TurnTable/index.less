@@ -12,10 +12,10 @@
     height: 84px;
     border-radius: 56px;
     background: rgba(#c71919, 0.2);
-    border: 2px solid #fff2d8;
+    border: 2px solid rgba(#fff2d8, 0.2);
     display: flex;
     position: relative;
-    overflow: hidden;
+    // overflow: hidden;
     .cardNavigation_line {
       width: 50%;
       height: 100%;
@@ -25,17 +25,22 @@
       color: #ffe7bb;
       line-height: 84px;
       border-radius: 43px;
+      transition: all 0.1s;
+      div {
+        position: relative;
+        z-index: 22;
+      }
     }
     .cardNavigation_line_check {
-      background: linear-gradient(180deg, #ffe7b9 0%, #ffdc99 26%, #ffd583 73%, #fdd9b3 100%);
+      // background: linear-gradient(180deg, #ffe7b9 0%, #ffdc99 26%, #ffd583 73%, #fdd9b3 100%);
       font-weight: 600;
       color: #eb2525;
     }
     .cardNavigation_check {
       width: 335px;
       position: absolute;
-      left: 0;
-      top: 0;
+      left: -2px;
+      top: -2px;
       height: 84px;
       background: linear-gradient(180deg, #ffe7b9 0%, #ffdc99 26%, #ffd583 73%, #fdd9b3 100%);
       border-radius: 43px;
@@ -52,6 +57,7 @@
   }
   .getCardsLeft,
   .getCardsRight {
+    height: 840px;
     padding-top: 51px;
     text-align: center;
     .getCardsLeft_word,

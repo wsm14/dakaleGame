@@ -1,150 +1,94 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Mask, ImageUploader } from 'antd-mobile';
-import html2canvas from 'html2canvas';
-import { makeB } from '@/utils/birdgeContent';
+import React, { useState, useEffect, forwardRef } from 'react';
+import { Mask } from 'antd-mobile';
+import { deviceName } from '@/utils/birdgeContent';
+import { fetchShareGetNewShareInfo } from '@/services/report';
 import './index.less';
 
+import img1 from '@public/image/img1.png';
 import img2 from '@public/image/img2.png';
 import img3 from '@public/image/img3.png';
 
 import lastImg3 from '@public/image/lastImg3.png';
 
-function index() {
-  const imgRef = useRef();
-
-  const [file, setFile] = useState('');
-
+const index = forwardRef((props, ref) => {
+  const { detail } = props;
+  const [shareImg, setShareImg] = useState('');
+  const { annualReport = {}, username } = detail;
   useEffect(() => {
-    // makeImage();
+    getShareImg();
   }, []);
+  const {
+    reportContentObject: content = {}, //具体信息
+  } = annualReport;
 
-  const makeImage = () => {
-    html2canvas(imgRef.current, {
-      allowTaint: false,
-      useCORS: true,
-    }).then(function (canvas) {
-      // toImage
-      const base64 = canvas.toDataURL('image/png');
-      // // base64转换blob
-      const arr = base64.split(',');
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      // eslint-disable-next-line no-plusplus
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      const fileblob = new Blob([u8arr], { type: mime });
-      // URL.createObjectURL(fileblob);
-      console.log(URL.createObjectURL(fileblob));
-
-      makeB(URL.createObjectURL(fileblob));
-      // console.log('file', URL.createObjectURL(fileblob));
-      // const alink = document.createElement('a');
-      // alink.href = base64;
-      // alink.download = 'testImg.jpg';
-      // alink.click();
+  const getShareImg = async () => {
+    const res = await fetchShareGetNewShareInfo({
+      shareType: 'gameTask',
     });
-  };
-
-  const makeImage1 = () => {
-    html2canvas(imgRef.current, {
-      allowTaint: false,
-      useCORS: true,
-    }).then(function (canvas) {
-      // toImage
-      const base64 = canvas.toDataURL('image/png');
-      // console.log('file', URL.createObjectURL(fileblob));
-      const alink = document.createElement('a');
-      alink.href = base64;
-      alink.download = 'testImg.jpg';
-      alink.click();
-    });
-  };
-
-  const makeImageUpload = () => {
-    if (!file) return;
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const alink = document.createElement('a');
-        alink.href = reader.result;
-        alink.download = 'downUploadImg.jpg';
-        alink.click();
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
-  const getUrl = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      console.log(file, 'file');
-
-      console.log(URL.createObjectURL(file));
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.onerror = (error) => reject(error);
-    });
+    const { shareInfo = {} } = res.content;
+    setShareImg(shareInfo.qcodeUrl);
   };
 
   return (
     <>
-      <Mask visible={true} style={{ '--z-index': '999' }}>
-        <div className="reportData_bac" ref={imgRef}>
+      <div className={`reportData_bac1`} ref={ref}>
+        <div className="reportData_position">
           <div className="reportData_content">
-            <div className="reportData_top">
-              <div className="consumption">
-                <div className="consumption_title">全年总消费(元)</div>
-                <div className="consumption_num">177,128.09</div>
-              </div>
-              <div className="consumption">
-                <div className="consumption_title">全年卡豆总抵扣(卡豆)</div>
-                <div className="consumption_num">177,128</div>
-              </div>
-            </div>
-            <div className="saveMoney">
-              <div className="saveMoney_title">全年卡豆为你省钱(元)</div>
-              <div className="saveMoney_num">177,128.09</div>
-            </div>
-            <div className="reportData_center">
-              <img src={lastImg3} alt="" />
-              <div className="reportData_center_money">
-                <div>
-                  线上消费 <span>177,1.98</span>元
+            <img src={img1} alt="" className="reportData_contentImg" />
+            <div className="reportData_relative">
+              <div className="reportData_top">
+                <div className="consumption">
+                  <div className="consumption_title">全年总消费(元)</div>
+                  <div className="consumption_num">{content.totalConsume}</div>
                 </div>
-                <div>
-                  线下消费 <span>177,1.98</span>元
+                <div className="consumption">
+                  <div className="consumption_title">全年卡豆总抵扣(卡豆)</div>
+                  <div className="consumption_num">{content.annualBeanDeduct}</div>
                 </div>
               </div>
+              <div className="saveMoney">
+                <div className="saveMoney_title">全年卡豆为你省钱(元)</div>
+                <div className="saveMoney_num">
+                  {(Number(content.annualBeanDeduct) / 100).toString()}
+                </div>
+              </div>
+              <div className="reportData_center">
+                <img src={lastImg3} alt="" />
+                <div className="reportData_center_money">
+                  <div>
+                    线上消费 <span>{content.onlineConsume}</span>元
+                  </div>
+                  <div>
+                    线下消费 <span>{content.outlineConsume}</span>元
+                  </div>
+                </div>
+              </div>
+              <div className="report_ranking">段位·{content.position}</div>
+              <div className="report_exceed">
+                超过全国 <span>{content.consumeCashLevel}%</span> 的用户
+              </div>
+              <div className="report_line"></div>
+              <div className="report_keyWord">我的年度关键词</div>
+              <div className="report_evaluate">{content.annualKey}</div>
+              <div className="report_summary">{content.annualWord}</div>
             </div>
-            <div className="report_ranking">段位·段位名称</div>
-            <div className="report_exceed">
-              超过全国 <span>98%</span> 的用户
+          </div>
+          <div className="reportBottom">
+            <div className="reportBottom_left">
+              <div className="reportBottom_nickname">
+                <span>{username}</span> 的年度报告
+              </div>
+              <img src={img3} alt="" className="reportBottom_img2" />
+              <img src={img2} alt="" className="reportBottom_img3" />
             </div>
-            <div className="report_line"></div>
-            <div className="report_keyWord">我的年度关键词</div>
-            <div className="report_evaluate">深不可测</div>
-            <div className="report_summary">
-              今年会有机遇，也会有挑战，可能一夜暴富
-              <br /> 也可能一举成名，当然离不开哒卡乐
-            </div>
-            <div>
-              <button onClick={makeImage}>点击事件！！！！！！</button>
-              <button onClick={makeImage1}>点击下载方法！！！！</button>
-            </div>
-            <div>
-              <input accept="image/*" type={'file'} onChange={(e) => setFile(e.target.files[0])} />
-              <button onClick={makeImageUpload}>点击下载上传的大文件</button>
+            <div className="reportBottom_right">
+              <img src={`${shareImg}?_=${Date.now()}`} alt="" crossOrigin="anonymous" />
             </div>
           </div>
         </div>
-      </Mask>
+      </div>
     </>
   );
-}
+});
 
 export default index;

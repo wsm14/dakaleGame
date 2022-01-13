@@ -6,26 +6,29 @@ import close from './Lottie/close.json';
 
 function index(props) {
   const { visible, onClose } = props;
-  const [autoplay, setAutoplay] = useState(false);
+  const [isStopped, setIsStopped] = useState(true);
   useEffect(() => {
     if (visible) {
-      setAutoplay(true);
+      setIsStopped(false);
+    } else {
+      setIsStopped(true);
     }
   }, [visible]);
   return (
     <div>
-      <Mask visible={visible}>
+      <Mask visible={visible} forceRender opacity="0.8">
         <div className="cardModal_Lottie">
           <Lottie
             options={{
               loop: false,
-              autoplay: autoplay,
+              autoplay: true,
               animationData: close,
               rendererSettings: {
                 preserveAspectRatio: 'xMidYMid slice',
               },
             }}
             isClickToPauseDisabled={true}
+            isStopped={isStopped}
           />
           <div className="cardModal_close" onClick={onClose}></div>
         </div>

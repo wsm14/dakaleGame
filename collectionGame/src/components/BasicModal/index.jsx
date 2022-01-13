@@ -5,7 +5,7 @@ import closeIcon from '@public/image/close.png';
 
 function index(props) {
   const { children, modalProps } = props;
-  const { onClose } = modalProps;
+  const { onClose, opacity = '0.8' } = modalProps;
   return (
     <>
       <Mask {...modalProps}>

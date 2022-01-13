@@ -30,7 +30,7 @@ export const cobyInfo = (data, val, callback) => {
   callback && callback(val);
 };
 
-export const reloadTab = (callback) => {
+export const reloadTab = (callback, callback1) => {
   let hiddenProperty =
     'hidden' in document
       ? 'hidden'
@@ -43,10 +43,24 @@ export const reloadTab = (callback) => {
     console.log(document[hiddenProperty]);
     if (document[hiddenProperty]) {
       //当离开H5 跳转到app原生的页面时,这里会被触发
+      callback1 && callback1();
     } else {
       //当从原生页面用户一系列操作后,返回H5的时候,这里会被触发
       console.log(1111111);
       callback && callback();
     }
   });
+};
+//获取年月日
+export const formatTime = (time) => {
+  if (time) {
+    time = time.replace(/\-/g, '/');
+    let date = new Date(time);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+    return { year, month, day, hour, minutes };
+  }
 };

@@ -101,6 +101,7 @@ var bridge = {
 
 function nativeOther() {
   this.ios = {
+    saveFile: 'storeImageAndShare', //保存图片
     close: 'finish', //关闭
     hideTitle: 'hideTitle', //隐藏头部
     linkTo: 'goNativePage', //页面挑战
@@ -123,6 +124,7 @@ function nativeOther() {
     cobyText: 'copyPasteBoard',
   };
   this.android = {
+    saveFile: 'saveFile', //保存图片
     close: 'finish', //关闭
     hideTitle: 'hideTitle', //隐藏头部
     linkTo: 'goNativePage', //路径跳转

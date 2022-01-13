@@ -46,9 +46,9 @@ export const getToken = (fn) => {
   } catch (e) {
     sessionStorage.setItem(
       'dakaleToken',
-      'mtqS6CTcVztPwIsRTfnav2FDPCe5w2xK5i6Q4doepKnagI6tEvHqd1tQxFKuBSi5',
+      'VyRTcn6pLRmlrFSmAwymahVE8S6LsHhY2uZmuqCTeyXIUcVqVkgu5A5H2HuFfXIh',
     );
-    fn && fn('mtqS6CTcVztPwIsRTfnav2FDPCe5w2xK5i6Q4doepKnagI6tEvHqd1tQxFKuBSi5');
+    fn && fn('VyRTcn6pLRmlrFSmAwymahVE8S6LsHhY2uZmuqCTeyXIUcVqVkgu5A5H2HuFfXIh');
   }
 };
 //获取token
@@ -286,12 +286,12 @@ export const linkToMyGoods = () => {
     ios: {
       path: 'smallClockRewardList',
       param: {
-        channelStyle: 'gatherCardGame',
+        channelStyle: 'gameGather',
       },
     },
     android: {
       path: 'ScanClockPrize',
-      type: 'gatherCardGame',
+      type: 'gameGather',
     },
     wechat: {
       url: `/pages/blindBox/gamePrize/index?channel=gatherCardGame`,
@@ -311,6 +311,13 @@ export const linkToAddress = () => {
     wechat: {
       url: `/pages/relay/community/delivery/index?mode=list`,
     },
+  });
+};
+
+//生成海报
+export const makeReport = (val) => {
+  native.nativeInit('saveFile', {
+    url: val,
   });
 };
 

@@ -44,12 +44,11 @@ export const getToken = (fn) => {
       });
     }
   } catch (e) {
-    console.log(e, '1111111');
     sessionStorage.setItem(
       'dakaleToken',
-      '9frOXnX2ELaN6rq4Trw7KnaJ2x8tvjtO2y34mU6xLlixfrqwXotTKTTPTjgAvg81',
+      'avO0aHQCmj5nO400sBoO26mz6zANZCCowKeS7T4Qe86LN997lEU2xb6n8vraQims',
     );
-    fn && fn('kSPxLBO9t41dQeyLbzplZOxIWbKZeLUHQUAMvPrvWPyydh53YpiAP6XIkzyvviG4');
+    fn && fn('avO0aHQCmj5nO400sBoO26mz6zANZCCowKeS7T4Qe86LN997lEU2xb6n8vraQims');
   }
 };
 //获取token
@@ -316,9 +315,9 @@ export const linkToAddress = () => {
 };
 
 //生成海报
-export const makeB = (val) => {
+export const makeReport = (val) => {
   native.nativeInit('saveFile', {
-    android: { url: val },
+    url: val,
   });
 };
 

@@ -40,7 +40,7 @@ function index(props) {
               className="getCards_script"
               onClick={() => {
                 window.location.href =
-                  'https://resource-new.dakale.net/product/html/rule/64c02191-8838-4301-4c46-18409012033c.html?shareKey=1473476250744676353?newPage=true&&showTitle=true';
+                  'https://resource-new.dakale.net/product/html/rule/711ab478-479a-4885-8419-178481788744.html?newPage=true&shareKey=1479299624553213954&showTitle=true';
               }}
             />
           </div>

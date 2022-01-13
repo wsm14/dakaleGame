@@ -17,13 +17,17 @@ import reunion from './Lottie/reunion';
 //空豆
 import empty from './Lottie/empty';
 
+//背景循环动效
+import back from './Lottie/back.json';
+
 function index(props) {
   const {
     visible = {},
     countList, //计算数组
   } = props;
+  const [isStopped, setIsStopped] = useState(true);
   const {
-    identification,
+    identification = 1,
     popFlag, //弹窗标识 0 - 抽奖 1 - 分享 2 - 转赠
     cardName = '福', //卡的名字
     rewardFlag = '1', //是否抽中 0 - 未抽中 1 - 抽中
@@ -33,10 +37,14 @@ function index(props) {
     rewardFlag === '1'
       ? ['', auspicious, reunion, healthy, euphoria, newSpring][identification]
       : empty;
+  const imgIndex = rewardFlag === '1' ? identification : 6;
+
   const [autoplay, setAutoplay] = useState(false);
   useEffect(() => {
     if (visible) {
-      setAutoplay(true);
+      setIsStopped(false);
+    } else {
+      setIsStopped(true);
     }
   }, [visible]);
 
@@ -57,29 +65,53 @@ function index(props) {
 
   return (
     <>
-      <Mask visible={visible} onMaskClick={countList}>
-        {visible && (
-          <div className="cardModal_Lottie">
-            <Lottie
-              options={{
-                loop: true,
-                autoplay: autoplay,
-                animationData: animationData,
-                rendererSettings: {
-                  preserveAspectRatio: 'xMidYMid slice',
-                },
-              }}
-              isClickToPauseDisabled={true}
-            />
-            <div className="cardModal">
-              <div className="cardModal_title">{checkTitle()}</div>
-              <div className="cardModal_accept" onClick={countList}>
-                {rewardFlag === '1' ? '开心收下' : '收下福气'}
+      <Mask visible={visible} onMaskClick={countList} forceRender={true} opacity="0.8">
+        <div className="cardModal_Lottie1">
+          {[auspicious, reunion, healthy, euphoria, newSpring, empty].map((item, index) => (
+            <div key={`${index}1`}>
+              <div
+                className="cardModal_animation"
+                style={{ display: imgIndex - 1 == index ? 'block' : 'none' }}
+              >
+                <Lottie
+                  options={{
+                    loop: index === 5 ? false : true,
+                    autoplay: true,
+                    animationData: back,
+                    rendererSettings: {
+                      preserveAspectRatio: 'xMidYMid slice',
+                    },
+                  }}
+                  isClickToPauseDisabled={true}
+                />
               </div>
-              <img src={closeImg} alt="" className="cardModal_closeImg" onClick={countList} />
+              <div
+                className="cardModal_animation"
+                style={{ display: imgIndex - 1 == index ? 'block' : 'none' }}
+              >
+                <Lottie
+                  options={{
+                    loop: index === 5 ? true : false,
+                    autoplay: true,
+                    animationData: item,
+                    rendererSettings: {
+                      preserveAspectRatio: 'xMidYMid slice',
+                    },
+                  }}
+                  isClickToPauseDisabled={true}
+                  isStopped={isStopped}
+                />
+              </div>
             </div>
+          ))}
+          <div className="cardModal">
+            <div className="cardModal_title">{checkTitle()}</div>
+            <div className="cardModal_accept" onClick={countList}>
+              {rewardFlag === '1' ? '开心收下' : '收下福气'}
+            </div>
+            <img src={closeImg} alt="" className="cardModal_closeImg" onClick={countList} />
           </div>
-        )}
+        </div>
       </Mask>
     </>
   );

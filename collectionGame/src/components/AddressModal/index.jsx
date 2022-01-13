@@ -63,7 +63,7 @@ function index(props) {
   };
   return (
     <>
-      <Mask visible={orderVisible} onMaskClick={onClose}>
+      <Mask visible={orderVisible} onMaskClick={onClose} opacity="0.8">
         <div className="overlay">
           <div className="overlayContent">
             <div className="overlayContent_title">确认订单</div>

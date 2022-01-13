@@ -6,3 +6,10 @@ export async function fetchReportGetAnnualReport(params) {
     params,
   });
 }
+
+// get 年度报告 - 分享接口(新)
+export async function fetchShareGetNewShareInfo(params) {
+  return request('/common/share/getNewShareInfo', {
+    params,
+  });
+}

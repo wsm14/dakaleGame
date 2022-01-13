@@ -1,7 +1,12 @@
+.swiperContent {
+  width: 100vw;
+  height: 100vh;
+}
+
 .reportPage {
   width: 100vw;
   height: 100vh;
-  background-size: 100% 100% !important;
+  background-size: cover !important;
   position: relative;
   .reportContent {
     width: 556px;
@@ -24,6 +29,10 @@
       color: #ffd637;
     }
   }
+}
+
+.padding1 {
+  padding-top: 100px !important;
 }
 
 .reportData_bac {
@@ -176,11 +185,12 @@
       text-align: center;
     }
     .report_summary {
+      width: 456px;
       font-size: 24px;
       font-weight: 400;
       color: #999999;
       line-height: 40px;
-      margin-top: 24px;
+      margin: 24px auto 0;
       text-align: center;
     }
   }
@@ -193,9 +203,8 @@
   .reportData_bottomImg {
     width: 409px;
     height: 57px;
-    position: absolute;
-    left: 171px;
-    bottom: 50px;
+    display: block;
+    margin: 0 auto;
   }
 }
 

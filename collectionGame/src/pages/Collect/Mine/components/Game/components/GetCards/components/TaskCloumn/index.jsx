@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { reloadTab, formatTime } from '@/utils/utils';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { reloadTab, formatTime1 } from '@/utils/utils';
 import { deviceName, linkTo } from '@/utils/birdgeContent';
 import { useUpdateEffect } from 'ahooks';
 import {
   fetchTaskGetTaskList,
-  fetchTaskExchangeBalance,
   fetchTaskDoneTask,
   fetchTaskReceiveTaskReward,
 } from '@/services/game';
 import { Toast } from 'antd-mobile';
+import ExchangeModal from '@/components/ExchangeModal';
 import './index.less';
 let timer = null;
 function index(props) {
@@ -17,13 +17,14 @@ function index(props) {
   const [downTime, setDownTime] = useState(0); //倒计时时间
   const [timeFlag, setTimeFlag] = useState(false); //是否是明天再领
   const [nextTime, setNextTime] = useState(0); //下一阶段时间的显示
+  const [visible, setVisible] = useState({ show: false });
   const timeRef = useRef(false);
 
   useEffect(() => {
+    reloadTab(getTaskList);
     if (sessionStorage.getItem('dakaleToken')) {
       getTaskList();
     }
-    reloadTab(getTaskList);
   }, []);
   useUpdateEffect(() => {
     clearInterval(timer);
@@ -76,8 +77,8 @@ function index(props) {
       let { condition } = jsonRule;
       //当前时间
       condition = (condition && JSON.parse(condition)) || [];
-      let nowTime = new Date(systemDate).getTime();
-      condition = condition.map((item) => new Date(item).getTime());
+      let nowTime = new Date(systemDate.replace(/\-/g, '/')).getTime();
+      condition = condition.map((item) => new Date(item.replace(/\-/g, '/')).getTime());
       //最后的时间
       let lastTime;
       for (let i = 0; i < condition.length; i++) {
@@ -93,11 +94,11 @@ function index(props) {
       if (hasDoneTimes === times) {
         lastTime = null;
       }
-
+      console.log(lastTime);
       if (lastTime) {
         setDownTime((lastTime - nowTime) / 1000);
         setNextTime({
-          time: `${formatTime(lastTime).hour}:${formatTime(lastTime).minutes}`,
+          time: `${formatTime1(lastTime).hour}:${formatTime1(lastTime).minutes}`,
           strapId: strapId,
         });
         timeRef.current = !timeRef.current;
@@ -127,21 +128,6 @@ function index(props) {
       },
     });
   };
-
-  //去兑换
-  const exchange = async (strapId) => {
-    const res = await fetchTaskExchangeBalance({
-      strapId,
-    });
-    if (res.success) {
-      Toast.show({
-        content: '兑换成功',
-      });
-      getTaskList();
-      getGameDetail();
-    }
-  };
-
   //领取奖励
   const receiveRewards = async (item) => {
     const { strapId, taskId } = item;
@@ -170,7 +156,7 @@ function index(props) {
             <div
               className="taskLine_right taskLine_button1"
               onClick={() => {
-                exchange(strapId);
+                setVisible(item);
               }}
             >
               去兑换
@@ -224,21 +210,37 @@ function index(props) {
       );
     }
   };
+  const modalRender = useMemo(
+    () => (
+      <ExchangeModal
+        visible={visible}
+        getTaskList={getTaskList}
+        getGameDetail={getGameDetail}
+        onClose={() => {
+          setVisible({ show: false });
+        }}
+      ></ExchangeModal>
+    ),
+    [visible.show],
+  );
   return (
-    <div className="taskCloumn">
-      {taskList.map((item) => (
-        <div className="taskLine" key={item.strapId}>
-          <div className="taskLine_left">
-            <img src={item.image} alt="" />
-            <div className="taskLine_left_info">
-              <div className="taskLine_left_title">{item.name}</div>
-              <div className="taskLine_left_description">{item.content}</div>
+    <>
+      <div className="taskCloumn">
+        {taskList.map((item) => (
+          <div className="taskLine" key={item.strapId}>
+            <div className="taskLine_left">
+              <img src={item.image} alt="" />
+              <div className="taskLine_left_info">
+                <div className="taskLine_left_title">{item.name}</div>
+                <div className="taskLine_left_description">{item.content}</div>
+              </div>
             </div>
+            {checkButton(item)}
           </div>
-          {checkButton(item)}
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+      {modalRender}
+    </>
   );
 }
 

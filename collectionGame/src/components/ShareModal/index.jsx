@@ -1,12 +1,14 @@
 import React from 'react';
 import './index.less';
-import { openWx, nativeShareSign, nativeShareWork, nativeShareClose } from '@/utils/birdgeContent';
+import { openWx } from '@/utils/birdgeContent';
 import kcopy from '@public/image/kcopy.png';
 import BasicModal from '@/components/BasicModal';
+import { cobyInfo } from '@/utils/utils';
+import { fetchCommandGetCommand } from '@/services/game';
 
 function index(props) {
-  const { visible, onClose } = props;
-  const { show, value } = visible;
+  const { visible, onClose, checkInfo, getCardDetail } = props;
+  const { show } = visible;
 
   const modalProps = {
     visible: show,
@@ -14,6 +16,20 @@ function index(props) {
     opacity: 0.8,
   };
 
+  const copyCode = async () => {
+    const res = await fetchCommandGetCommand({
+      commandType: 'luckCardGiveOther',
+      relateId: checkInfo.identification,
+    });
+    if (res.success) {
+      const { command } = res.content;
+      cobyInfo(command, {}, (val) => {
+        openWx();
+        onClose();
+        getCardDetail();
+      });
+    }
+  };
   return (
     <>
       <BasicModal modalProps={{ ...modalProps }}>
@@ -22,16 +38,12 @@ function index(props) {
             <img src={kcopy} alt="" />
           </div>
           <div className="ShareModal_content_title">
-            将口令复制给微信好友，好友打开app识别口令即可邀请成功
+            将口令复制给微信好友识别即可领取
+            <br />
+            赠送后自动扣除卡片，10分钟未领自动退回
           </div>
           <div className="ShareModal_doubleButton">
-            <div
-              className="ShareModal_content_button"
-              onClick={() => {
-                openWx();
-                onClose();
-              }}
-            >
+            <div className="ShareModal_content_button" onClick={copyCode}>
               去微信粘贴
             </div>
             {/* <div

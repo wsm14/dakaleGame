@@ -23,7 +23,15 @@ const LoginForm = ({ type }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     reloadTab(() => {
-      getHomeDetail();
+      if (!sessionStorage.getItem('dakaleToken')) {
+        getToken((e) => {
+          if (e) {
+            getHomeDetail();
+          }
+        });
+      } else {
+        getHomeDetail();
+      }
     });
     getStateToken();
     closeAnimate();

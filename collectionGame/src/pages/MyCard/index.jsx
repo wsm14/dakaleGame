@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.less';
 import { history } from 'umi';
+import { useDebounceFn } from 'ahooks';
 import Cloud from '@/components/Cloud';
 import TitleBlock from '@/components/TitleBlock';
 import {
@@ -22,6 +23,7 @@ function index() {
   const [cardInfo, setCardInfo] = useState({}); //一张卡的信息
   const [visible, setVisible] = useState(false); //合成福卡弹窗
   const [shareVisible, setShareVisible] = useState({ show: false }); //转赠弹窗
+
   useEffect(() => {
     getCardDetail();
   }, []);
@@ -53,9 +55,11 @@ function index() {
   };
   //合成卡
   const closeCard = async () => {
-    setVisible(true);
     const res = await fetchGatherExchangeCard();
-    getCardDetail();
+    if (res.success) {
+      setVisible(true);
+      getCardDetail();
+    }
   };
 
   //点击返回按钮
@@ -65,7 +69,7 @@ function index() {
 
   //开奖
   const openPrize = async () => {
-    const res = await fetchGathergetLuckReward();
+    await fetchGathergetLuckReward();
     getCardDetail();
   };
 
@@ -76,24 +80,17 @@ function index() {
 
   //转赠好友
   const giveFriend = async () => {
-    const { checkInfo } = cardInfo;
-    // if (deviceName() != 'miniProgram') {
-    const res = await fetchCommandGetCommand({
-      commandType: 'luckCardGiveOther',
-      relateId: checkInfo.identification,
-    });
-    if (res.success) {
-      const { command } = res.content;
-      cobyInfo(command, { show: true, value: checkInfo.identification }, (val) => {
-        setShareVisible(val);
-        getCardDetail();
-      });
-    }
-    // } else {
-    //   linkTo({
-    //     wechat: {
-    //       url: `/pages/share/gameHelp/index?subType=${btnType}&shareId=${checkInfo.identification}`,
-    //     },
+    setShareVisible({ show: true });
+
+    // const { checkInfo } = cardInfo;
+    // const res = await fetchCommandGetCommand({
+    //   commandType: 'luckCardGiveOther',
+    //   relateId: checkInfo.identification,
+    // });
+    // if (res.success) {
+    //   const { command } = res.content;
+    //   cobyInfo(command, { show: true, value: checkInfo.identification }, (val) => {
+    //     setShareVisible(val);
     //   });
     // }
   };
@@ -110,7 +107,13 @@ function index() {
     cardFlag = {}, //是否可以合成
   } = cardInfo;
 
-  const getTime = formatTime(prizeOpenTime);
+  const getTime = formatTime(prizeOpenTime) || {};
+  const { run } = useDebounceFn(
+    () => {
+      openPrize();
+    },
+    { wait: 1000, leading: true, trailing: false },
+  );
   return (
     <>
       {/* 标题栏 */}
@@ -136,7 +139,7 @@ function index() {
                       <div className="openPrize_time">
                         {getTime.month}月{getTime.day}日 {getTime.hour}:{getTime.minutes}开奖
                       </div>
-                      <div className="openPrize_open" onClick={openPrize}></div>
+                      <div className="openPrize_open" onClick={run}></div>
                     </div>
                   ) : (
                     <div className="alreadyOpen">
@@ -151,7 +154,11 @@ function index() {
                   )}
                 </>
               ) : (
-                <img src={checkInfo.cardImg} alt="" className="myCardInfo_center_img" />
+                <img
+                  src={checkInfo.hasNums > 0 ? checkInfo.cardImg : checkInfo.cardVirualImg}
+                  alt=""
+                  className="myCardInfo_center_img"
+                />
               )}
             </div>
             <div className="myCardInfo_area">
@@ -204,6 +211,7 @@ function index() {
       <ShareModal
         visible={shareVisible}
         getCardDetail={getCardDetail}
+        checkInfo={checkInfo}
         onClose={() => {
           setShareVisible({ show: false });
         }}

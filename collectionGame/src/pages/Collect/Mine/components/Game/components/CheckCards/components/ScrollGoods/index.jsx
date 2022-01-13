@@ -13,11 +13,10 @@ function index(props) {
           className="scrollCards"
           key={`${index}1`}
           onClick={() => {
-            console.log(item);
-            // if (!cardIndex) {
-            setCardIndex(index);
-            checkCard(item);
-            // }
+            if (!cardIndex && cardIndex !== 0) {
+              setCardIndex(index);
+              checkCard(item);
+            }
           }}
         >
           <img

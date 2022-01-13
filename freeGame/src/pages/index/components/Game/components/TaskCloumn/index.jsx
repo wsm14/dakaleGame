@@ -53,10 +53,13 @@ function index(props) {
   const getSignContent = async () => {
     const res = await fetchFreeGoodGetSignRecord();
     const { content = {} } = res;
+    // if (content.signDay > 5) {
+    //   for (let i = 1; i <= content.signDay - 5; i++) {
+    //     content.signInfo.push({ number: 5 + i, rewardStar: 15 });
+    //   }
+    // }
     if (content.signDay > 5) {
-      for (let i = 1; i <= content.signDay - 5; i++) {
-        content.signInfo.push({ number: 5 + i, rewardStar: 15 });
-      }
+      content.signInfo[content.signInfo.length].number = content.signDay;
     }
     setSignContent(content);
   };

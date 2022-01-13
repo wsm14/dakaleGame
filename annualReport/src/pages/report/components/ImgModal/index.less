@@ -1,16 +1,34 @@
-.reportData_bac {
+.reportData_bac1 {
   width: 100vw;
   height: 100vh;
   background: url(~@public/image/lastImg1.png) no-repeat;
-  background-size: 100% 100%;
-  padding-top: 20px;
+  background-size: cover;
+  position: fixed;
+  top: 1000%;
+  left: 0;
+  z-index: -99;
+  .reportData_position {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   .reportData_content {
     width: 726px;
     height: 1134px;
-    background: url(~@public/image/img1.png) no-repeat;
-    background-size: 100% 100%;
     margin: 0 auto;
     padding: 109px 43px 0;
+    .reportData_contentImg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 726px;
+      height: 1134px;
+    }
+    .reportData_relative {
+      position: relative;
+      z-index: 1;
+    }
     .reportData_top {
       display: flex;
       justify-content: center;
@@ -148,12 +166,62 @@
       text-align: center;
     }
     .report_summary {
+      width: 456px;
       font-size: 24px;
       font-weight: 400;
       color: #999999;
       line-height: 40px;
-      margin-top: 24px;
+      display: block;
+      margin: 24px auto 0;
       text-align: center;
     }
   }
+  .reportBottom {
+    display: flex;
+    padding: 0 40px;
+    justify-content: space-between;
+    .reportBottom_left {
+      display: flex;
+      flex-direction: column;
+      .reportBottom_nickname {
+        display: flex;
+        align-items: center;
+        span {
+          display: inline-block;
+          max-width: 280px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        font-size: 28px;
+        font-weight: 500;
+        color: #ffffff;
+        line-height: 28px;
+      }
+      .reportBottom_img2 {
+        width: 332px;
+        height: 44px;
+        margin-top: 16px;
+      }
+      .reportBottom_img3 {
+        width: 200px;
+        height: 64px;
+        margin-top: 32px;
+      }
+    }
+    .reportBottom_right {
+      width: 188px;
+      height: 188px;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+.padding1 {
+  padding-top: 70px;
 }
