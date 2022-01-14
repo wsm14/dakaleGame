@@ -1,5 +1,9 @@
 export default [
   {
+    path: '/',
+    redirect: '/index',
+  },
+  {
     path: '/index',
     name: '选商品',
     component: './index',
