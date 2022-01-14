@@ -30,7 +30,9 @@ import TaskCloumn from '../TaskCloumn';
 import InvitationModal from '../InvitationModal';
 import Speed from '../Speed';
 import ShareModal from '@/components/ShareModal';
-import { deviceName, nativeShareWork, nativeShareClose, linkTo } from '@/utils/birdgeContent';
+import BeanModal from '@/components/BeanModal';
+import { deviceName, linkTo } from '@/utils/birdgeContent';
+import { appHeight } from '@/utils/game';
 
 const computedY = window.innerHeight * 2;
 let ticker = null; //定时器
@@ -45,6 +47,7 @@ function index(props) {
   const [invateVisible, setInvateVisible] = useState(''); //合力弹窗
   const [taskVisible, setTaskVisible] = useState(''); //任务弹窗
   const [shareVisible, setShareVisible] = useState({ show: false });
+  const [beanModalVisible, setBeanModalVisible] = useState({ show: false });
   //获取所有的数据
   const { homeDetail, gameHeight } = useSelector((state) => state.receiveGoods); //所有的数据
   const { gameInfo = {} } = homeDetail;
@@ -58,7 +61,7 @@ function index(props) {
     cityCode,
   } = gameInfo;
   const {
-    supplyProcessStr, //进度
+    supplyProcess, //进度
     supplyLevel, //等级
   } = processInfo;
 
@@ -135,7 +138,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.starBord.src,
         x: conversionSize(195),
-        y: computedY - conversionSize(152 - gameHeight),
+        y: computedY + appHeight - conversionSize(conversionSize(_, 184)),
         width: conversionSize(360),
         height: conversionSize(120),
       },
@@ -144,7 +147,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.bigStar.src,
         x: conversionSize(305),
-        y: computedY - conversionSize(221 - gameHeight),
+        y: computedY + appHeight - conversionSize(253 - (184 - conversionSize(_, 184))),
         width: conversionSize(140),
         height: conversionSize(140),
       },
@@ -153,7 +156,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.invateIcon.src,
         x: conversionSize(32),
-        y: computedY - conversionSize(152 - gameHeight),
+        y: computedY + appHeight - conversionSize(conversionSize(_, 184)),
         width: conversionSize(120),
         height: conversionSize(120),
       },
@@ -162,7 +165,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.starBean.src,
         x: conversionSize(598),
-        y: computedY - conversionSize(152 - gameHeight),
+        y: computedY + appHeight - conversionSize(conversionSize(_, 184)),
         width: conversionSize(120),
         height: conversionSize(120),
       },
@@ -172,7 +175,7 @@ function index(props) {
         text: '1111',
         image: imgObj.rectangle1.src,
         x: conversionSize(32),
-        y: computedY - conversionSize(192 - gameHeight),
+        y: computedY + appHeight - conversionSize(conversionSize(_, 234)),
         width: conversionSize(120),
         height: conversionSize(42),
       },
@@ -182,7 +185,7 @@ function index(props) {
         text: '1111',
         image: imgObj.rectangle2.src,
         x: conversionSize(608),
-        y: computedY - conversionSize(192 - gameHeight),
+        y: computedY + appHeight - conversionSize(conversionSize(_, 234)),
         width: conversionSize(100),
         height: conversionSize(42),
       },
@@ -231,9 +234,16 @@ function index(props) {
 
   //点击领豆动画
   const collarBean = async () => {
-    const res = await fetchFreeGoodGetSupply();
-    // console.log(stage, 'stage');
-    createStar(stage, imgObj, bigStar, getHomeDetail, gameHeight);
+    const { subsidyNum, subsidyFlag } = gameInfo;
+    if (subsidyFlag === '1') {
+      const res = await fetchFreeGoodGetSupply();
+      if (res.sucess) {
+        setBeanModalVisible({ show: true, type: 2, num: subsidyNum });
+        createStar(stage, imgObj, bigStar, getHomeDetail);
+      }
+    } else {
+      setBeanModalVisible({ show: true, type: 3, num: subsidyNum });
+    }
   };
 
   //设置大星星的动画
@@ -243,13 +253,13 @@ function index(props) {
       bigStar,
       {
         x: conversionSize(305),
-        y: computedY - conversionSize(221 - gameHeight),
+        y: computedY + appHeight - conversionSize(254 - (184 - conversionSize(_, 184))),
         scaleX: 1,
         scaleY: 1,
       },
       {
         x: conversionSize(320),
-        y: computedY - conversionSize(200 - gameHeight),
+        y: computedY + appHeight - conversionSize(253 - (184 - conversionSize(_, 184))),
         scaleX: 0.8,
         scaleY: 0.8,
       },
@@ -270,8 +280,16 @@ function index(props) {
     const res = await fetchFreeGoodGameSupply({
       processId: processId,
     });
-    if (res.resultCode == 1) {
+    if (res.success) {
       createBottomStar(stage, imgObj, spiritPlus, getHomeDetail);
+    } else {
+      setBeanModalVisible({
+        show: true,
+        type: 1,
+        onClick: () => {
+          setTaskVisible(true);
+        },
+      });
     }
     // createBottomStar(stage, imgObj, spiritPlus, getHomeDetail);
   };
@@ -292,133 +310,6 @@ function index(props) {
       background2.visible = false;
       Spirite1.interval = 24;
     }, 5000);
-    // clearTimeout(speedSetTimeout);
-    // const target = stage.getChildById('animationBac');
-    // const target1 = stage.getChildById('animationBac1');
-
-    // console.log(target);
-    // Hilo.Tween.remove(target);
-    // Hilo.Tween.remove(target1);
-    // const imgWidth = imgObj.planeBg.width;
-
-    // const num = target.x;
-    // const num1 = target1.x;
-
-    // speedSetTimeout = setTimeout(() => {
-    //   Spirite1.interval = 1;
-    //   Hilo.Tween.to(
-    //     target,
-    //     {
-    //       x: -imgWidth,
-    //     },
-    //     {
-    //       duration: math.divide(math.multiply(math.add(imgWidth, num), 3), 5),
-    //       ease: Hilo.Ease.Linear.EaseNone,
-    //       onComplete: (tween) => {
-    //         Hilo.Tween.fromTo(
-    //           tween.target,
-    //           {
-    //             x: 0,
-    //           },
-    //           {
-    //             x: num,
-    //           },
-    //           {
-    //             duration: math.divide(math.multiply(-num, 3), 5),
-    //             ease: Hilo.Ease.Linear.EaseNone,
-    //             loop: false,
-    //             onComplete: (tween) => {
-    //               Spirite1.interval = 24;
-    //               Hilo.Tween.to(
-    //                 tween.target,
-    //                 {
-    //                   x: -imgWidth,
-    //                 },
-    //                 {
-    //                   duration: math.multiply(math.add(imgWidth, tween.target.x), 3),
-    //                   ease: Hilo.Ease.Linear.EaseNone,
-    //                   loop: false,
-    //                   onComplete: (tween) => {
-    //                     Hilo.Tween.fromTo(
-    //                       tween.target,
-    //                       {
-    //                         x: 0,
-    //                       },
-    //                       {
-    //                         x: -imgWidth,
-    //                       },
-    //                       {
-    //                         duration: 9000,
-    //                         ease: Hilo.Ease.Linear.EaseNone,
-    //                         loop: true,
-    //                       },
-    //                     );
-    //                   },
-    //                 },
-    //               );
-    //             },
-    //           },
-    //         );
-    //       },
-    //     },
-    //   );
-
-    //   Hilo.Tween.to(
-    //     target1,
-    //     {
-    //       x: 0,
-    //     },
-    //     {
-    //       duration: math.divide(math.multiply(num1, 3), 5),
-    //       ease: Hilo.Ease.Linear.EaseNone,
-    //       onComplete: (tween) => {
-    //         Hilo.Tween.fromTo(
-    //           tween.target,
-    //           {
-    //             x: imgWidth,
-    //           },
-    //           {
-    //             x: num1,
-    //           },
-    //           {
-    //             duration: math.divide(math.multiply(math.subtract(imgWidth, num1), 3), 5),
-    //             ease: Hilo.Ease.Linear.EaseNone,
-    //             loop: false,
-    //             onComplete: (tween) => {
-    //               Hilo.Tween.to(
-    //                 tween.target,
-    //                 {
-    //                   x: 0,
-    //                 },
-    //                 {
-    //                   duration: math.multiply(num1, 3),
-    //                   ease: Hilo.Ease.Linear.EaseNone,
-    //                   loop: false,
-    //                   onComplete: (tween) => {
-    //                     Hilo.Tween.fromTo(
-    //                       tween.target,
-    //                       {
-    //                         x: imgWidth,
-    //                       },
-    //                       {
-    //                         x: 0,
-    //                       },
-    //                       {
-    //                         duration: 9000,
-    //                         ease: Hilo.Ease.Linear.EaseNone,
-    //                         loop: true,
-    //                       },
-    //                     );
-    //                   },
-    //                 },
-    //               );
-    //             },
-    //           },
-    //         );
-    //       },
-    //     },
-    //   );
-    // });
   };
 
   //改变元素运动
@@ -447,6 +338,7 @@ function index(props) {
     }
   };
 
+  //添加我的星豆
   const addText = (stage) => {
     stage.removeChildById('myBean1');
     const list = [
@@ -454,19 +346,26 @@ function index(props) {
         id: 'myBean1',
         type: 'Text',
         color: '#fff',
-        font: '28px arial',
+        font: `28px arial`,
         text: `我的星豆${starBean}`,
         maxWidth: conversionSize(400),
         width: conversionSize(400),
         textAlign: 'center',
         x: conversionSize(170),
-        y: computedY - conversionSize(80 - gameHeight),
+        y: computedY + appHeight - conversionSize(112 - (184 - conversionSize(_, 184))),
       },
     ];
     const mapItem = createBitmap({
       list,
     });
     stage.addChild(...mapItem);
+  };
+
+  //计算还差多少到达下一站
+  const countDistance = (num) => {
+    const distance =
+      supplyLevel > 0 ? `${(100 - supplyProcess / 100).toFixed(2)}%` : `${10 - supplyProcess}次`;
+    setBeanModalVisible({ show: true, type: 4, num: num, progress: distance });
   };
 
   return (
@@ -476,7 +375,7 @@ function index(props) {
         <Rules></Rules>
       </div>
       {/* 领取文字 */}
-      <div className="receiveText" onClick={subsidyFlag === '1' ? collarBean : null}>
+      <div className="receiveText" onClick={collarBean}>
         {subsidyFlag === '1' ? (
           `${subsidyNum}星豆`
         ) : (
@@ -511,6 +410,7 @@ function index(props) {
         getHomeDetail={getHomeDetail}
         processId={processId}
         openModal={openModal}
+        countDistance={countDistance}
       ></TaskCloumn>
       {/* 合力弹窗 */}
       <InvitationModal
@@ -531,6 +431,13 @@ function index(props) {
           setShareVisible({ show: false });
         }}
       ></ShareModal>
+      {/* 领豆弹窗 */}
+      <BeanModal
+        visible={beanModalVisible}
+        onClose={() => {
+          setBeanModalVisible({ show: false });
+        }}
+      ></BeanModal>
     </>
   );
 }

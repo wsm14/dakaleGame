@@ -8,6 +8,7 @@ const computedY = window.innerHeight * 2;
 const timesHeight = math.divide(math.multiply(window.innerHeight, 2), 1624);
 
 export const weappHeight = deviceName() == 'miniProgram' ? 100 : 0;
+export const appHeight = deviceName() == 'dakaleIOS' || deviceName() == 'dakaleAndroid' ? 100 : 0;
 
 //画图尺寸换算
 export const conversionSize = (width, height) => {
@@ -84,7 +85,7 @@ export const HiloCreateSpiritbac = (path, length, num, width, height, id) => {
 };
 
 //生成随机的星星
-export const createStar = (stage, imgObj, bigStar, fn, gameHeight) => {
+export const createStar = (stage, imgObj, bigStar, fn) => {
   const list = [];
   for (let i = 0; i < 5; i++) {
     let starObj = {
@@ -114,7 +115,7 @@ export const createStar = (stage, imgObj, bigStar, fn, gameHeight) => {
               bigStar,
               {
                 x: conversionSize(320),
-                y: computedY - conversionSize(200 - gameHeight),
+                y: computedY + appHeight - conversionSize(253 - (184 - conversionSize(_, 184))),
                 scaleX: 0.8,
                 scaleY: 0.8,
               },

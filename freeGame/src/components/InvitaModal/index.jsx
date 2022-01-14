@@ -2,7 +2,7 @@ import React from 'react';
 import './index.less';
 import { Mask } from 'antd-mobile';
 import { useDispatch } from 'umi';
-import closeIcon from '@public/closeIcon.png';
+import closeIcon from '@public/usual/closeIcon.png';
 import BasicModal from '@/components/BasicModal';
 
 function index(props) {

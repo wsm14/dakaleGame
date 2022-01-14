@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PopupModal from '@/components/PopupModal';
 import { Button, Toast } from 'antd-mobile';
 import { fetchFreeGoodGetTogetherList } from '@/services/game';
 import { filterList } from '@/utils/game';
 import SignOutModal from '@/components/SignOutModal';
+import GuideModal from '@/components/GuideModal';
 import './index.less';
 import friends from '@public/usual/friends.png';
 import taskClose from '@public/usual/taskClose.png';
 import invite from '@public/usual/invite.png';
+import lock from '@public/usual/lock.png';
 
 function index(props) {
   const {
@@ -37,6 +39,8 @@ function index(props) {
     setInvitaList(userList);
   };
 
+  const levelFlag = useMemo(() => supplyLevel > 0, [supplyLevel]);
+
   const popupProps = {
     visible,
     onClose,
@@ -64,15 +68,17 @@ function index(props) {
                 className="invita_one"
                 key={index + 1}
                 onClick={() => {
-                  if (supplyLevel > 1) {
+                  if (levelFlag) {
                     !item.profile && openModal('nativeShareClose', processId);
                   } else {
-                    Toast.show({ content: '达到第三阶段即可合力' });
+                    Toast.show({ content: '达到第二阶段即可合力' });
                   }
                 }}
               >
-                <img src={item.profile ? item.profile : invite} alt="" />
-                <div className="invita_one_button">加速5%</div>
+                <img src={item.profile ? item.profile : levelFlag ? invite : lock} alt="" />
+                <div className={`invita_one_button ${levelFlag ? null : 'invita_one_gray'}`}>
+                  加速5%
+                </div>
               </div>
             ))}
           </div>
@@ -81,16 +87,16 @@ function index(props) {
           <div className="invita_rules">
             · 每邀请一名成员，运输加速5% <br />· 运输成功之后，成员每人均可获得本次包裹，包邮到家
             <br /> · 运输期间可随时邀请成员或者退出小队
-            <br />· 只有在第三阶段才能邀请好友合力，前两级邀请无效
+            <br />· 只有在第二阶段才能邀请好友合力，前一级邀请无效
           </div>
 
           <Button
             className="invita_button"
             onClick={() => {
-              setOutVisible(true);
+              levelFlag ? setOutVisible(true) : null;
             }}
           >
-            退出小队
+            {levelFlag ? '退出小队' : '下一阶段即可发起合力'}
           </Button>
         </div>
       </PopupModal>
@@ -103,6 +109,9 @@ function index(props) {
         getInvitaInfo={getInvitaInfo}
         processId={processId}
       ></SignOutModal>
+
+      {/*引导弹窗*/}
+      <GuideModal></GuideModal>
     </>
   );
 }

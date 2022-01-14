@@ -8,9 +8,9 @@ import {
   fetchFreeGoodSetRewardAddress,
 } from '@/services/address';
 import { checkCityName } from '@/utils/utils';
-import closeIcon from '@public/closeIcon.png';
+import closeIcon from '@public/usual/closeIcon.png';
 import address from '@public/usual/address.png';
-import rightPng from '@public/right.png';
+import rightPng from '@public/usual/right.png';
 import { set } from '@umijs/deps/compiled/lodash';
 
 function index(props) {

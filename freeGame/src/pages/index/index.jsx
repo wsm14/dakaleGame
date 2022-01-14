@@ -23,6 +23,7 @@ const LoginForm = ({ type }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     reloadTab(() => {
+      console.log(sessionStorage.getItem('dakaleToken'));
       if (!sessionStorage.getItem('dakaleToken')) {
         getToken((e) => {
           if (e) {
@@ -62,14 +63,14 @@ const LoginForm = ({ type }) => {
       },
       (_, val) => {
         setImgObj(val);
-        if (deviceName() == 'miniProgram') {
-          dispatch({
-            type: 'receiveGoods/save',
-            payload: {
-              gameHeight: 0,
-            },
-          });
-        }
+        // if (deviceName() == 'miniProgram') {
+        //   dispatch({
+        //     type: 'receiveGoods/save',
+        //     payload: {
+        //       gameHeight: 0,
+        //     },
+        //   });
+        // }
         getToken((e) => {
           if (e) {
             getHomeDetail();

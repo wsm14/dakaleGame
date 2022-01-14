@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.less';
 import { history } from 'umi';
-import backImg from '@public/back.png';
+import backImg from '@public/usual/back.png';
 import { linkToMyGoods, nativeClose, deviceName } from '@/utils/birdgeContent';
 
 function index() {
@@ -10,10 +10,12 @@ function index() {
   };
   return (
     <div className={`topRules ${deviceName() == 'miniProgram' ? 'topPadding1' : 'topPadding'}`}>
-    {
-      deviceName() == 'miniProgram'?<div></div>:<img src={backImg} alt="" className="backImg" onClick={goBack} />
-    }
-      
+      {deviceName() == 'miniProgram' ? (
+        <div></div>
+      ) : (
+        <img src={backImg} alt="" className="backImg" onClick={goBack} />
+      )}
+
       <div className="topButton">
         <div
           className="topButton_rule"

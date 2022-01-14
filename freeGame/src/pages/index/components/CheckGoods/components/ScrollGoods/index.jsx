@@ -1,8 +1,8 @@
 import React from 'react';
 import './index.less';
 import { useSelector, useDispatch } from 'umi';
-import checkon from '@public/checkon.png';
-import checkoff from '@public/checkoff.png';
+import checkon from '@public/usual/checkon.png';
+import checkoff from '@public/usual/checkoff.png';
 
 function index(props) {
   const { list = [] } = props;

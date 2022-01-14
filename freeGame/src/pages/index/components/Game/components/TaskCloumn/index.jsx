@@ -22,7 +22,7 @@ import taskOn from '@public/usual/taskOn.png';
 let timer = null;
 
 function index(props) {
-  const { visible, onClose, getHomeDetail, openModal } = props;
+  const { visible, onClose, getHomeDetail, openModal, countDistance } = props;
   const [signContent, setSignContent] = useState({}); //签到信息
   const [taskList, setTaskList] = useState([]); //任务信息
   const [count, setCount] = useState(30); //倒计时
@@ -218,17 +218,14 @@ function index(props) {
 
   //领取奖励
   const receiveRewards = async (item) => {
-    const { strapId, taskId } = item;
-
+    const { strapId, taskId, rewardNum } = item;
     const res = await fetchTaskReceiveTaskReward({
       strapId,
       gameName: 'freeGoodGame',
       taskId,
     });
-    if (res.resultCode == 1) {
-      Toast.show({
-        content: '领取成功',
-      });
+    if (res.success) {
+      countDistance(rewardNum);
       getTaskList();
       getHomeDetail();
     }
