@@ -1,0 +1,27 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+.font_hide {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.font_noHide {
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  word-wrap: break-word;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+@font-face {
+  font-family: 'Alternate';
+  src: url('https://dakale-wechat-new.oss-cn-hangzhou.aliyuncs.com/miniprogram/game/DIN Alternate Bold.ttf');
+}

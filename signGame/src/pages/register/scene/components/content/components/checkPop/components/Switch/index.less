@@ -1,0 +1,33 @@
+.switch_box {
+  position: relative;
+  width: 70px;
+  height: 40px;
+  margin-left: 8px;
+
+  border: 1px solid #ffffff;
+  border-radius: 20px;
+  .switch_radius {
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 30px;
+    margin-top: -15px;
+    background: #ffffff;
+    border-radius: 50%;
+  }
+  .switch_radius_anmate1 {
+    left: 0;
+    transform: translateX(0px);
+    transition: linear all 300ms;
+  }
+  .switch_radius_anmate2 {
+    transform: translateX(34px);
+    transition: linear all 300ms;
+  }
+}
+.switch_box_bg1 {
+  background: #ff8900;
+}
+.switch_box_bg2 {
+  background: rgba(255, 194, 90, 1);
+}
