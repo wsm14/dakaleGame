@@ -59,7 +59,7 @@ function index(props) {
       case 1:
         elementDom = (
           <div className={`reportPage  background${index}`}>
-            <div className="reportContent" ref={textRef}>
+            <div className="reportContent reportContent_opacity1" ref={textRef}>
               <div>
                 <span className="fontSize48">{content.totalBean}</span>卡豆
               </div>
@@ -80,7 +80,7 @@ function index(props) {
       case 2:
         elementDom = (
           <div className={`reportPage  background${index}`}>
-            <div className="reportContent" ref={textRef}>
+            <div className="reportContent reportContent_opacity2" ref={textRef}>
               <div>
                 <span className="fontSize48">
                   {(Number(content.annualBeanDeduct) / 100).toString()}
@@ -109,7 +109,7 @@ function index(props) {
         elementDom = (
           <div className={`reportPage  background${index}`}>
             {content.familyNums > 50 ? (
-              <div className="reportContent" ref={textRef}>
+              <div className="reportContent reportContent_opacity3" ref={textRef}>
                 <div>
                   <span className="fontSize48">{content.familyNums}</span>人
                 </div>
@@ -125,7 +125,7 @@ function index(props) {
                 <div>一分耕耘一分收获，愿你2022继续</div>
               </div>
             ) : (
-              <div className="reportContent" ref={textRef}>
+              <div className="reportContent reportContent_opacity3" ref={textRef}>
                 <div>
                   <span className="fontSize48">{content.familyNums}</span>人
                 </div>
@@ -147,7 +147,7 @@ function index(props) {
       case 4:
         elementDom = (
           <div className={`reportPage  background${index}`}>
-            <div className="reportContent" ref={textRef}>
+            <div className="reportContent reportContent_opacity3" ref={textRef}>
               <div>
                 <span className="fontSize48">{BEAN_LEVEL[content.userLevel]}</span>
               </div>
