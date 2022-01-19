@@ -24,16 +24,10 @@ function index(props) {
   const [invitaList, setInvitaList] = useState([]); //邀请列表
   const [guideVisible, setGuideVisible] = useState(false);
 
-  useOnceEffect(() => {
-    if (visible) {
-      console.log(1111);
-      setGuideVisible(true);
-    }
-  }, [visible]);
+  // useOnceEffect(() => {}, [visible]);
 
   useEffect(() => {
     if (visible) {
-      console.log(1111);
       getInvitaInfo();
     }
   }, [visible]);
