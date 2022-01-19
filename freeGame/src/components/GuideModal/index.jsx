@@ -1,14 +1,19 @@
 import React from 'react';
-import { Mask } from 'antd-mobile';
+import modalHand from '@public/usual/modalHand.png';
 import './index.less';
 
-function index() {
-  const modalProps = {
-    visible: true,
-    opacity: 0.8,
-  };
-
-  return <>{/* <Mask {...modalProps}></Mask> */}</>;
+function index(props) {
+  const { visible, onClose } = props;
+  return (
+    <>
+      <div className="guideModal" style={{ display: visible ? 'block' : 'none' }} onClick={onClose}>
+        <div className="guideModal_handImg">
+          <div>点我合力</div>
+          <img src={modalHand} alt="" />
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default index;

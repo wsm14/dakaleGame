@@ -3,6 +3,7 @@ import PopupModal from '@/components/PopupModal';
 import { Button, Toast } from 'antd-mobile';
 import { fetchFreeGoodGetTogetherList } from '@/services/game';
 import { filterList } from '@/utils/game';
+import { useOnce } from '@/hook/useOnceEffect';
 import SignOutModal from '@/components/SignOutModal';
 import GuideModal from '@/components/GuideModal';
 import './index.less';
@@ -10,6 +11,8 @@ import friends from '@public/usual/friends.png';
 import taskClose from '@public/usual/taskClose.png';
 import invite from '@public/usual/invite.png';
 import lock from '@public/usual/lock.png';
+
+const useOnceEffect = () => {};
 
 function index(props) {
   const {
@@ -21,6 +24,13 @@ function index(props) {
   } = props;
   const [outVisible, setOutVisible] = useState(false);
   const [invitaList, setInvitaList] = useState([]); //邀请列表
+  const [guideVisible, setGuideVisible] = useState(false);
+
+  useOnce(() => {
+    if (visible) {
+      setGuideVisible(true);
+    }
+  }, [visible]);
 
   useEffect(() => {
     if (visible) {
@@ -111,7 +121,12 @@ function index(props) {
       ></SignOutModal>
 
       {/*引导弹窗*/}
-      <GuideModal></GuideModal>
+      <GuideModal
+        visible={guideVisible}
+        onClose={() => {
+          setGuideVisible(false);
+        }}
+      ></GuideModal>
     </>
   );
 }
