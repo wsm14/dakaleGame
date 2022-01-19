@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Swiper } from 'antd-mobile';
+import { Swiper, SpinLoading } from 'antd-mobile';
 import './index.less';
 import { fetchReportGetAnnualReport } from '@/services/report';
 import html2canvas from 'html2canvas';
@@ -16,6 +16,8 @@ function index() {
   const [pageIndex, setPageIndex] = useState(0); //跳转到第几页
   const [audioFlag, setAudioFlag] = useState(true);
   const [detail, setDetail] = useState({}); //年度报告内容
+  const [loadVisible, setLoadVisible] = useState(false); //年度报告内容
+
   const reportRef = useRef();
 
   useEffect(() => {
@@ -37,12 +39,14 @@ function index() {
 
   //画海报
   const makeImage = () => {
+    setLoadVisible(true);
     html2canvas(reportRef.current, {
       useCORS: true,
       scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2,
     }).then(function (canvas) {
       const base64 = canvas.toDataURL('image/png');
       // // base64转换
+      setLoadVisible(false);
       makeReport(`shareType=wechat,${base64}`);
     });
   };
@@ -74,7 +78,12 @@ function index() {
 
       {/* 分享和音乐图标 */}
       <ReportIcon audioFlag={audioFlag} setAudioFlag={setAudioFlag}></ReportIcon>
-
+      <div
+        className="SpinLoading"
+        className={`SpinLoading ${loadVisible ? null : 'SpinLoading_hide'}`}
+      >
+        <SpinLoading color="currentColor"></SpinLoading>
+      </div>
       {/* 上滑动图标 */}
       {pageIndex < 5 && (
         <div className="topIcon">

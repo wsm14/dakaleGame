@@ -1,4 +1,4 @@
-const target = 'https://devgateway.dakale.net';
+const target = 'https://pregateway.dakale.net';
 
 export default {
   dev: {
