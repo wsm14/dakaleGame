@@ -117,7 +117,7 @@ function index(props) {
     const { jumpUrl } = json;
     const { iosUrl, androidUrl, weChatUrl } = jumpUrl;
     linkTo({
-      wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
+      wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=collect` },
       ios: {
         path: iosUrl,
         param: { strapId },
