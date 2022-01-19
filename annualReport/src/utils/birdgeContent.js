@@ -313,7 +313,6 @@ export const linkToAddress = () => {
     },
   });
 };
-
 //生成海报
 export const makeReport = (val) => {
   native.nativeInit('saveFile', {

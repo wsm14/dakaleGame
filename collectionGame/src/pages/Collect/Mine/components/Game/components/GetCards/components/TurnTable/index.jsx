@@ -7,7 +7,7 @@ import html2canvas from 'html2canvas';
 import { fetchGatherLuckDraw, fetchShareGetNewShareInfo } from '@/services/game';
 import { conversionWidth } from '@/utils/game';
 import { CHECK_TYPE } from '@/common/goods';
-import { makeReport } from '@/utils/birdgeContent';
+import { deviceName, makeReport, linkTo } from '@/utils/birdgeContent';
 import PosterModal from '@/components/PosterModal';
 import contentWord1 from '@public/loading/contentWord1.png';
 import contentWord2 from '@public/loading/contentWord2.png';
@@ -84,7 +84,8 @@ function index(props) {
 
   const getShareImg = async () => {
     const res = await fetchShareGetNewShareInfo({
-      shareType: 'gameTask',
+      shareType: 'game',
+      subType: 'gatherCard',
     });
     const { shareInfo = {} } = res.content;
     setShareImg(shareInfo.qcodeUrl);
@@ -96,23 +97,25 @@ function index(props) {
     openModal(cardInfo);
     getGameDetail();
   };
-  const getDPR = () => {
-    if (window.devicePixelRatio && window.devicePixelRatio > 1) {
-      return window.devicePixelRatio;
-    }
-    return 1;
-  };
   const makePoster = async () => {
     setTimeout(() => {
-      html2canvas(posterRef.current, {
-        useCORS: true,
-        scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2,
-      }).then((canvas) => {
-        // toImage
-        let base64 = canvas.toDataURL('image/png');
-        base64 = `shareType=wechat,${base64}`;
-        makeReport(base64);
-      });
+      if (deviceName() == 'miniProgram') {
+        linkTo({
+          wechat: {
+            url: `/pages/share/shareSign/index?userType=share`,
+          },
+        });
+      } else {
+        html2canvas(posterRef.current, {
+          useCORS: true,
+          scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2,
+        }).then((canvas) => {
+          // toImage
+          let base64 = canvas.toDataURL('image/png');
+          base64 = `shareType=wechat,${base64}`;
+          makeReport(base64);
+        });
+      }
     });
   };
 

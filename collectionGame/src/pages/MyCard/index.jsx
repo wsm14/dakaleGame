@@ -15,6 +15,7 @@ import { linkToMyGoods, deviceName } from '@/utils/birdgeContent';
 import { cobyInfo } from '@/utils/utils';
 import CloseModal from './components/CloseModal';
 import ShareModal from '@/components/ShareModal';
+import DownModal from './components/DownModal';
 
 import lantern from '@public/loading/lantern.png';
 
@@ -23,6 +24,7 @@ function index() {
   const [cardInfo, setCardInfo] = useState({}); //一张卡的信息
   const [visible, setVisible] = useState(false); //合成福卡弹窗
   const [shareVisible, setShareVisible] = useState({ show: false }); //转赠弹窗
+  const [downVisible, setDownVisible] = useState(false); //小程序转赠弹窗
 
   useEffect(() => {
     getCardDetail();
@@ -80,7 +82,11 @@ function index() {
 
   //转赠好友
   const giveFriend = async () => {
-    setShareVisible({ show: true });
+    if (deviceName() === 'miniProgram') {
+      setDownVisible(true);
+    } else {
+      setShareVisible({ show: true });
+    }
 
     // const { checkInfo } = cardInfo;
     // const res = await fetchCommandGetCommand({
@@ -120,9 +126,7 @@ function index() {
       <TitleBlock type="title" back={goBack}></TitleBlock>
       <div className="myCard">
         {/* 上方图片 */}
-        <div className="myCard_topImg" onClick={myRecord}>
-          <img src={lantern} alt="" />
-        </div>
+        <div className="myCard_topImg">{/* <img src={lantern} alt="" /> */}</div>
         {/* 下方内容 */}
         <div className="myCard_content">
           {/* 我的福豆 */}
@@ -224,6 +228,14 @@ function index() {
           setVisible(false);
         }}
       ></CloseModal>
+
+      {/*下载弹窗  */}
+      <DownModal
+        visible={downVisible}
+        onClose={() => {
+          setDownVisible(false);
+        }}
+      ></DownModal>
       <Cloud></Cloud>
     </>
   );

@@ -4,6 +4,11 @@ export default [
     redirect: '/collect',
   },
   {
+    path: '/secret',
+    name: '秘籍',
+    component: './Secret',
+  },
+  {
     path: '/',
     component: '../layouts/BasicLayout',
     routes: [

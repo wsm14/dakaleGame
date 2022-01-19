@@ -17,35 +17,22 @@ function index() {
   const [audioFlag, setAudioFlag] = useState(true);
   const [detail, setDetail] = useState({}); //年度报告内容
   const reportRef = useRef();
-  const {} = detail;
 
   useEffect(() => {
     reloadTab(() => {
-      if (!sessionStorage.getItem('dakaleToken')) {
-        getToken((e) => {
-          if (e) {
-            getReportDetail();
-          }
-        });
-      } else {
+      if (sessionStorage.getItem('dakaleToken')) {
         getReportDetail();
       }
     });
-    getToken((e) => {
-      if (e) {
-        getReportDetail();
-      }
-    });
+    getReportDetail();
   }, []);
 
   const getReportDetail = async () => {
     const res = await fetchReportGetAnnualReport({
       reportYear: '2021',
     });
-    if (res.success) {
-      const { content = {} } = res;
-      setDetail(content);
-    }
+    const { content = {} } = res;
+    setDetail(content);
   };
 
   //画海报
@@ -61,6 +48,7 @@ function index() {
   };
 
   const list = [0, 1, 2, 3, 4, 5];
+  // const list = [5];
 
   return (
     <>
