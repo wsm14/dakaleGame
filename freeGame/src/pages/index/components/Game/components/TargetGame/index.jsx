@@ -31,6 +31,7 @@ import InvitationModal from '../InvitationModal';
 import Speed from '../Speed';
 import ShareModal from '@/components/ShareModal';
 import { deviceName, nativeShareWork, nativeShareClose, linkTo } from '@/utils/birdgeContent';
+import { appHeight } from '@/utils/game';
 
 const computedY = window.innerHeight * 2;
 let ticker = null; //定时器
@@ -135,7 +136,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.starBord.src,
         x: conversionSize(195),
-        y: computedY - conversionSize(152 - gameHeight),
+        y: computedY + appHeight - conversionSize(184),
         width: conversionSize(360),
         height: conversionSize(120),
       },
@@ -144,7 +145,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.bigStar.src,
         x: conversionSize(305),
-        y: computedY - conversionSize(221 - gameHeight),
+        y: computedY + appHeight - conversionSize(253),
         width: conversionSize(140),
         height: conversionSize(140),
       },
@@ -153,7 +154,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.invateIcon.src,
         x: conversionSize(32),
-        y: computedY - conversionSize(152 - gameHeight),
+        y: computedY + appHeight - conversionSize(184),
         width: conversionSize(120),
         height: conversionSize(120),
       },
@@ -162,7 +163,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.starBean.src,
         x: conversionSize(598),
-        y: computedY - conversionSize(152 - gameHeight),
+        y: computedY + appHeight - conversionSize(184),
         width: conversionSize(120),
         height: conversionSize(120),
       },
@@ -172,7 +173,7 @@ function index(props) {
         text: '1111',
         image: imgObj.rectangle1.src,
         x: conversionSize(32),
-        y: computedY - conversionSize(192 - gameHeight),
+        y: computedY + appHeight - conversionSize(234),
         width: conversionSize(120),
         height: conversionSize(42),
       },
@@ -182,7 +183,7 @@ function index(props) {
         text: '1111',
         image: imgObj.rectangle2.src,
         x: conversionSize(608),
-        y: computedY - conversionSize(192 - gameHeight),
+        y: computedY + appHeight - conversionSize(234),
         width: conversionSize(100),
         height: conversionSize(42),
       },
@@ -243,13 +244,13 @@ function index(props) {
       bigStar,
       {
         x: conversionSize(305),
-        y: computedY - conversionSize(221 - gameHeight),
+        y: computedY + appHeight - conversionSize(254),
         scaleX: 1,
         scaleY: 1,
       },
       {
         x: conversionSize(320),
-        y: computedY - conversionSize(200 - gameHeight),
+        y: computedY + appHeight - conversionSize(230),
         scaleX: 0.8,
         scaleY: 0.8,
       },
@@ -292,133 +293,6 @@ function index(props) {
       background2.visible = false;
       Spirite1.interval = 24;
     }, 5000);
-    // clearTimeout(speedSetTimeout);
-    // const target = stage.getChildById('animationBac');
-    // const target1 = stage.getChildById('animationBac1');
-
-    // console.log(target);
-    // Hilo.Tween.remove(target);
-    // Hilo.Tween.remove(target1);
-    // const imgWidth = imgObj.planeBg.width;
-
-    // const num = target.x;
-    // const num1 = target1.x;
-
-    // speedSetTimeout = setTimeout(() => {
-    //   Spirite1.interval = 1;
-    //   Hilo.Tween.to(
-    //     target,
-    //     {
-    //       x: -imgWidth,
-    //     },
-    //     {
-    //       duration: math.divide(math.multiply(math.add(imgWidth, num), 3), 5),
-    //       ease: Hilo.Ease.Linear.EaseNone,
-    //       onComplete: (tween) => {
-    //         Hilo.Tween.fromTo(
-    //           tween.target,
-    //           {
-    //             x: 0,
-    //           },
-    //           {
-    //             x: num,
-    //           },
-    //           {
-    //             duration: math.divide(math.multiply(-num, 3), 5),
-    //             ease: Hilo.Ease.Linear.EaseNone,
-    //             loop: false,
-    //             onComplete: (tween) => {
-    //               Spirite1.interval = 24;
-    //               Hilo.Tween.to(
-    //                 tween.target,
-    //                 {
-    //                   x: -imgWidth,
-    //                 },
-    //                 {
-    //                   duration: math.multiply(math.add(imgWidth, tween.target.x), 3),
-    //                   ease: Hilo.Ease.Linear.EaseNone,
-    //                   loop: false,
-    //                   onComplete: (tween) => {
-    //                     Hilo.Tween.fromTo(
-    //                       tween.target,
-    //                       {
-    //                         x: 0,
-    //                       },
-    //                       {
-    //                         x: -imgWidth,
-    //                       },
-    //                       {
-    //                         duration: 9000,
-    //                         ease: Hilo.Ease.Linear.EaseNone,
-    //                         loop: true,
-    //                       },
-    //                     );
-    //                   },
-    //                 },
-    //               );
-    //             },
-    //           },
-    //         );
-    //       },
-    //     },
-    //   );
-
-    //   Hilo.Tween.to(
-    //     target1,
-    //     {
-    //       x: 0,
-    //     },
-    //     {
-    //       duration: math.divide(math.multiply(num1, 3), 5),
-    //       ease: Hilo.Ease.Linear.EaseNone,
-    //       onComplete: (tween) => {
-    //         Hilo.Tween.fromTo(
-    //           tween.target,
-    //           {
-    //             x: imgWidth,
-    //           },
-    //           {
-    //             x: num1,
-    //           },
-    //           {
-    //             duration: math.divide(math.multiply(math.subtract(imgWidth, num1), 3), 5),
-    //             ease: Hilo.Ease.Linear.EaseNone,
-    //             loop: false,
-    //             onComplete: (tween) => {
-    //               Hilo.Tween.to(
-    //                 tween.target,
-    //                 {
-    //                   x: 0,
-    //                 },
-    //                 {
-    //                   duration: math.multiply(num1, 3),
-    //                   ease: Hilo.Ease.Linear.EaseNone,
-    //                   loop: false,
-    //                   onComplete: (tween) => {
-    //                     Hilo.Tween.fromTo(
-    //                       tween.target,
-    //                       {
-    //                         x: imgWidth,
-    //                       },
-    //                       {
-    //                         x: 0,
-    //                       },
-    //                       {
-    //                         duration: 9000,
-    //                         ease: Hilo.Ease.Linear.EaseNone,
-    //                         loop: true,
-    //                       },
-    //                     );
-    //                   },
-    //                 },
-    //               );
-    //             },
-    //           },
-    //         );
-    //       },
-    //     },
-    //   );
-    // });
   };
 
   //改变元素运动
@@ -460,7 +334,7 @@ function index(props) {
         width: conversionSize(400),
         textAlign: 'center',
         x: conversionSize(170),
-        y: computedY - conversionSize(80 - gameHeight),
+        y: computedY + appHeight - conversionSize(180),
       },
     ];
     const mapItem = createBitmap({

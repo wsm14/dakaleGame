@@ -9,6 +9,8 @@ const timesHeight = math.divide(math.multiply(window.innerHeight, 2), 1624);
 
 export const weappHeight = deviceName() == 'miniProgram' ? 100 : 0;
 
+export const appHeight = deviceName() == 'dakaleIOS' || deviceName() == 'dakaleAndroid' ? 100 : 0;
+
 //画图尺寸换算
 export const conversionSize = (width, height) => {
   if (width && Number(width)) {
@@ -114,7 +116,7 @@ export const createStar = (stage, imgObj, bigStar, fn, gameHeight) => {
               bigStar,
               {
                 x: conversionSize(320),
-                y: computedY - conversionSize(200 - gameHeight),
+                y: computedY + appHeight - conversionSize(230),
                 scaleX: 0.8,
                 scaleY: 0.8,
               },
