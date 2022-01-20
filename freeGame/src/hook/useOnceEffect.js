@@ -8,7 +8,6 @@ export const useOnceEffect = (fn, deps, flag = true) => {
 
   useEffect(() => {
     if (flag && !ref.current) {
-      console.log('哈哈哈哈哈哈');
       fn();
       ref.current = true;
     }

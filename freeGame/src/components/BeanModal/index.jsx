@@ -12,7 +12,6 @@ function index(props) {
   const { visible = {}, onClose, openTask } = props;
   const { show = false, num, type, progress } = visible;
   const [modalType, setModalType] = useState();
-  console.log(openTask, ' K is not a function', type);
 
   useEffect(() => {
     if (type) {

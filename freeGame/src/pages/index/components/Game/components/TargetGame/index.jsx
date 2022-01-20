@@ -125,6 +125,9 @@ function index(props) {
 
     //  添加文字
     addText(stage);
+
+    //添加红点
+    addpoint(stage);
   };
 
   //监听舞台
@@ -216,7 +219,6 @@ function index(props) {
       list,
     });
     bigStar = mapItem[1];
-    console.log(mapItem, 'mapItem');
     mapItem[0].on(Hilo.event.POINTER_START, () => {
       starAnimate(mapItem[1], stage);
     });
@@ -315,7 +317,6 @@ function index(props) {
   const spiritPlus = () => {
     let [background1, background2, Spirite1] = spiritObj;
     clearTimeout(speedSetTimeout);
-    console.log(background1);
     const index = background1.currentFrame;
     background2.goto(parseInt(index / 10) - 1);
     background2.visible = true;
@@ -379,6 +380,26 @@ function index(props) {
     stage.addChild(...mapItem);
   };
 
+  //添加我的星豆
+  const addpoint = (stage) => {
+    const list = [
+      {
+        id: 'point',
+        type: 'Graphics',
+        x: conversionSize(677),
+        y: computedY + appHeight - conversionSize(180),
+      },
+    ];
+    const mapItem = createBitmap({
+      list,
+    });
+    mapItem[0].beginFill('#EF476F', 1);
+    mapItem[0].drawCircle(16, 16, 8);
+    mapItem[0].endFill();
+    stage.addChild(...mapItem);
+    // stage.removeChildById('point');
+  };
+
   //计算还差多少到达下一站
   const countDistance = (num) => {
     const distance =
@@ -418,9 +439,6 @@ function index(props) {
 
       {/* 进度 */}
       <Speed processInfo={processInfo} cityCode={cityCode}></Speed>
-
-      {/* 可领取红点 */}
-      <div className="redPoint"></div>
 
       {/* 任务弹窗 */}
       <TaskCloumn

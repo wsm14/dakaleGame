@@ -23,7 +23,6 @@ const LoginForm = ({ type }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     reloadTab(() => {
-      console.log(sessionStorage.getItem('dakaleToken'));
       if (!sessionStorage.getItem('dakaleToken')) {
         getToken((e) => {
           if (e) {
