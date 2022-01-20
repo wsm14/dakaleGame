@@ -419,6 +419,9 @@ function index(props) {
       {/* 进度 */}
       <Speed processInfo={processInfo} cityCode={cityCode}></Speed>
 
+      {/* 可领取红点 */}
+      <div className="redPoint"></div>
+
       {/* 任务弹窗 */}
       <TaskCloumn
         visible={taskVisible}
