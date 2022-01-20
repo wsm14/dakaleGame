@@ -1,11 +1,17 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export const useOnceEffect = (fn, list) => {
+export const useOnceEffect = (fn, deps) => {
+  const [count, setCount] = useState();
   const ref = useRef(false);
+  console.log(deps);
   useEffect(() => {
-    if (!ref.current) {
-      // fn();
-      ref.current = true;
-    }
-  }, [list]);
+    console.log('改变就是好事');
+  }, deps);
+
+  // useEffect(() => {
+  //   if (!ref.current) {
+  //     // fn();
+  //     ref.current = true;
+  //   }
+  // }, [list]);
 };
