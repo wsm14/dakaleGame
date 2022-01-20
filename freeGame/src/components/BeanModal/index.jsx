@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import BasicModal from '@/components/BasicModal';
 import './index.less';
 
@@ -9,21 +9,31 @@ import modalImg3 from '@public/usual/modalImg3.png';
 import modalImg4 from '@public/usual/modalImg4.png';
 
 function index(props) {
-  const { visible = {}, onClose } = props;
-  const { show = false, num, type, onClick, progress } = visible;
-  console.log(show, type);
+  const { visible = {}, onClose, openTask } = props;
+  const { show = false, num, type, progress } = visible;
+  const [modalType, setModalType] = useState();
+  console.log(openTask, ' K is not a function', type);
+
+  useEffect(() => {
+    if (type) {
+      setModalType(type);
+    }
+  }, [type]);
+
   const modalProps = {
     visible: show,
     opacity: 0.8,
     onClose: onClose,
-    afterClose: onClick || null,
+    afterClose: () => {
+      modalType === 1 && openTask();
+    },
     style: { '--z-index': '1001' },
   };
 
   const info = [
     {
       titleImg: modalImg1,
-      beanNum: `送你${num}星豆`,
+      beanNum: `送你100星豆`,
       content: '',
       button: '去补给',
       click: onClose,

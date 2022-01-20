@@ -32,6 +32,8 @@ import Speed from '../Speed';
 import ShareModal from '@/components/ShareModal';
 import BeanModal from '@/components/BeanModal';
 import { deviceName, linkTo } from '@/utils/birdgeContent';
+import GuideModal from '@/components/GuideModal';
+import { useOnceEffect } from '@/hook/useOnceEffect';
 import { appHeight } from '@/utils/game';
 
 const computedY = window.innerHeight * 2;
@@ -48,9 +50,15 @@ function index(props) {
   const [taskVisible, setTaskVisible] = useState(''); //任务弹窗
   const [shareVisible, setShareVisible] = useState({ show: false });
   const [beanModalVisible, setBeanModalVisible] = useState({ show: false });
+  const [guideVisible, setGuideVisible] = useState(false);
+
   //获取所有的数据
-  const { homeDetail, gameHeight } = useSelector((state) => state.receiveGoods); //所有的数据
-  const { gameInfo = {} } = homeDetail;
+  const { homeDetail } = useSelector((state) => state.receiveGoods); //所有的数据
+  const {
+    gameInfo = {},
+    newUserFlag, //是不是第一次玩游戏 0 - 不是 1 - 是
+    taskAbleReceive, //是否有可领取的任务奖励 0 - 无, 1 - 有
+  } = homeDetail;
   const {
     processId, //进度id
     starBean, //星豆数
@@ -70,6 +78,12 @@ function index(props) {
   }, []);
 
   useEffect(() => {
+    if (newUserFlag === '1') {
+      setBeanModalVisible({ show: true, type: 0 });
+    }
+  }, [newUserFlag]);
+
+  useEffect(() => {
     addText(stage);
   }, [starBean]);
 
@@ -79,6 +93,14 @@ function index(props) {
     ticker.removeTick(Hilo.Tween);
     initStage();
   }, [supplyLevel]);
+
+  useOnceEffect(
+    () => {
+      setGuideVisible(true);
+    },
+    [supplyLevel],
+    supplyLevel,
+  );
 
   //创建舞台
   const initStage = () => {
@@ -237,7 +259,7 @@ function index(props) {
     const { subsidyNum, subsidyFlag } = gameInfo;
     if (subsidyFlag === '1') {
       const res = await fetchFreeGoodGetSupply();
-      if (res.sucess) {
+      if (res.success) {
         setBeanModalVisible({ show: true, type: 2, num: subsidyNum });
         createStar(stage, imgObj, bigStar, getHomeDetail);
       }
@@ -259,7 +281,7 @@ function index(props) {
       },
       {
         x: conversionSize(320),
-        y: computedY + appHeight - conversionSize(253),
+        y: computedY + appHeight - conversionSize(230),
         scaleX: 0.8,
         scaleY: 0.8,
       },
@@ -286,12 +308,8 @@ function index(props) {
       setBeanModalVisible({
         show: true,
         type: 1,
-        onClick: () => {
-          setTaskVisible(true);
-        },
       });
     }
-    // createBottomStar(stage, imgObj, spiritPlus, getHomeDetail);
   };
   //背景图加速动画
   const spiritPlus = () => {
@@ -437,7 +455,17 @@ function index(props) {
         onClose={() => {
           setBeanModalVisible({ show: false });
         }}
+        openTask={() => {
+          setTaskVisible(true);
+        }}
       ></BeanModal>
+      {/*引导弹窗*/}
+      <GuideModal
+        visible={guideVisible}
+        onClose={() => {
+          setGuideVisible(false);
+        }}
+      ></GuideModal>
     </>
   );
 }
