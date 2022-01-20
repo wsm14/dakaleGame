@@ -7,7 +7,7 @@ import TitleBlock from '@/components/TitleBlock';
 import AddressModal from '@/components/AddressModal';
 import Cloud from '@/components/Cloud';
 import { fetchListGameRewardBarrage, fetchBeginGatherGame } from '@/services/game';
-import { nativeClose } from '@/utils/birdgeContent';
+import { deviceName, nativeClose } from '@/utils/birdgeContent';
 import BlessWord from '@public/loading/BlessWord.png';
 
 function index(props) {
@@ -51,7 +51,11 @@ function index(props) {
     <div className="checkCards">
       {/* 标题栏 */}
       <TitleBlock type="check" back={nativeClose}></TitleBlock>
-      <div className="checkCards_Img">
+      <div
+        className={`checkCards_Img ${
+          deviceName() === 'miniProgram' ? 'checkCards_ImgPadding' : null
+        }`}
+      >
         <img src={BlessWord} alt="" />
       </div>
       {/*左滑*/}
