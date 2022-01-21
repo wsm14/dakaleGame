@@ -10,6 +10,7 @@ import Game from './components/Game';
 function index() {
   const [state, setState] = useState(); //进度条加载
   const [gameDetail, setGameDetail] = useState({}); //游戏详情
+  const [loadFlag, setLoadFlag] = useState(false);
   const loadRef = useRef(false);
 
   useEffect(() => {
@@ -48,12 +49,18 @@ function index() {
   const getGameDetail = async () => {
     const res = await fetchGatherMainPage();
     const { content = {} } = res;
+    // loadRef.current = !loadRef.current;
+    setLoadFlag(!loadFlag);
     setGameDetail(content);
-    loadRef.current = !loadRef.current;
   };
 
   return Object.keys(gameDetail).length ? (
-    <Game gameDetail={gameDetail} getGameDetail={getGameDetail} loadFlag={loadRef.current}></Game>
+    <Game
+      gameDetail={gameDetail}
+      getGameDetail={getGameDetail}
+      loadFlag={loadFlag}
+      ref={loadRef}
+    ></Game>
   ) : (
     <Loding state={state} imgList={imgList}></Loding>
   );

@@ -313,6 +313,17 @@ export const linkToAddress = () => {
     },
   });
 };
+//秘籍
+export const linkToSecret = () => {
+  linkTo({
+    ios: {
+      path: 'https://web-new.dakale.net/dev/game/collectGame/index.html#/secret',
+    },
+    android: {
+      path: 'https://web-new.dakale.net/dev/game/collectGame/index.html#/secret',
+    },
+  });
+};
 
 //生成海报
 export const makeReport = (val) => {

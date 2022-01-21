@@ -1,3 +1,4 @@
+import { Toast } from 'antd-mobile';
 /*
  * bridge android桥接库
  * nativeOther 封装
@@ -189,21 +190,20 @@ function nativeOther() {
             param = param.android;
           }
           try {
-            if (fnName === 'goNativePage') {
-              return window['AndroidObj'][fnName](param.path, { a: 1 });
-            }
-            window['AndroidObj'][fnName](Object.values(param)).bind(window);
+            return that.dsBridgeSynchro(fnName, param);
           } catch (e) {
-            console.log(1);
+            Toast.show({
+              content: '请下载新版APP体验此功能',
+            });
           }
-          return that.dsBridgeSynchro(fnName, param);
         } else {
           try {
-            window['AndroidObj'][fnName]();
+            that.dsBridgeSynchro(fnName);
           } catch (e) {
-            console.log(e);
+            Toast.show({
+              content: '请下载新版APP体验此功能',
+            });
           }
-          return that.dsBridgeSynchro(fnName);
         }
       }
     } else if (that.getPhone() === 'miniProgram') {

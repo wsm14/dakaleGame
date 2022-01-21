@@ -3,6 +3,8 @@ import './index.less';
 import { history } from 'umi';
 import { Toast } from 'antd-mobile';
 import { closeAnimate } from '@/utils/birdgeContent';
+import { getToken } from '@/utils/birdgeContent';
+import { reloadTab } from '@/utils/utils';
 
 import hand from '@public/image/hand.png';
 import circle from '@public/image/circle.png';
@@ -12,6 +14,12 @@ function index() {
   const [state, setState] = useState(false);
   useEffect(() => {
     closeAnimate();
+    reloadTab(() => {
+      if (!sessionStorage.getItem('dakaleToken')) {
+        getToken();
+      }
+    });
+    getToken();
   }, []);
   const begainReport = () => {
     if (!state) {

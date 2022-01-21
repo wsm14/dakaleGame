@@ -27,7 +27,7 @@ function index(props) {
   } = props;
   const [isStopped, setIsStopped] = useState(true);
   const {
-    identification = 1,
+    identification,
     popFlag, //弹窗标识 0 - 抽奖 1 - 分享 2 - 转赠
     cardName = '福', //卡的名字
     rewardFlag = '1', //是否抽中 0 - 未抽中 1 - 抽中
@@ -55,7 +55,7 @@ function index(props) {
         return `恭喜你获得一张${cardName}卡`;
       } else if (popFlag == 1) {
         return `邀请好友成功，送您一张${cardName}卡`;
-      } else {
+      } else if (popFlag == 2) {
         return `${username}送您一张${cardName}卡`;
       }
     } else {

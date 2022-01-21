@@ -33,6 +33,7 @@ const LoginForm = ({ type }) => {
         getHomeDetail();
       }
     });
+    hideTitle();
     getStateToken();
     closeAnimate();
   }, []);
@@ -78,8 +79,6 @@ const LoginForm = ({ type }) => {
         });
       },
     );
-
-    hideTitle();
   };
 
   return (

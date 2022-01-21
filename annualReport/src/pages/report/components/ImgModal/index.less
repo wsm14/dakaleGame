@@ -1,215 +1,82 @@
+@font-face {
+  font-family: 'HeiTi'; // --自定义名字就好
+  src: url('https://dakale-web-new.oss-cn-hangzhou.aliyuncs.com/dev/game/Lottie/font/font.ttf'); // --下载的字体文件路径
+}
 .reportData_bac1 {
   width: 100vw;
-  height: 100vh;
-  background: url(~@public/image/lastImg1.png) no-repeat;
-  background-size: cover;
+  height: 1334px;
   position: fixed;
   top: 1000%;
   left: 0;
-  z-index: -99;
-  .reportData_position {
+  z-index: 99;
+  .reportData_bacImg {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100%;
+    // object-fit: cover;
+    // object-position: 0% 0%;
   }
   .reportData_content {
-    width: 726px;
-    height: 1134px;
-    margin: 0 auto;
-    padding: 109px 43px 0;
-    .reportData_contentImg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 726px;
-      height: 1134px;
+    position: absolute;
+    top: 218px;
+    left: 48px;
+    .reportData_title {
+      font-size: 56px;
+      font-weight: 600;
+      color: #108588;
+      line-height: 72px;
     }
-    .reportData_relative {
-      position: relative;
-      z-index: 1;
-    }
-    .reportData_top {
-      display: flex;
-      justify-content: center;
-      .consumption {
-        &:nth-child(1) {
-          margin-right: 76px;
-        }
-        .consumption_title {
-          font-size: 24px;
-          font-weight: 400;
-          color: #999999;
-          line-height: 24px;
-          text-align: center;
-        }
-        .consumption_num {
-          font-size: 40px;
-          font-weight: bold;
-          color: #333333;
-          line-height: 40px;
-          text-align: center;
-          margin-top: 24px;
-        }
+    .reportData_days {
+      font-size: 140px;
+      color: #108588;
+      line-height: 140px;
+      margin-top: 48px;
+      font-family: 'HeiTi';
+      span {
+        font-size: 40px;
+        font-weight: 600;
+        color: #108588;
+        line-height: 40px;
       }
     }
-    .saveMoney {
-      margin-top: 32px;
-      div {
-        text-align: center;
-      }
-      .saveMoney_title {
-        font-size: 24px;
-        font-weight: 400;
-        color: #999999;
-        line-height: 24px;
-      }
-      .saveMoney_num {
-        font-size: 64px;
-        font-weight: bold;
-        color: #ef476f;
-        line-height: 64px;
-        margin-top: 24px;
-      }
+    .reportData_reportImg1 {
+      width: 260px;
+      height: 60px;
+      margin-top: 129px;
     }
-    .reportData_center {
-      width: 640px;
-      height: 200px;
-      background: rgba(#06c0c2, 0.06);
-      border-radius: 20px;
-      display: flex;
-      padding: 20px 40px;
-      margin-top: 32px;
-      img {
-        width: 140px;
-        height: 160px;
-        margin-right: 60px;
-      }
-      .reportData_center_money {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        div {
-          font-size: 28px;
-          font-weight: 400;
-          color: #ef476f;
-          line-height: 28px;
-          span {
-            font-weight: bold;
-            margin: 0 8px 0 24px;
-          }
-        }
-        div:nth-child(2) {
-          color: #06bfc1;
-          margin-top: 32px;
-        }
-      }
-    }
-    .report_ranking {
-      font-size: 48px;
-      font-weight: 500;
-      color: #ef476f;
-      line-height: 48px;
-      text-align: center;
-      margin-top: 40px;
-    }
-    .report_exceed {
+    .reportData_style {
       font-size: 24px;
       font-weight: 400;
       color: #333333;
       line-height: 24px;
-      text-align: center;
-      margin-top: 24px;
+      margin-top: 23px;
+      font-family: 'HeiTi';
       span {
-        color: #ef476f;
+        font-size: 40px;
+        font-weight: bold;
+        color: #333333;
+        line-height: 40px;
       }
     }
-    .report_line {
-      height: 1px;
-      background: #e5e5e5;
-      border-radius: 1px;
-      margin-top: 39px;
+    .reportData_pink1 {
+      color: #ef476f !important;
     }
-    .report_keyWord {
-      width: 230px;
-      font-size: 32px;
-      color: #333333;
-      line-height: 32px;
-      margin: 40px auto 0;
-      font-weight: bold;
-      position: relative;
-    }
-    .report_keyWord::before {
-      position: absolute;
-      background: #333;
-      content: '';
-      height: 2px;
-      top: 50%;
-      width: 40px;
-      left: -60px;
-    }
-    .report_keyWord::after {
-      position: absolute;
-      background: #333;
-      content: '';
-      height: 2px;
-      top: 50%;
-      width: 40px;
-      right: -50px;
-    }
-    .report_evaluate {
-      font-size: 64px;
-      font-weight: 500;
-      color: #06bec0;
-      line-height: 64px;
-      margin-top: 40px;
-      text-align: center;
-    }
-    .report_summary {
-      width: 456px;
-      font-size: 24px;
-      font-weight: 400;
-      color: #999999;
+    .reportData_pink2 {
+      font-size: 40px;
+      font-weight: 600;
+      color: #ef476f !important;
       line-height: 40px;
-      display: block;
-      margin: 24px auto 0;
-      text-align: center;
+    }
+    .fontSize24 {
+      font-size: 24px !important;
     }
   }
   .reportBottom {
+    position: absolute;
+    left: 40px;
+    bottom: 32px;
     display: flex;
-    padding: 0 40px;
-    justify-content: space-between;
     .reportBottom_left {
-      display: flex;
-      flex-direction: column;
-      .reportBottom_nickname {
-        display: flex;
-        align-items: center;
-        span {
-          display: inline-block;
-          max-width: 280px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-        font-size: 28px;
-        font-weight: 500;
-        color: #ffffff;
-        line-height: 28px;
-      }
-      .reportBottom_img2 {
-        width: 332px;
-        height: 44px;
-        margin-top: 16px;
-      }
-      .reportBottom_img3 {
-        width: 200px;
-        height: 64px;
-        margin-top: 32px;
-      }
-    }
-    .reportBottom_right {
       width: 188px;
       height: 188px;
       background: #ffffff;
@@ -218,6 +85,29 @@
       img {
         width: 100%;
         height: 100%;
+      }
+    }
+    .reportBottom_right {
+      display: flex;
+      flex-direction: column;
+      margin-left: 17px;
+      justify-content: flex-end;
+      .reportBottom_nickname {
+        display: flex;
+        align-items: center;
+        margin-left: 5px;
+        span {
+          display: inline-block;
+        }
+        font-size: 28px;
+        font-weight: 500;
+        color: #333333;
+        line-height: 28px;
+      }
+      .reportBottom_img2 {
+        width: 299px;
+        height: 44px;
+        margin-top: 16px;
       }
     }
   }

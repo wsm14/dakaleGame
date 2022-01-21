@@ -5,7 +5,7 @@ import TitleBlock from '@/components/TitleBlock';
 import Cloud from '@/components/Cloud';
 import TurnTable from './components/TurnTable';
 import TaskCloumn from './components/TaskCloumn';
-import { nativeClose } from '@/utils/birdgeContent';
+import { nativeClose, linkToSecret, deviceName } from '@/utils/birdgeContent';
 
 import getCard_button from '@public/loading/getCard_button.png';
 import getCard_script from '@public/loading/getCard_script.png';
@@ -39,8 +39,11 @@ function index(props) {
               alt=""
               className="getCards_script"
               onClick={() => {
-                window.location.href =
-                  'https://resource-new.dakale.net/product/html/rule/711ab478-479a-4885-8419-178481788744.html?newPage=true&shareKey=1479299624553213954&showTitle=true';
+                if (deviceName() === 'miniProgram') {
+                  history.push('/secret');
+                } else {
+                  linkToSecret();
+                }
               }}
             />
           </div>

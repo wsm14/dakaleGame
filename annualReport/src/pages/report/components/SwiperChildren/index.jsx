@@ -3,15 +3,16 @@ import { formatTime } from '@/utils/utils';
 import { BEAN_LEVEL } from '@/common/report';
 import { deviceName } from '@/utils/birdgeContent';
 import './index.less';
-import lastImg3 from '@public/image/lastImg3.png';
-import lastImg4 from '@public/image/lastImg4.png';
-import lastImg5 from '@public/image/lastImg5.png';
+import reportBac from '@public/image/reportBac.png';
+import reportButton from '@public/image/reportButton.png';
+import reportImg1 from '@public/image/reportImg1.png';
+import reportImg2 from '@public/image/reportImg2.png';
 
 function index(props) {
   const { index, pageIndex, detail = {}, makeImage } = props;
   const textRef = useRef();
   const imgRef = useRef();
-
+  console.log(reportBac, 'reportBac');
   const { annualReport = {} } = detail;
 
   const {
@@ -58,7 +59,7 @@ function index(props) {
       case 1:
         elementDom = (
           <div className={`reportPage  background${index}`}>
-            <div className="reportContent" ref={textRef}>
+            <div className="reportContent reportContent_opacity1" ref={textRef}>
               <div>
                 <span className="fontSize48">{content.totalBean}</span>卡豆
               </div>
@@ -79,7 +80,7 @@ function index(props) {
       case 2:
         elementDom = (
           <div className={`reportPage  background${index}`}>
-            <div className="reportContent" ref={textRef}>
+            <div className="reportContent reportContent_opacity2" ref={textRef}>
               <div>
                 <span className="fontSize48">
                   {(Number(content.annualBeanDeduct) / 100).toString()}
@@ -108,7 +109,7 @@ function index(props) {
         elementDom = (
           <div className={`reportPage  background${index}`}>
             {content.familyNums > 50 ? (
-              <div className="reportContent" ref={textRef}>
+              <div className="reportContent reportContent_opacity3" ref={textRef}>
                 <div>
                   <span className="fontSize48">{content.familyNums}</span>人
                 </div>
@@ -124,7 +125,7 @@ function index(props) {
                 <div>一分耕耘一分收获，愿你2022继续</div>
               </div>
             ) : (
-              <div className="reportContent" ref={textRef}>
+              <div className="reportContent reportContent_opacity3" ref={textRef}>
                 <div>
                   <span className="fontSize48">{content.familyNums}</span>人
                 </div>
@@ -146,7 +147,7 @@ function index(props) {
       case 4:
         elementDom = (
           <div className={`reportPage  background${index}`}>
-            <div className="reportContent" ref={textRef}>
+            <div className="reportContent reportContent_opacity3" ref={textRef}>
               <div>
                 <span className="fontSize48">{BEAN_LEVEL[content.userLevel]}</span>
               </div>
@@ -164,46 +165,38 @@ function index(props) {
         break;
       case 5:
         elementDom = (
-          <div className={`reportData_bac`} ref={imgRef}>
+          <div className="reportData_bac">
+            <img src={reportBac} alt="" className="reportData_bacImg" />
             <div className="reportData_content">
-              <div className="reportData_top">
-                <div className="consumption">
-                  <div className="consumption_title">全年总消费(元)</div>
-                  <div className="consumption_num">{content.totalConsume}</div>
-                </div>
-                <div className="consumption">
-                  <div className="consumption_title">全年卡豆总抵扣(卡豆)</div>
-                  <div className="consumption_num">{content.annualBeanDeduct}</div>
-                </div>
+              <div className="reportData_title">
+                哒卡乐
+                <br />
+                陪你走过了
               </div>
-              <div className="saveMoney">
-                <div className="saveMoney_title">全年卡豆为你省钱(元)</div>
-                <div className="saveMoney_num">
-                  {(Number(content.annualBeanDeduct) / 100).toString()}
-                </div>
+              <div className="reportData_days">
+                {totalDays}
+                <span>天</span>
               </div>
-              <div className="reportData_center">
-                <img src={lastImg3} alt="" />
-                <div className="reportData_center_money">
-                  <div>
-                    线上消费 <span>{content.onlineConsume}</span>元
-                  </div>
-                  <div>
-                    线下消费 <span>{content.outlineConsume}</span>元
-                  </div>
-                </div>
+              <img src={reportImg1} alt="" className="reportData_reportImg1" />
+              <div className="reportData_style">
+                全年总消费 <span>{content.totalConsume}</span>元
               </div>
-              <div className="report_ranking">段位·{content.position}</div>
-              <div className="report_exceed">
-                超过全国 <span>{content.consumeCashLevel}%</span> 的用户
+              <div className="reportData_style">
+                全年累计获得 <span>{content.totalBean}</span>卡豆
               </div>
-              <div className="report_line"></div>
-              <div className="report_keyWord">我的年度关键词</div>
-              <div className="report_evaluate">{content.annualKey}</div>
-              <div className="report_summary">{content.annualWord}</div>
+              <div className="reportData_style">
+                全年卡豆为你省钱{' '}
+                <span className="reportData_pink1">{Number(content.annualBeanDeduct) / 100}</span>
+                <span className="reportData_pink1 fontSize24"> 元</span>
+              </div>
+              <div className="reportData_style">
+                你的段位是 <span className="reportData_pink2">{content.position}</span>
+              </div>
             </div>
-            <img src={lastImg4} alt="" className="reportData_button" onClick={makeImage} />
-            <img src={lastImg5} alt="" className="reportData_bottomImg" />
+            {deviceName() !== 'miniProgram' && (
+              <img src={reportButton} alt="" className="reportData_button" onClick={makeImage} />
+            )}
+            <img src={reportImg2} alt="" className="reportData_bottomImg" />
           </div>
         );
         break;
