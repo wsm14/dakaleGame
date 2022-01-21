@@ -114,17 +114,20 @@ function index(props) {
   const goApp = (item) => {
     const { jumpRule, strapId } = item;
     let json = (jumpRule && JSON.parse(jumpRule)) || {};
-    const { jumpUrl } = json;
+    const { jumpUrl, param } = json;
+    const paramJson = (param && JSON.parse(param)) || {};
+    const { browseType } = paramJson;
     const { iosUrl, androidUrl, weChatUrl } = jumpUrl;
     linkTo({
       wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
       ios: {
         path: iosUrl,
-        param: { strapId },
+        param: { strapId, browseType },
       },
       android: {
         path: androidUrl,
         strapId,
+        browseType,
       },
     });
   };
