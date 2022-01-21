@@ -87,6 +87,10 @@ function index(props) {
     addText(stage);
   }, [starBean]);
 
+  useEffect(() => {
+    addPoint(stage);
+  }, [taskAbleReceive]);
+
   useUpdateEffect(() => {
     stage.removeAllChildren();
     ticker.removeTick(stage);
@@ -127,7 +131,7 @@ function index(props) {
     addText(stage);
 
     //添加红点
-    addpoint(stage);
+    addPoint(stage);
   };
 
   //监听舞台
@@ -380,14 +384,14 @@ function index(props) {
     stage.addChild(...mapItem);
   };
 
-  //添加我的星豆
-  const addpoint = (stage) => {
+  //添加红点
+  const addPoint = (stage) => {
     const list = [
       {
         id: 'point',
         type: 'Graphics',
-        x: conversionSize(677),
-        y: computedY + appHeight - conversionSize(180),
+        x: conversionSize(673),
+        y: computedY + appHeight - conversionSize(185),
       },
     ];
     const mapItem = createBitmap({
@@ -396,8 +400,11 @@ function index(props) {
     mapItem[0].beginFill('#EF476F', 1);
     mapItem[0].drawCircle(16, 16, 8);
     mapItem[0].endFill();
-    stage.addChild(...mapItem);
-    // stage.removeChildById('point');
+    if (taskAbleReceive === '1') {
+      stage.addChild(...mapItem);
+    } else {
+      stage.removeChildById('point');
+    }
   };
 
   //计算还差多少到达下一站
