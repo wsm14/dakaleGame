@@ -53,14 +53,16 @@ function index(props) {
   const getSignContent = async () => {
     const res = await fetchFreeGoodGetSignRecord();
     const { content = {} } = res;
-    // if (content.signDay > 5) {
-    //   for (let i = 1; i <= content.signDay - 5; i++) {
-    //     content.signInfo.push({ number: 5 + i, rewardStar: 15 });
-    //   }
-    // }
+    // content.signDay = 29;
     if (content.signDay > 5) {
-      content.signInfo[content.signInfo.length].number = content.signDay;
+      for (let i = 1; i <= content.signDay - 5; i++) {
+        content.signInfo.push({ number: 5 + i, rewardStar: 15 });
+      }
+      content.signInfo = content.signInfo.slice(content.signInfo.length - 5);
     }
+    // if (content.signDay > 5) {
+    //   content.signInfo[content.signInfo.length - 1].number = content.signDay;
+    // }
     setSignContent(content);
   };
 
@@ -225,7 +227,7 @@ function index(props) {
       gameName: 'freeGoodGame',
       taskId,
     });
-    if (res.resultCode == 1) {
+    if (res.success) {
       Toast.show({
         content: '领取成功',
       });
@@ -295,7 +297,7 @@ function index(props) {
                             className="taskSteps_line_img1"
                           />
                           <div className="taskSteps_line_days">
-                            {['1'].includes(signFlag) && signDay - 1 == index ? (
+                            {['1'].includes(signFlag) && signDay == item.number ? (
                               <div className="taskSteps_line_today">
                                 <img
                                   src={taskOn}

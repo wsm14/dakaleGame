@@ -91,7 +91,7 @@ const index = forwardRef((props, ref) => {
                 gameDetail={gameDetail}
                 getGameDetail={getGameDetail}
                 openModal={(val) => {
-                  let list = [...cardList];
+                  let list = [];
                   list.unshift(val);
                   setCardList([...list]);
                 }}

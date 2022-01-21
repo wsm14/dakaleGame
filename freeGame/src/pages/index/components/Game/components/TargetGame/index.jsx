@@ -334,7 +334,7 @@ function index(props) {
         width: conversionSize(400),
         textAlign: 'center',
         x: conversionSize(170),
-        y: computedY + appHeight - conversionSize(180),
+        y: computedY + appHeight - conversionSize(112),
       },
     ];
     const mapItem = createBitmap({
