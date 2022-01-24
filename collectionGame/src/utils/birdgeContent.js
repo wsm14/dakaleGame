@@ -46,9 +46,9 @@ export const getToken = (fn) => {
   } catch (e) {
     sessionStorage.setItem(
       'dakaleToken',
-      'VyRTcn6pLRmlrFSmAwymahVE8S6LsHhY2uZmuqCTeyXIUcVqVkgu5A5H2HuFfXIh',
+      'YTJn7f2o9NCgi8NvxaMnkoaiUBtKjV5KXODG2QxryUsi6qpsatrhdhS7ruYOsog6',
     );
-    fn && fn('VyRTcn6pLRmlrFSmAwymahVE8S6LsHhY2uZmuqCTeyXIUcVqVkgu5A5H2HuFfXIh');
+    fn && fn('YTJn7f2o9NCgi8NvxaMnkoaiUBtKjV5KXODG2QxryUsi6qpsatrhdhS7ruYOsog6');
   }
 };
 //获取token

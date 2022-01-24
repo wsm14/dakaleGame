@@ -51,9 +51,11 @@ function index(props) {
 
   //完成任务
 
-  const downTask = async () => {
+  const downTask = async (id, lastTime) => {
+    console.log(id);
     const res = await fetchTaskDoneTask({
-      taskStrapId: nextTime.strapId,
+      taskStrapId: id || nextTime.strapId,
+      extraParam: lastTime || '',
     });
     getTaskList();
   };
@@ -69,7 +71,15 @@ function index(props) {
     //获取一条的数据
     const timeInfo = taskList.filter((item) => item.taskType === 'timing')[0];
 
-    let { receiveRule, systemDate, taskStatus, strapId, hasDoneTimes, times } = timeInfo;
+    let {
+      receiveRule,
+      systemDate,
+      taskStatus,
+      strapId,
+      hasDoneTimes, //已经领取的次数
+      times, //总可以领取的次数
+      extraParam, //请求的时间
+    } = timeInfo;
 
     if (taskStatus === '0') {
       const jsonRule = (receiveRule && JSON.parse(receiveRule)) || {};
@@ -87,6 +97,15 @@ function index(props) {
           break;
         } else if (condition[i] < nowTime && nowTime <= condition[i + 1]) {
           lastTime = condition[i + 1];
+          //判断请求的时间和下一阶段时间是否一致
+          if (extraParam != condition[i + 1]) {
+            downTask(strapId, lastTime);
+            return;
+          }
+          //如果时间等于最后的时间的话
+          if (lastTime == condition[condition.length]) {
+            lastTime = null;
+          }
           break;
         }
       }

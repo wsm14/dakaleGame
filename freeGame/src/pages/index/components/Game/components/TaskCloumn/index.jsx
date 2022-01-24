@@ -106,26 +106,29 @@ function index(props) {
   };
   //判断显示的按钮
   const checkButton = (item) => {
-    const { taskStatus, receiveRule, strapId, jumpRule } = item;
+    const { taskStatus, strapId, jumpRule, taskType } = item;
     let json = (jumpRule && JSON.parse(jumpRule)) || {};
     const { iosUrl, androidUrl, weChatUrl } = json;
-    const rule = JSON.parse(receiveRule);
-    const { type } = rule;
     if (taskStatus === '0') {
-      if (type === 'free') {
+      if (taskType === 'free') {
         return (
           <div className="taskLine_right taskLine_button1">
             {parseInt(count / 60) < 10 ? `0${parseInt(count / 60)}` : parseInt(count / 60)}:
             {count % 60 < 10 ? `0${count % 60}` : count % 60}
           </div>
         );
-      } else if (type === 'invite') {
+      } else if (taskType === 'invite' || taskType === 'share') {
         return (
           <div>
             <div
               className="taskLine_right taskLine_button1"
               onClick={() => {
-                openModal('nativeShareWork', strapId);
+                let paramId = strapId;
+                if (taskType === 'share') {
+                  paramId = taskList.filter((item) => item.taskType === 'share')[0].strapId;
+                }
+                console.log(paramId, 'paramId');
+                openModal('nativeShareWork', paramId);
               }}
             >
               去完成
@@ -327,7 +330,7 @@ function index(props) {
             {/*任务*/}
             {taskList &&
               taskList.map((item) => (
-                <div className="taskLine" key={item.strapId}>
+                <div className={`taskLine taskLine_${item?.taskType}`} key={item.strapId}>
                   <div className="taskLine_left">
                     <img src={item.image} alt="" />
                     <div className="taskLine_left_info">
