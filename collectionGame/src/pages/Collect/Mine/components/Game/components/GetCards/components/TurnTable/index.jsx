@@ -133,7 +133,7 @@ function index(props) {
               swiperRef.current?.swipeTo(0);
             }}
           >
-            <div>转福盘抽福豆</div>
+            <div>转福盘抽福豆卡</div>
           </div>
           <div
             className={`cardNavigation_line ${
@@ -144,7 +144,7 @@ function index(props) {
               swiperRef.current?.swipeTo(1);
             }}
           >
-            <div>邀请好友送福豆</div>
+            <div>邀请好友送福豆卡</div>
           </div>
           <div
             className={`cardNavigation_check ${

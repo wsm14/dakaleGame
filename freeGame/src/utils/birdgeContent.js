@@ -310,7 +310,7 @@ export const linkToAddress = () => {
       path: 'AddressAdd',
     },
     wechat: {
-      url: `/pages/relay/community/delivery/index?mode=list`,
+      url: `/pages/perimeter/delivery/index?mode=list`,
     },
   });
 };
