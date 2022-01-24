@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { getToken, hideTitle, closeAnimate } from '@/utils/birdgeContent';
-import Rules from '@/components/Rules';
-
-import './index.less';
-
+import { hideTitle, closeAnimate } from '@/utils/birdgeContent';
+import Views from './components/index';
+import { KeepAlive } from 'umi';
 function index() {
   useEffect(() => {
     hideTitle();
@@ -12,10 +10,9 @@ function index() {
 
   return (
     <>
-      <Rules></Rules>
-      <div className="load">
-        <div className="loadBottom"></div>
-      </div>
+      <KeepAlive>
+        <Views></Views>
+      </KeepAlive>
     </>
   );
 }

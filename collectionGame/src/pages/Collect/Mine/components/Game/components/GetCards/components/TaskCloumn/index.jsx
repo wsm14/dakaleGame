@@ -122,7 +122,7 @@ function index(props) {
       wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=collect` },
       ios: {
         path: iosUrl,
-        param: { strapId, browseType },
+        param: { strapId, browserType: browseType },
       },
       android: {
         path: androidUrl,

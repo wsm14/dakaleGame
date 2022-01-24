@@ -38,7 +38,10 @@ function index(props) {
     setInvitaList(userList);
   };
 
+  //判断等于是否到达第二阶段
   const levelFlag = useMemo(() => supplyLevel > 0, [supplyLevel]);
+  //是否有自己的小组成员
+  const groupFlag = useMemo(() => invitaList.every((item) => item.profile), [invitaList.length]);
 
   const popupProps = {
     visible,
@@ -92,7 +95,7 @@ function index(props) {
           <Button
             className="invita_button"
             onClick={() => {
-              levelFlag ? setOutVisible(true) : null;
+              levelFlag ? (groupFlag ? setOutVisible(true) : null) : null;
             }}
           >
             {levelFlag ? '退出小队' : '下一阶段即可发起合力'}

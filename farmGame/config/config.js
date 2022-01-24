@@ -33,6 +33,7 @@ export default defineConfig({
   inlineLimit: 10,
   alias: {
     '@public': path.resolve(__dirname, '../public'),
+    '@asstes': path.resolve(__dirname, '../src/asstes'),
   },
   publicPath: './',
   lessLoader: { javascriptEnabled: true },
