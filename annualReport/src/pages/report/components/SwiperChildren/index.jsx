@@ -155,7 +155,7 @@ function index(props) {
               <div>你在哒卡乐的地位，</div>
               <div>这一年，</div>
               <div>
-                这个身份给你赚取了 <span>{(Number(content.familyBean) / 100).toString()}元</span>
+                这个身份给你赚取了 <span>{(Number(content.totalIncome) / 100).toString()}元</span>
               </div>
               <div>距离下一个等级已不远</div>
               <div>加油吧少年</div>
