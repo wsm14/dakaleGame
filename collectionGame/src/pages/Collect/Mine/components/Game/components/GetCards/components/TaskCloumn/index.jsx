@@ -52,10 +52,9 @@ function index(props) {
   //完成任务
 
   const downTask = async (id, lastTime) => {
-    console.log(id);
     const res = await fetchTaskDoneTask({
       taskStrapId: id || nextTime.strapId,
-      extraParam: lastTime || '',
+      extraParam: lastTime || nextTime.lastTime,
     });
     getTaskList();
   };
@@ -98,12 +97,12 @@ function index(props) {
         } else if (condition[i] < nowTime && nowTime <= condition[i + 1]) {
           lastTime = condition[i + 1];
           //判断请求的时间和下一阶段时间是否一致
-          if (extraParam != condition[i + 1]) {
-            downTask(strapId, lastTime);
+          if (extraParam != condition[i]) {
+            downTask(strapId, condition[i]);
             return;
           }
           //如果时间等于最后的时间的话
-          if (lastTime == condition[condition.length]) {
+          if (lastTime == condition[condition.length - 1]) {
             lastTime = null;
           }
           break;
@@ -113,12 +112,12 @@ function index(props) {
       if (hasDoneTimes === times) {
         lastTime = null;
       }
-      console.log(lastTime);
       if (lastTime) {
         setDownTime((lastTime - nowTime) / 1000);
         setNextTime({
           time: `${formatTime1(lastTime).hour}:${formatTime1(lastTime).minutes}`,
           strapId: strapId,
+          lastTime: lastTime,
         });
         timeRef.current = !timeRef.current;
       } else {
