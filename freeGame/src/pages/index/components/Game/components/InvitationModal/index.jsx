@@ -41,8 +41,8 @@ function index(props) {
   //判断等于是否到达第二阶段
   const levelFlag = useMemo(() => supplyLevel > 0, [supplyLevel]);
   //是否有自己的小组成员
-  const groupFlag = useMemo(() => invitaList.every((item) => item.profile), [invitaList.length]);
-
+  const groupFlag = useMemo(() => invitaList.some((item) => item.profile), [invitaList.length]);
+  console.log(groupFlag, 'groupFlag', invitaList);
   const popupProps = {
     visible,
     onClose,
@@ -94,6 +94,7 @@ function index(props) {
 
           <Button
             className="invita_button"
+            disabled={!groupFlag}
             onClick={() => {
               levelFlag ? (groupFlag ? setOutVisible(true) : null) : null;
             }}
