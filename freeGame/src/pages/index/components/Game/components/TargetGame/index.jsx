@@ -76,13 +76,6 @@ function index(props) {
   useEffect(() => {
     initStage();
   }, []);
-
-  useEffect(() => {
-    if (newUserFlag === '1') {
-      setBeanModalVisible({ show: true, type: 0 });
-    }
-  }, [newUserFlag]);
-
   useEffect(() => {
     addText(stage);
   }, [starBean]);
@@ -167,7 +160,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.starBord.src,
         x: conversionSize(195),
-        y: computedY + appHeight - conversionSize(184),
+        y: computedY - conversionSize(184 - appHeight),
         width: conversionSize(360),
         height: conversionSize(120),
       },
@@ -176,7 +169,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.bigStar.src,
         x: conversionSize(305),
-        y: computedY + appHeight - conversionSize(253),
+        y: computedY - conversionSize(253 - appHeight),
         width: conversionSize(140),
         height: conversionSize(140),
       },
@@ -185,7 +178,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.invateIcon.src,
         x: conversionSize(32),
-        y: computedY + appHeight - conversionSize(184),
+        y: computedY - conversionSize(184 - appHeight),
         width: conversionSize(120),
         height: conversionSize(120),
       },
@@ -194,7 +187,7 @@ function index(props) {
         type: 'Bitmap',
         image: imgObj.starBean.src,
         x: conversionSize(598),
-        y: computedY + appHeight - conversionSize(184),
+        y: computedY - conversionSize(184 - appHeight),
         width: conversionSize(120),
         height: conversionSize(120),
       },
@@ -204,7 +197,7 @@ function index(props) {
         text: '1111',
         image: imgObj.rectangle1.src,
         x: conversionSize(32),
-        y: computedY + appHeight - conversionSize(234),
+        y: computedY - conversionSize(234 - appHeight),
         width: conversionSize(120),
         height: conversionSize(42),
       },
@@ -214,7 +207,7 @@ function index(props) {
         text: '1111',
         image: imgObj.rectangle2.src,
         x: conversionSize(608),
-        y: computedY + appHeight - conversionSize(234),
+        y: computedY - conversionSize(234 - appHeight),
         width: conversionSize(100),
         height: conversionSize(42),
       },
@@ -266,7 +259,11 @@ function index(props) {
     if (subsidyFlag === '1') {
       const res = await fetchFreeGoodGetSupply();
       if (res.success) {
-        setBeanModalVisible({ show: true, type: 2, num: subsidyNum });
+        if (newUserFlag === '1') {
+          setBeanModalVisible({ show: true, type: 0 });
+        } else {
+          setBeanModalVisible({ show: true, type: 2, num: subsidyNum });
+        }
         createStar(stage, imgObj, bigStar, getHomeDetail);
       }
     } else {
@@ -281,13 +278,13 @@ function index(props) {
       bigStar,
       {
         x: conversionSize(305),
-        y: computedY + appHeight - conversionSize(254),
+        y: computedY - conversionSize(254 - appHeight),
         scaleX: 1,
         scaleY: 1,
       },
       {
         x: conversionSize(320),
-        y: computedY + appHeight - conversionSize(230),
+        y: computedY - conversionSize(230 - appHeight),
         scaleX: 0.8,
         scaleY: 0.8,
       },
@@ -375,7 +372,7 @@ function index(props) {
         width: conversionSize(400),
         textAlign: 'center',
         x: conversionSize(170),
-        y: computedY + appHeight - conversionSize(112),
+        y: computedY - conversionSize(112 - appHeight),
       },
     ];
     const mapItem = createBitmap({
@@ -391,7 +388,7 @@ function index(props) {
         id: 'point',
         type: 'Graphics',
         x: conversionSize(673),
-        y: computedY + appHeight - conversionSize(185),
+        y: computedY - conversionSize(185 - appHeight),
       },
     ];
     const mapItem = createBitmap({
@@ -421,22 +418,24 @@ function index(props) {
         <Rules></Rules>
       </div>
       {/* 领取文字 */}
-      <div className="receiveText" onClick={collarBean}>
-        {subsidyFlag === '1' ? (
-          `${subsidyNum}星豆`
-        ) : (
-          <Swiper
-            autoplay
-            direction="vertical"
-            loop
-            allowTouchMove={false}
-            indicator={() => null}
-            className="receiveText_swiper"
-          >
-            <Swiper.Item>明日领取</Swiper.Item>
-            <Swiper.Item>{subsidyNum}星豆</Swiper.Item>
-          </Swiper>
-        )}
+      <div className="receiveText_box" onClick={collarBean}>
+        <div className="receiveText">
+          {subsidyFlag === '1' ? (
+            `${subsidyNum}星豆`
+          ) : (
+            <Swiper
+              autoplay
+              direction="vertical"
+              loop
+              allowTouchMove={false}
+              indicator={() => null}
+              className="receiveText_swiper"
+            >
+              <Swiper.Item>明日领取</Swiper.Item>
+              <Swiper.Item>{subsidyNum}星豆</Swiper.Item>
+            </Swiper>
+          )}
+        </div>
       </div>
 
       {/* 剩余星豆 */}

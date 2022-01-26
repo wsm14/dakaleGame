@@ -114,7 +114,7 @@ export const createStar = (stage, imgObj, bigStar, fn) => {
               bigStar,
               {
                 x: conversionSize(320),
-                y: computedY + appHeight - conversionSize(230),
+                y: computedY - conversionSize(230 - appHeight),
                 scaleX: 0.8,
                 scaleY: 0.8,
               },
