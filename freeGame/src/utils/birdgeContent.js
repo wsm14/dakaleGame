@@ -47,9 +47,9 @@ export const getToken = (fn) => {
     console.log(e, '1111111');
     sessionStorage.setItem(
       'dakaleToken',
-      'J12TGJJJzCiCDihChts9Ta4GTJu82ajlqlqBG7X2an0aRZwwmLaHBrZVzL',
+      'YTJn7f2o9NCgi8NvxaMnkoaiUBtKjV5KXODG2QxryUsi6qpsatrhdhS7ruYOsog6',
     );
-    fn && fn('J12TGJJJzCiCDihChts9Ta4GTJu82ajlqlqBG7X2an0aRZwwmLaHBrZVzL');
+    fn && fn('YTJn7f2o9NCgi8NvxaMnkoaiUBtKjV5KXODG2QxryUsi6qpsatrhdhS7ruYOsog6');
   }
 };
 //获取token
@@ -310,7 +310,7 @@ export const linkToAddress = () => {
       path: 'AddressAdd',
     },
     wechat: {
-      url: `/pages/perimeter/delivery/index?mode=list`,
+      url: `/pages/relay/community/delivery/index?mode=list`,
     },
   });
 };

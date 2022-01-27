@@ -128,7 +128,7 @@ function index(props) {
                   paramId = taskList.filter((item) => item.taskType === 'share')[0].strapId;
                 }
                 console.log(paramId, 'paramId');
-                openModal('nativeShareWork', paramId);
+                openModal('nativeShareWork', paramId, taskType);
               }}
             >
               去完成

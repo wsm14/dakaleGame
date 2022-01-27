@@ -91,13 +91,20 @@ function index(props) {
     initStage();
   }, [supplyLevel]);
 
-  useOnceEffect(
-    () => {
+  useEffect(() => {
+    if (supplyLevel && !localStorage.getItem('level')) {
       setGuideVisible(true);
-    },
-    [supplyLevel],
-    supplyLevel,
-  );
+      localStorage.setItem('level', supplyLevel);
+    }
+  }, [supplyLevel]);
+
+  // useOnceEffect(
+  //   () => {
+  //     setGuideVisible(true);
+  //   },
+  //   [supplyLevel],
+  //   supplyLevel,
+  // );
 
   //创建舞台
   const initStage = () => {
@@ -335,7 +342,7 @@ function index(props) {
   //改变元素运动
 
   //打开弹窗并且复制口令
-  const openModal = async (type, id) => {
+  const openModal = async (type, id, taskType) => {
     const btnType = {
       nativeShareWork: 'freeTaskHelp',
       nativeShareClose: 'gameTogether',
@@ -346,7 +353,7 @@ function index(props) {
         relateId: id,
       });
       const { command } = res.content;
-      cobyInfo(command, { show: true, type, value: id }, (val) => {
+      cobyInfo(command, { show: true, type, value: id, taskType }, (val) => {
         setShareVisible(val);
       });
     } else {

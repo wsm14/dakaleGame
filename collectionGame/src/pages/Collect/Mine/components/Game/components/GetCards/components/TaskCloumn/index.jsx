@@ -219,16 +219,24 @@ function index(props) {
         </div>
       );
     } else if (taskStatus === '2') {
-      return (
-        <div
-          className="taskLine_right taskLine_button3"
-          onClick={() => {
-            goApp(item);
-          }}
-        >
-          已领取
-        </div>
-      );
+      if (taskType === 'timing') {
+        return (
+          <div>
+            <div className="taskLine_right taskLine_button1">明日可领</div>
+          </div>
+        );
+      } else {
+        return (
+          <div
+            className="taskLine_right taskLine_button3"
+            onClick={() => {
+              goApp(item);
+            }}
+          >
+            已领取
+          </div>
+        );
+      }
     }
   };
   const modalRender = useMemo(

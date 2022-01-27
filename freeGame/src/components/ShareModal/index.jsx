@@ -1,12 +1,14 @@
 import React from 'react';
 import './index.less';
 import { openWx, nativeShareSign, nativeShareWork, nativeShareClose } from '@/utils/birdgeContent';
+import { fetchTaskDoneTask } from '@/services/game';
 import kcopy from '@public/usual/kcopy.png';
 import BasicModal from '@/components/BasicModal';
 
 function index(props) {
   const { visible, onClose, type, data = {} } = props;
-  const { show } = visible;
+  const { show, taskType } = visible;
+  console.log(taskType, 'taskType');
   const { value } = data;
   const btnType = {
     nativeShareWork: nativeShareWork,
@@ -19,7 +21,11 @@ function index(props) {
     opacity: 0.8,
     style: { '--z-index': '1001' },
   };
-
+  const downTask = async () => {
+    const res = await fetchTaskDoneTask({
+      taskStrapId: value,
+    });
+  };
   return (
     <>
       <BasicModal modalProps={{ ...modalProps }}>
@@ -34,6 +40,9 @@ function index(props) {
             <div
               className="ShareModal_content_button"
               onClick={() => {
+                if (taskType == 'share') {
+                  downTask();
+                }
                 openWx();
                 onClose();
               }}
@@ -43,6 +52,9 @@ function index(props) {
             <div
               className="ShareModal_content_button"
               onClick={() => {
+                if (taskType == 'share') {
+                  downTask();
+                }
                 btnType && btnType(value);
                 onClose();
               }}
