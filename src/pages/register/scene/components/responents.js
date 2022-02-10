@@ -16,6 +16,7 @@ import bubble from '@/assert/image/bubble.png';
 import level from '@/assert/image/level.png';
 import key from '@/assert/image/key.png';
 import blindbg from '@/assert/image/blindbg.png';
+import blind_news from '@/assert/image/blind_box_news.png';
 export const list = [
   { id: 'scene', noCache: true, src: bg },
   { id: 'qianScene', noCache: true, src: qianbg },
@@ -35,4 +36,5 @@ export const list = [
   { id: 'level', noCache: true, src: level },
   { id: 'key', noCache: true, src: key },
   { id: 'blindbg', noCache: true, src: blindbg },
+  { id: 'blind_news', noCache: true, src: blind_news },
 ];

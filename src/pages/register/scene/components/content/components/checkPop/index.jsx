@@ -8,15 +8,27 @@ import {
   fakefillSign,
   fetchCommand,
 } from '@/server/registerServers';
-import day from 'dayjs';
 import { deviceName, linkTo } from '@/utils/birdgeContent';
 import { toast, cobyInfo } from '@/utils/utils';
+import Imper from './components/signSuccess';
+import day from 'dayjs';
 import './index.less';
 export default (props) => {
-  const { list, reloadRequest, token, onOpen, onClose, reload, remindFlag, openCommond } = props;
+  const {
+    list,
+    reloadRequest,
+    token,
+    onOpen,
+    onClose,
+    reload,
+    remindFlag,
+    openCommond,
+    tomorrowBean,
+  } = props;
   const [checkFlag, setCheckFlag] = useState(false);
   const [time, setTime] = useState(0);
   const [data, setData] = useState({});
+  const [imperMask, setImperMask] = useState(false);
   const [maskVisible, setMaskVisible] = useState(false);
   const [maskData, setMaskData] = useState({
     type: 'success',
@@ -53,6 +65,9 @@ export default (props) => {
         await reload();
         await setTime(5);
         await onOpen();
+        if (deviceName() === 'miniProgram') {
+          await setImperMask(true);
+        }
       }
     });
   };
@@ -241,6 +256,13 @@ export default (props) => {
         shareSign={fetchUserCommand}
         onClose={() => setMaskVisible(false)}
       ></Signature>
+      <Imper
+        onClose={() => {
+          setImperMask(false);
+        }}
+        show={imperMask}
+        tomorrowBean={tomorrowBean}
+      ></Imper>
     </div>
   );
 };

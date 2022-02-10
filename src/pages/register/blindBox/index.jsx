@@ -1,7 +1,7 @@
 import React from 'react';
 import { history } from 'umi';
 import { fetchBoxList, fetchOpenBlindBox, fetchCommand } from '@/server/registerServers';
-import { getToken } from '@/utils/birdgeContent';
+import { Swiper } from 'antd-mobile';
 import { backgroundObj, toast, cobyInfo, reloadTab, filterStrList } from '@/utils/utils';
 import classNames from 'classnames';
 import Pop from './components/blindPop';
@@ -139,35 +139,51 @@ class Index extends React.Component {
           <div className="blind_titleName"></div>
         </div>
         <div className="blind_key_info">
-          {noUseKeys > 0 ? (
-            <div className="blind_key_left">你有{noUseKeys}把金钥匙，快去拆盲盒大礼吧～</div>
-          ) : hasKeys - noUseKeys === 4 ? (
-            <div className="blind_key_left">所有盲盒都被你开启了，等待新盲盒吧~</div>
-          ) : growValueLimit - gameBalance > 0 ? (
-            <div className="blind_key_left">
-              已解锁{hasKeys - noUseKeys}个，还差{growValueLimit - gameBalance}成长值解锁盲盒
-              <div
-                className="blind_key_btn"
-                onClick={() => {
-                  history.goBack();
-                }}
-              >
-                去获取
+          <Swiper
+            autoplay={true}
+            allowTouchMove={false}
+            direction={'vertical'}
+            loop={true}
+            indicator={() => {}}
+            className="blind_key_swiper"
+          >
+            <Swiper.Item className="swiper_box public_center">
+              <div className="font_hide">
+                {noUseKeys > 0 ? (
+                  <div className="blind_key_left">你有{noUseKeys}把金钥匙，快去拆盲盒大礼吧～</div>
+                ) : hasKeys - noUseKeys === 4 ? (
+                  <div className="blind_key_left">所有盲盒都被你开启了，等待新盲盒吧~</div>
+                ) : growValueLimit - gameBalance > 0 ? (
+                  <div className="blind_key_left">
+                    已解锁{hasKeys - noUseKeys}个，还差{growValueLimit - gameBalance}成长值解锁盲盒
+                    <div
+                      className="blind_key_btn"
+                      onClick={() => {
+                        history.goBack();
+                      }}
+                    >
+                      去获取
+                    </div>
+                  </div>
+                ) : (
+                  <div className="blind_key_left">
+                    您有钥匙暂未领取
+                    <div
+                      className="blind_key_btn"
+                      onClick={() => {
+                        history.goBack();
+                      }}
+                    >
+                      去领取
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          ) : (
-            <div className="blind_key_left">
-              您有钥匙暂未领取
-              <div
-                className="blind_key_btn"
-                onClick={() => {
-                  history.goBack();
-                }}
-              >
-                去领取
-              </div>
-            </div>
-          )}
+            </Swiper.Item>
+            <Swiper.Item className="blind_key_left font_hide">
+              本期奖池：iPhone13、肯德基霸王…
+            </Swiper.Item>
+          </Swiper>
           <div
             onClick={() => {
               history.goBack();

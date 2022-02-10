@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'umi';
 import {
   fetchUserAcquiredPlatformGift,
   fetchUserPopUpCommerceGoods,
@@ -58,7 +59,7 @@ export default ({}) => {
       </div>
     );
   };
-  const templateShop = (val) => {
+  const templateShop = (val, index) => {
     const {
       goodsImg,
       goodsName,
@@ -70,11 +71,11 @@ export default ({}) => {
     const { type, bean, cash } = paymentModeObject;
     return (
       <div
-        className="templateShop_box"
+        className={`templateShop_box ${(index + 1) % 3 !== 0 && 'templateShop_box_margin'}`}
         onClick={() =>
           linkTo({
             ios: {
-              path: 'beanDistrictCommerce',
+              path: 'DKLAroundDiscountGoodsDetailViewController',
               param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
             },
             android: {
@@ -91,44 +92,49 @@ export default ({}) => {
         <div className="templateShop_img" style={backgroundObj(goodsImg)}></div>
         <div className="templateShop_title font_hide">{goodsName} </div>
         <div className="templateShop_desc">卡豆价 </div>
-        <div className="templateShop_price">
+        <div className="templateShop_price font_hide">
           {type === 'defaultMode' ? `¥${realPrice}` : `¥${cash}+${bean}卡豆`}
         </div>
       </div>
     );
   };
   return (
-    <div className="appActive_box">
-      <div className="appActive_banner"></div>
-      {platformGiftPackRelateList.length > 0 && (
-        <>
-          <div className="appActive_title  appActive_title_style1"></div>
-          <div className="appActive_coupon_content">
-            {platformGiftPackRelateList.map((item) => {
-              return templateCoupon(item);
-            })}
-          </div>
-        </>
-      )}
+    <>
+      <Helmet>
+        <title>新人福利落地页</title>
+      </Helmet>
+      <div className="appActive_box">
+        <div className="appActive_banner"></div>
+        {platformGiftPackRelateList.length > 0 && (
+          <>
+            <div className="appActive_title  appActive_title_style1"></div>
+            <div className="appActive_coupon_content">
+              {platformGiftPackRelateList.map((item) => {
+                return templateCoupon(item);
+              })}
+            </div>
+          </>
+        )}
 
-      <div className="appActive_title appActive_title_style2"></div>
+        <div className="appActive_title appActive_title_style2"></div>
 
-      <div className="appActive_content_vertion">
-        <div className="appActive_vertion_info" onClick={linkToPhone}></div>
-        <div className="appActive_vertion_info" onClick={linkToMember}></div>
+        <div className="appActive_content_vertion">
+          <div className="appActive_vertion_info" onClick={linkToPhone}></div>
+          <div className="appActive_vertion_info" onClick={linkToMember}></div>
+        </div>
+        {list.length > 0 && (
+          <>
+            <div className="appActive_title  appActive_title_style3"></div>
+            <div className="appActive_newsContent">
+              {list.map((item, index) => {
+                return templateShop(item, index);
+              })}
+            </div>
+          </>
+        )}
+
+        <div className="appActive_logo"></div>
       </div>
-      {list.length > 0 && (
-        <>
-          <div className="appActive_title  appActive_title_style3"></div>
-          <div className="appActive_newsContent">
-            {list.map((item) => {
-              return templateShop(item);
-            })}
-          </div>
-        </>
-      )}
-
-      <div className="appActive_logo"></div>
-    </div>
+    </>
   );
 };

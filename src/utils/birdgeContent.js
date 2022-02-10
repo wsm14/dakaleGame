@@ -291,9 +291,9 @@ export const linkToPhone = () => {
       android: {
         path: 'PhoneRecharge',
       },
-      // wechat: {
-      //   url: `/pages/coupon/wraparound/index`,
-      // },
+      wechat: {
+        url: `/pages/perimeter/recharge/index`,
+      },
     });
   } catch (e) {}
 };
@@ -306,9 +306,9 @@ export const linkToMember = () => {
       android: {
         path: 'MemberRecharge',
       },
-      // wechat: {
-      //   url: `/pages/coupon/wraparound/index`,
-      // },
+      wechat: {
+        url: `/pages/perimeter/rechargeMemberList/index`,
+      },
     });
   } catch (e) {}
 };

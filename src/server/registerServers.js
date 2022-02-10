@@ -121,9 +121,10 @@ export function fetchOpenBlindBox(params) {
 }
 //拆盲盒
 
-export function fetchTaskReward(params) {
+export function fetchTaskReward(data) {
   return request('/user/game/task/receiveTaskReward', {
-    params,
+    method: 'POST',
+    data,
   });
 }
 //领取任务奖励

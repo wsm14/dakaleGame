@@ -154,7 +154,7 @@ export default (props) => {
               console.log(e);
             }
           }}
-          className="growPop_body_btn growPop_body_btn2 growPop_body_opcity"
+          className="growPop_body_btn growPop_body_btn3"
         >
           已领取
         </div>
@@ -188,7 +188,7 @@ export default (props) => {
           {list.map((item, index) => {
             const { image, name, content, times, hasDoneTimes } = item;
             return (
-              <div className="growPop_content_list" key={index}>
+              <div className={`growPop_content_list ${'taskLine_' + item.taskType}`} key={index}>
                 <div className={classNames('growPop_content_profile')}>
                   <img src={image} className="growPop_content_img" />
                 </div>

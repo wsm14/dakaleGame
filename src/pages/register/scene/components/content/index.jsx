@@ -25,6 +25,7 @@ import PackPop from './components/packPop';
 import EatPop from './components/eatPop';
 import GrowPop from './components/growPop';
 import CobyMask from '@/components/cobyMask';
+import Step from './components/step';
 import BottomContent from './components/BottomContent';
 import { getToken } from '@/utils/birdgeContent';
 import { toast, computedSeconds, pxComputed, reloadTab } from '@/utils/utils';
@@ -64,6 +65,7 @@ export default ({ responent }) => {
     feedReward = 0,
     loseTime = 0,
     remindFlag = '0',
+    tomorrowBean = 0,
   } = gameData;
   const width = window.innerWidth * 2;
   const height = (window.innerWidth / 375) * 520 * 2;
@@ -200,6 +202,7 @@ export default ({ responent }) => {
     const pack = createBgInit(stageinfo, 4);
     const eat = createBgInit(stageinfo, 5);
     const grow = createBgInit(stageinfo, 6);
+    const blindBox = createBgInit(stageinfo, 7);
     eat.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
       clickInEase(eat, () => setEatVisible(true));
@@ -211,6 +214,12 @@ export default ({ responent }) => {
     grow.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
       clickInEase(grow, () => setGrowVisible(true));
+    });
+    blindBox.on(Hilo.event.POINTER_START, (e) => {
+      e.preventDefault();
+      clickInEase(blindBox, () => {
+        history.push('/blind');
+      });
     });
   };
   //舞台其他元素添加进舞台
@@ -576,6 +585,14 @@ export default ({ responent }) => {
           height: pxComputed(120),
           rect: [451, 36, 120, 120],
         },
+        {
+          id: 'btn_icon4',
+          image: responent.get('blind_news').content,
+          x: pxComputed(440),
+          y: pxComputed(725),
+          width: pxComputed(120),
+          height: pxComputed(120),
+        },
       ],
     });
     stage.addChild(list[index]);
@@ -794,6 +811,7 @@ export default ({ responent }) => {
         bodyClassName={'checkPop_radius'}
         position={'top'}
         className="drawer_box"
+        tomorrowBean={tomorrowBean}
         remindFlag={remindFlag}
         openCommond={setCobyVisible}
         reloadRequest={() => {
@@ -909,6 +927,7 @@ export default ({ responent }) => {
         show={WorkVisible.visible}
       ></CobyMask>
       <BottomContent userInfo={userInfo}></BottomContent>
+      <Step></Step>
     </div>
   );
 };

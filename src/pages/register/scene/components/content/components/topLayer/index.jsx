@@ -1,5 +1,5 @@
 import React from 'react';
-import { Swiper, Switch } from 'antd-mobile';
+import { Swiper } from 'antd-mobile';
 import { nativeClose, linkRule, linkToWallet, deviceName } from '@/utils/birdgeContent';
 import { history } from 'umi';
 import './index.less';
@@ -46,14 +46,6 @@ export default ({ img, regOpen, data = {} }) => {
           }}
         >
           签到秘籍
-        </div>
-        <div
-          onClick={() => {
-            history.push('/blind');
-          }}
-          className="topLayer_blindBox public_center"
-        >
-          {noUseKeys}
         </div>
       </div>
       <div className="bean_barrge_info">
