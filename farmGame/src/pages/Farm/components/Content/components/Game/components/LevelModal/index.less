@@ -1,0 +1,101 @@
+.levelModal_title {
+  width: 100vw;
+  font-size: 48px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #ffef6e;
+  line-height: 60px;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.levelModal_content {
+  width: 540px;
+  height: 738px;
+  margin: 32px auto 0;
+  overflow: hidden;
+  .levelModal_level {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333333;
+    line-height: 28px;
+    text-align: center;
+    margin-top: 384px;
+  }
+  .prizeProgress {
+    width: 400px;
+    height: 20px;
+    background: rgba(#389c40, 0.1);
+    border-radius: 10px;
+    position: relative;
+    margin: 84px auto 0;
+    .prizeProgress_line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      max-width: 100%;
+      height: 100%;
+      background: #389c40;
+      border-radius: 10px;
+    }
+    .prizeProgress_circle {
+      position: absolute;
+      top: -20px;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      .prizeProgress_item {
+        &:nth-child(1) {
+          margin-left: 110px;
+        }
+        &:nth-child(2) {
+          margin-left: 80px;
+        }
+        width: 40px;
+        height: 40px;
+        background: #3a9c3d;
+        border-radius: 100%;
+      }
+      .prizeProgress_img {
+        width: 60px;
+        height: 60px;
+        background: #ffffff;
+        border: 2px solid #3a9c3d;
+        margin-left: 80px;
+        border-radius: 100%;
+      }
+    }
+  }
+  .prizeProgress_level {
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    margin: 30px auto 0;
+    font-size: 24px;
+    font-weight: 400;
+    color: #999999;
+    line-height: 24px;
+  }
+  .levelModal_button {
+    width: 360px;
+    height: 60px;
+    background: #ef476f;
+    border-radius: 30px;
+    font-size: 28px;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 64px auto 0;
+  }
+}
+.levelModal_bg0 {
+  background: url(~@/asstes/common/levelModalbg0.png) no-repeat center/100% 100%;
+}
+.levelModal_bg1 {
+  background: url(~@/asstes/common/levelModalbg1.png) no-repeat center/100% 100%;
+}

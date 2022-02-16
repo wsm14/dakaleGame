@@ -96,6 +96,7 @@ function index(props) {
           break;
         } else if (condition[i] < nowTime && nowTime <= condition[i + 1]) {
           lastTime = condition[i + 1];
+          console.log(condition[i], condition[i]);
           //判断请求的时间和下一阶段时间是否一致
           if (extraParam != condition[i]) {
             downTask(strapId, condition[i]);

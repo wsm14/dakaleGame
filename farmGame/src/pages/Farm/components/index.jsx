@@ -25,7 +25,11 @@ const index = () => {
   };
   return (
     <>
-      {imgFlag ? <Content></Content> : <Loading current={state} total={imgList.length}></Loading>}
+      {imgFlag ? (
+        <Content imgObj={imgObj}></Content>
+      ) : (
+        <Loading current={state} total={imgList.length}></Loading>
+      )}
     </>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'umi';
 import './index.less';
 import { Button, Toast } from 'antd-mobile';
 import SwiperReceive from './components/SwiperReceive';
@@ -15,8 +16,9 @@ function index(props) {
     gameDetail = {}, //详情数据
     getGameDetail, //获取详情接口
   } = props;
-
-  const { cardList = [] } = gameDetail;
+  const { addressObj } = useSelector((state) => state.collectCards); //商品信息  地址信息
+  const dispatch = useDispatch();
+  const { cardList = [], addressInfo = {} } = gameDetail;
   const [cardInfo, setCardInfo] = useState({});
   const [barrageList, setBarrageList] = useState([]); //游戏弹幕
   const cardLength = Object.keys(cardInfo).length;
@@ -70,7 +72,7 @@ function index(props) {
       <Cloud></Cloud>
 
       {/* 确认地址弹窗 */}
-      {/* <AddressModal></AddressModal> */}
+      <AddressModal addressInfo={addressInfo}></AddressModal>
     </div>
   );
 }

@@ -5,13 +5,15 @@ import { Button, Toast } from 'antd-mobile';
 import TitleBlock from '@/components/TitleBlock';
 import SwiperReceive from './components/SwiperReceive';
 import ScrollGoods from './components/ScrollGoods';
+import OrderModal from '@/components/OrderModal';
 import { fetchListGameRewardBarrage } from '@/services/game';
-import homePic from '@public/usual/homePic.png';
+import checkTitle from '@/asstes/image/checkTitle.png';
 
 function index(props) {
   const { homeDetail, packageObj } = useSelector((state) => state.receiveGoods);
   const dispatch = useDispatch();
   const [barrageList, setBarrageList] = useState([]); //游戏弹幕
+  const [orderVisible, setOrderVisible] = useState(false);
   const {
     freeGoodList = [], //商品列表
   } = homeDetail;
@@ -22,17 +24,13 @@ function index(props) {
 
   const checkGoods = () => {
     if (Object.keys(packageObj).length) {
-      dispatch({
-        type: 'receiveGoods/save',
-        payload: {
-          orderVisible: true,
-        },
-      });
+      setOrderVisible(true);
     } else {
       Toast.show({
         content: '请选择商品',
       });
     }
+    setOrderVisible(true);
   };
 
   const getBrrageList = async () => {
@@ -47,7 +45,7 @@ function index(props) {
       {/* 规则 */}
       <TitleBlock></TitleBlock>
       <div className="checkGoods_tips">
-        <img src={homePic} alt="" />
+        <img src={checkTitle} alt="" />
       </div>
       {/*左滑*/}
       <ScrollGoods list={freeGoodList}></ScrollGoods>
@@ -59,6 +57,13 @@ function index(props) {
       </div>
       {/* 领取轮播 */}
       <SwiperReceive list={barrageList}></SwiperReceive>
+      {/* 确认弹窗 */}
+      <OrderModal
+        visible={orderVisible}
+        onClose={() => {
+          setOrderVisible(false);
+        }}
+      ></OrderModal>
     </div>
   );
 }

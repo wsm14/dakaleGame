@@ -1,7 +1,7 @@
 // import { fetchFreeGoodMainPage } from '@/services/game';
 
 const LoginForm = {
-  namespace: 'receiveGoods',
+  namespace: 'collectCards',
 
   state: {
     type: 'loding', //页面的显示  loading-加载页面 checkGoods-选择商品页面  startSupply--开始补给   game-游戏

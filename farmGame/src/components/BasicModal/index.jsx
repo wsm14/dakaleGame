@@ -2,10 +2,10 @@ import React from 'react';
 import './index.less';
 import { Mask } from 'antd-mobile-v5';
 import { useDispatch } from 'umi';
-import closeIcon from '@public/closeIcon.png';
+import closeIcon from '@/asstes/image/close.png';
 
 function index(props) {
-  const { children, modalProps } = props;
+  const { children, modalProps = {} } = props;
   const { onClose } = modalProps;
   return (
     <>

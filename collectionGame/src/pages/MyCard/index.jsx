@@ -16,8 +16,15 @@ import { cobyInfo } from '@/utils/utils';
 import CloseModal from './components/CloseModal';
 import ShareModal from '@/components/ShareModal';
 import DownModal from './components/DownModal';
+import TipsModal from './components/TipsModal';
 
 import lantern from '@public/loading/lantern.png';
+import exchange from '@public/image/exchange.png';
+import card0 from '@public/image/card0.png';
+import card1 from '@public/image/card1.png';
+import card2 from '@public/image/card2.png';
+import card3 from '@public/image/card3.png';
+import card4 from '@public/image/card4.png';
 
 function index() {
   const [cardDetail, setCardDetail] = useState({}); //整体信息
@@ -25,6 +32,7 @@ function index() {
   const [visible, setVisible] = useState(false); //合成福卡弹窗
   const [shareVisible, setShareVisible] = useState({ show: false }); //转赠弹窗
   const [downVisible, setDownVisible] = useState(false); //小程序转赠弹窗
+  const [tipsVisible, setTipsVisible] = useState(false);
 
   useEffect(() => {
     getCardDetail();
@@ -208,6 +216,46 @@ function index() {
 
             {/*  */}
           </div>
+          <div className="exchangeCard">
+            <img src={exchange} alt="" className="exchangeCard_titleImg" />
+            <div className="exchangeCard_list">
+              <div className="exchangeCard_goodsImg"></div>
+              <div className="exchangeCard_goodsName">电商品名称</div>
+              <div className="exchangeCard_line"></div>
+              <div className="exchangeCard_bottom">
+                <div className="exchangeCard_cards">
+                  <div className="exchangeCard_item">
+                    <img src={card0} alt="" />
+                    <div>1</div>
+                  </div>
+                  <div className="exchangeCard_item">
+                    <img src={card1} alt="" />
+                    <div>1</div>
+                  </div>
+                  <div className="exchangeCard_item">
+                    <img src={card2} alt="" />
+                    <div>1</div>
+                  </div>
+                  <div className="exchangeCard_item">
+                    <img src={card3} alt="" />
+                    <div>1</div>
+                  </div>
+                  <div className="exchangeCard_item">
+                    <img src={card4} alt="" />
+                    <div>1</div>
+                  </div>
+                </div>
+                <div
+                  className="exchangeCard_button"
+                  onClick={() => {
+                    setTipsVisible(true);
+                  }}
+                >
+                  兑换0/1
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -236,6 +284,14 @@ function index() {
           setDownVisible(false);
         }}
       ></DownModal>
+
+      {/*是否兑换弹窗  */}
+      <TipsModal
+        visible={tipsVisible}
+        onClose={() => {
+          setTipsVisible(false);
+        }}
+      ></TipsModal>
       <Cloud></Cloud>
     </>
   );

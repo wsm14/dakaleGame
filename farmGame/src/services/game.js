@@ -104,3 +104,34 @@ export async function fetchListGameRewardBarrage(params) {
     params,
   });
 }
+
+//权益商品
+export const fetchUserShareCommission = (params) => {
+  return request('/user/userInfo/getUserShareCommission', {
+    params,
+  });
+};
+//签到补签
+
+export function fetchFilterType(params, headerOther) {
+  return request('/user/specialGoods/listSpecialGoodsByFilterType', {
+    params,
+    headerOther,
+  });
+}
+//爆品福利
+
+export function fetchSelfTourGoods(params, headerOther) {
+  return request('/user/specialGoods/getSelfTourGoods', {
+    params,
+    headerOther,
+  });
+}
+//周边游玩
+
+export const fetchRightGoods = (params, headerOther) => {
+  return request('/user/rightGoods/rightGoodsList', {
+    params,
+    headerOther,
+  });
+};

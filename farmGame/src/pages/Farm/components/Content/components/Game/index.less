@@ -1,0 +1,43 @@
+.content_scene {
+  width: 100%;
+  height: 1260px;
+}
+
+.messageTips {
+  width: 180px;
+  height: 108px;
+  background: url(~@/asstes/image/messageTips.png) no-repeat center / 100% 100%;
+  font-size: 20px;
+  font-weight: 500;
+  color: #399c3f;
+  line-height: 20px;
+  position: absolute;
+  right: 70px;
+  top: 490px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: left 1s linear forwards;
+}
+
+@keyframes left {
+  0% {
+    width: 0;
+    transform: scaleY(0);
+  }
+  100% {
+    width: 180px;
+    transform: scaley(1);
+  }
+}
+
+.myFertilizer {
+  width: 100vw;
+  font-size: 28px;
+  font-weight: 500;
+  color: #9c5108;
+  line-height: 28px;
+  position: absolute;
+  top: 1120px;
+  text-align: center;
+}

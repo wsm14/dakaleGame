@@ -14,22 +14,15 @@ import rightPng from '@public/right.png';
 import { set } from '@umijs/deps/compiled/lodash';
 
 function index(props) {
-  const { visible = false, onClose, query = {}, pageFlag, getHomeDetail, time } = props;
-  const { packageObj = {}, addressObj, homeDetail } = useSelector((state) => state.receiveGoods); //商品信息  地址信息
-  const { gameInfo = {} } = homeDetail;
-  const { addressId, processId } = gameInfo;
-
+  const { visible = false, onClose, getHomeDetail } = props;
+  const { packageObj = {}, addressObj } = useSelector((state) => state.receiveGoods); //商品信息  地址信息
   const dispatch = useDispatch();
 
   const addressLength = Object.keys(addressObj).length;
+
   useEffect(() => {
-    if (time) {
-      !addressLength && getAddress();
-      if (!addressId && processId) {
-        getGoodsDetail();
-      }
-    }
-  }, [time, addressId, processId]);
+    !addressLength && getAddress();
+  }, []);
   //获取默认地址
   const getAddress = async () => {
     const res = await fetchUserDefaultAddress();
@@ -56,7 +49,7 @@ function index(props) {
 
   const confirmAddress = async () => {
     if (addressLength) {
-      if (!addressId && processId) {
+      if (processId) {
         const { userAddressId } = addressObj;
         const res = await fetchFreeGoodSetRewardAddress({
           gameProcessId: processId,

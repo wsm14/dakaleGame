@@ -9,11 +9,11 @@ import address from '@public/image/address.png';
 import rightPng from '@public/image/right.png';
 
 function index(props) {
-  const { onClose, getHomeDetail } = props;
-  const { addressObj, orderVisible } = useSelector((state) => state.receiveGoods); //商品信息  地址信息
-
+  const { onClose, getHomeDetail, addressInfo } = props;
+  const { addressObj, orderVisible } = useSelector((state) => state.collectCards); //商品信息  地址信息
   const dispatch = useDispatch();
 
+  //获取是否有选择的地址
   const addressLength = Object.keys(addressObj).length;
   useEffect(() => {
     if (orderVisible) {
@@ -22,12 +22,9 @@ function index(props) {
   }, [orderVisible]);
   //获取默认地址
   const getAddress = async () => {
-    const res = await fetchUserDefaultAddress();
-    const { content = {} } = res;
-    const { userAddressInfo = {} } = content;
     dispatch({
-      type: 'receiveGoods/save',
-      payload: { addressObj: userAddressInfo },
+      type: 'collectCards/save',
+      payload: { addressObj: addressInfo },
     });
   };
 
@@ -47,7 +44,6 @@ function index(props) {
         });
         getHomeDetail();
       } else {
-        onClose();
         dispatch({
           type: 'receiveGoods/save',
           payload: {
