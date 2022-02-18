@@ -6,6 +6,7 @@
   flex-direction: column;
   align-items: center;
   overflow: hidden;
+  position: relative;
   .SuccessModal_title {
     font-size: 32px;
     font-weight: 600;
@@ -14,11 +15,13 @@
     margin-top: 180px;
   }
   .SuccessModal_info {
+    width: 180px;
     font-size: 28px;
     font-weight: 500;
     color: #666666;
-    line-height: 28px;
+    line-height: 36px;
     margin-top: 24px;
+    text-align: center;
   }
   .SuccessModal_image {
     width: 250px;
@@ -38,9 +41,10 @@
     margin-top: 24px;
   }
   .SuccessModal_bottom {
-    margin-top: 120px;
     width: 100%;
     padding: 0 58px;
+    position: absolute;
+    bottom: 40px;
     display: flex;
     justify-content: space-between;
   }

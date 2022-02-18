@@ -9,48 +9,30 @@ import address from '@public/image/address.png';
 import rightPng from '@public/image/right.png';
 
 function index(props) {
-  const { onClose, getHomeDetail, addressInfo } = props;
+  const { onClose, getHomeDetail, addressInfo, visible } = props;
   const { addressObj, orderVisible } = useSelector((state) => state.collectCards); //商品信息  地址信息
   const dispatch = useDispatch();
 
   //获取是否有选择的地址
   const addressLength = Object.keys(addressObj).length;
   useEffect(() => {
-    if (orderVisible) {
+    if (visible) {
       !addressLength && getAddress();
     }
-  }, [orderVisible]);
+  }, [visible]);
   //获取默认地址
   const getAddress = async () => {
+    let addressCopy = addressInfo.addressInfo;
+    addressCopy = (addressCopy && JSON.parse(addressCopy)) || {};
     dispatch({
       type: 'collectCards/save',
-      payload: { addressObj: addressInfo },
+      payload: { addressObj: addressCopy },
     });
   };
 
   const confirmAddress = async () => {
     if (addressLength) {
-      if (!addressId && processId) {
-        const { userAddressId } = addressObj;
-        const res = await fetchFreeGoodSetRewardAddress({
-          gameProcessId: processId,
-          addressId: userAddressId,
-        });
-        dispatch({
-          type: 'receiveGoods/save',
-          payload: {
-            orderVisible: false,
-          },
-        });
-        getHomeDetail();
-      } else {
-        dispatch({
-          type: 'receiveGoods/save',
-          payload: {
-            type: 'startSupply',
-          },
-        });
-      }
+      onClose();
     } else {
       Toast.show({
         content: '请填写收货地址',
@@ -59,7 +41,7 @@ function index(props) {
   };
   return (
     <>
-      <Mask visible={orderVisible} onMaskClick={onClose} opacity="0.8">
+      <Mask visible={visible} onMaskClick={onClose} opacity="0.8">
         <div className="overlay">
           <div className="overlayContent">
             <div className="overlayContent_title">确认订单</div>

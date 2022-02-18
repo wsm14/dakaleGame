@@ -21,6 +21,7 @@ function index(props) {
   const { cardList = [], addressInfo = {} } = gameDetail;
   const [cardInfo, setCardInfo] = useState({});
   const [barrageList, setBarrageList] = useState([]); //游戏弹幕
+  const [addressVisible, setAddressVisible] = useState(false);
   const cardLength = Object.keys(cardInfo).length;
 
   useEffect(() => {
@@ -43,10 +44,15 @@ function index(props) {
 
   //确认按钮
   const cardsOk = async () => {
-    const res = await fetchBeginGatherGame({
-      identification: cardInfo.identification,
-    });
-    getGameDetail();
+    if (Object.keys(addressObj).length) {
+      const res = await fetchBeginGatherGame({
+        identification: cardInfo.identification,
+        addressIdStr: addressObj.userAddressId,
+      });
+      getGameDetail();
+    } else {
+      setAddressVisible(true);
+    }
   };
 
   return (
@@ -72,7 +78,13 @@ function index(props) {
       <Cloud></Cloud>
 
       {/* 确认地址弹窗 */}
-      <AddressModal addressInfo={addressInfo}></AddressModal>
+      <AddressModal
+        addressInfo={addressInfo}
+        visible={addressVisible}
+        onClose={() => {
+          setAddressVisible(false);
+        }}
+      ></AddressModal>
     </div>
   );
 }

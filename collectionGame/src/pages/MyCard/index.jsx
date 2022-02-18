@@ -12,7 +12,8 @@ import {
 } from '@/services/game';
 import { formatTime } from '@/utils/utils';
 import { linkToMyGoods, deviceName } from '@/utils/birdgeContent';
-import { cobyInfo } from '@/utils/utils';
+import { cobyInfo, reloadTab } from '@/utils/utils';
+
 import CloseModal from './components/CloseModal';
 import ShareModal from '@/components/ShareModal';
 import DownModal from './components/DownModal';
@@ -32,15 +33,17 @@ function index() {
   const [visible, setVisible] = useState(false); //合成福卡弹窗
   const [shareVisible, setShareVisible] = useState({ show: false }); //转赠弹窗
   const [downVisible, setDownVisible] = useState(false); //小程序转赠弹窗
-  const [tipsVisible, setTipsVisible] = useState(false);
+  const [tipsVisible, setTipsVisible] = useState(false); //兑换弹窗
+  const [exchangeItem, setExchangeItem] = useState({});
 
   useEffect(() => {
     getCardDetail();
+    reloadTab(getCardDetail);
   }, []);
 
   const getCardDetail = async () => {
     const res = await fetchGatherGetMyHarvest();
-    const { cardList = [] } = res.content;
+    const { cardList = [] } = res?.content;
     //获取福卡
     const lastChild = cardList.pop();
     if (lastChild.hasNums > 0) {
@@ -113,6 +116,7 @@ function index() {
     cardList = [],
     prizeOpenTime, //开奖时间
     totalLuckCard, //多少人集齐
+    rewardList = [], //兑换商品信息
   } = cardDetail;
 
   const {
@@ -134,7 +138,9 @@ function index() {
       <TitleBlock type="title" back={goBack}></TitleBlock>
       <div className="myCard">
         {/* 上方图片 */}
-        <div className="myCard_topImg">{/* <img src={lantern} alt="" /> */}</div>
+        <div className="myCard_topImg" onClick={myRecord}>
+          <img src={lantern} alt="" />
+        </div>
         {/* 下方内容 */}
         <div className="myCard_content">
           {/* 我的福豆 */}
@@ -218,43 +224,38 @@ function index() {
           </div>
           <div className="exchangeCard">
             <img src={exchange} alt="" className="exchangeCard_titleImg" />
-            <div className="exchangeCard_list">
-              <div className="exchangeCard_goodsImg"></div>
-              <div className="exchangeCard_goodsName">电商品名称</div>
-              <div className="exchangeCard_line"></div>
-              <div className="exchangeCard_bottom">
-                <div className="exchangeCard_cards">
-                  <div className="exchangeCard_item">
-                    <img src={card0} alt="" />
-                    <div>1</div>
-                  </div>
-                  <div className="exchangeCard_item">
-                    <img src={card1} alt="" />
-                    <div>1</div>
-                  </div>
-                  <div className="exchangeCard_item">
-                    <img src={card2} alt="" />
-                    <div>1</div>
-                  </div>
-                  <div className="exchangeCard_item">
-                    <img src={card3} alt="" />
-                    <div>1</div>
-                  </div>
-                  <div className="exchangeCard_item">
-                    <img src={card4} alt="" />
-                    <div>1</div>
-                  </div>
+            {rewardList.map((item) => (
+              <div className="exchangeCard_list" key={item.identification}>
+                <div className="exchangeCard_goodsImg">
+                  <img src={item.prizeImg} alt="" />
                 </div>
-                <div
-                  className="exchangeCard_button"
-                  onClick={() => {
-                    setTipsVisible(true);
-                  }}
-                >
-                  兑换0/1
+                <div className="exchangeCard_goodsName">{item.prizeName}</div>
+                <div className="exchangeCard_line"></div>
+                <div className="exchangeCard_bottom">
+                  <div className="exchangeCard_cards">
+                    {(item.conditions || []).map((item, index) => (
+                      <div className="exchangeCard_item">
+                        <img src={[card0, card1, card2, card3, card4][index]} alt="" />
+                        <div>{item.needNums}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div
+                    className={`exchangeCard_button ${
+                      item.prizeStatus === '1' ? 'exchangeCard_button1' : 'exchangeCard_button2'
+                    }`}
+                    onClick={() => {
+                      if (item.prizeStatus === '1') {
+                        setExchangeItem(item);
+                        setTipsVisible(true);
+                      }
+                    }}
+                  >
+                    {item.prizeStatus === '1' || item.prizeStatus === '0' ? '兑换0/1' : '已兑换'}
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -291,6 +292,8 @@ function index() {
         onClose={() => {
           setTipsVisible(false);
         }}
+        data={exchangeItem}
+        getCardDetail={getCardDetail}
       ></TipsModal>
       <Cloud></Cloud>
     </>

@@ -1,0 +1,63 @@
+.footPrint {
+  width: 100%;
+  min-height: 100%;
+  background: url(~@/asstes/common/footBac.png) no-repeat;
+  background-size: cover;
+  .footPrint_titleImg {
+    text-align: center;
+    padding-top: 147px;
+    img {
+      width: 284px;
+      height: 84px;
+    }
+  }
+  .footPrint_content {
+    width: 750px;
+    height: 1050px;
+    background: url(~@/asstes/common/footBook.png) no-repeat center / 100% 100%;
+    margin-top: 37px;
+    .footPrint_padding {
+      display: flex;
+      flex-direction: column;
+      height: 850px;
+      padding: 80px 0 0 140px;
+      flex-wrap: wrap;
+      align-content: baseline;
+    }
+    .footPrint_item {
+      width: 200px;
+      height: 356px;
+      background: #d1e8ff;
+      box-shadow: 4px 4px 8px 0px rgba(222, 187, 109, 0.4);
+      border-radius: 20px;
+      border: 10px solid #ffffff;
+      margin: 0 40px 20px 0;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        animation: 1s;
+      }
+    }
+    .footPrint_button {
+      display: flex;
+      padding-left: 165px;
+      div {
+        width: 150px;
+        height: 60px;
+        background: #eac06f;
+        box-shadow: 0px 5px 0px 0px #ffebc5;
+        border-radius: 30px;
+        font-size: 28px;
+        font-weight: 500;
+        color: #ffffff;
+        line-height: 28px;
+        text-align: center;
+        line-height: 60px;
+        &:nth-child(2) {
+          margin-left: 90px;
+        }
+      }
+    }
+  }
+}

@@ -3,10 +3,11 @@ import BeanCardModal from '@/components/BeanCardModal';
 import CheckCards from './components/CheckCards';
 import GetCards from './components/GetCards';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { fetchGatherReceiveOthersCard } from '@/services/game';
+import { fetchGatherReceiveOthersCard, fetchExchangeReward } from '@/services/game';
 import { useUpdateEffect } from 'ahooks';
 import { useLocation } from 'umi';
 import './index.less';
+import { Toast } from 'antd-mobile';
 
 const index = forwardRef((props, ref) => {
   const { gameDetail, getGameDetail, loadFlag } = props;
@@ -22,12 +23,9 @@ const index = forwardRef((props, ref) => {
     getOtherCard();
   }, [loadFlag, gameBeginFlag]);
 
-  // useUpdateEffect(() => {
-  //   console.log('useEffect2', shareCardList);
-  //   if (shareCardList.length) {
-  //     setCardList([...cardList, shareCardList[0]]);
-  //   }
-  // }, [loadFlag]);
+  useEffect(() => {
+    HelpOthers();
+  }, []);
 
   useEffect(() => {
     console.log(cardList.length, 'length');
@@ -36,13 +34,38 @@ const index = forwardRef((props, ref) => {
     }
   }, [cardList.length]);
 
+  //助力他人
+
+  const HelpOthers = async () => {
+    const { query = {} } = location;
+    const { userId, relateId, commandType } = query;
+    if (commandType === 'gatherExchangeHelp') {
+      const res = await fetchExchangeReward({
+        identification: relateId,
+        shareUserIdStr: userId,
+      });
+      if (res.success) {
+        Toast.show({
+          content: '助力成功',
+        });
+      }
+    }
+  };
+
   //获取他人赠送的福卡
 
   const getOtherCard = async () => {
     let list = cardList;
     const { query = {} } = location;
-    const { userId, command, relateId } = query;
-    if (userId && command && relateId && gameBeginFlag === '1' && !ref.current) {
+    const { userId, command, relateId, commandType } = query;
+    if (
+      userId &&
+      command &&
+      relateId &&
+      gameBeginFlag === '1' &&
+      !ref.current &&
+      commandType === 'luckCardGiveOther'
+    ) {
       const res = await fetchGatherReceiveOthersCard({
         identification: relateId,
         command,

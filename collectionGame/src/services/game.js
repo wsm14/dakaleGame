@@ -105,3 +105,19 @@ export async function fetchShareGetNewShareInfo(params) {
     params,
   });
 }
+
+//post 集碎片 - 预兑换奖品
+export async function fetchPreExchangeReward(data) {
+  return request('/user/game/gather/preExchangeReward', {
+    method: 'POST',
+    data,
+  });
+}
+
+//post 集碎片 - 兑换礼品
+export async function fetchExchangeReward(data) {
+  return request('/user/game/gather/exchangeReward', {
+    method: 'POST',
+    data,
+  });
+}

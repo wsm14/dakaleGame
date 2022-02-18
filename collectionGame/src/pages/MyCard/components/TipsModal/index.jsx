@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
 import BasicModal from '@/components/BasicModal';
 import SuccessModal from '../SuccessModal';
-import card0 from '@public/image/card0.png';
+import { fetchPreExchangeReward } from '@/services/game';
 
 import './index.less';
 
 function index(props) {
-  const { visible, onClose } = props;
+  const { visible, onClose, data, getCardDetail } = props;
   const [exchangeVisible, setExchangeVisible] = useState(false);
   const modalProps = {
     visible: visible,
     onClose,
     opacity: 0.8,
+  };
+
+  const exchangePre = async () => {
+    const res = await fetchPreExchangeReward({
+      identification: data.identification,
+    });
+    getCardDetail();
+    if (res.success) {
+      onClose();
+      setExchangeVisible(true);
+    }
   };
   return (
     <>
@@ -20,13 +31,12 @@ function index(props) {
           <div className="TipsModal_title">温馨提示</div>
           <div className="TipsModal_info">确定要兑换吗</div>
           <div className="TipsModal_image">
-            <img src={card0} alt="" />
+            <img src={data.prizeImg} alt="" />
           </div>
           <div
             className="TipsModal_button"
             onClick={() => {
-              onClose();
-              setExchangeVisible(true);
+              exchangePre();
             }}
           >
             立即兑换
@@ -40,6 +50,7 @@ function index(props) {
         onClose={() => {
           setExchangeVisible(false);
         }}
+        data={data}
       ></SuccessModal>
     </>
   );

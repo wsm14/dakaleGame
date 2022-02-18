@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+// get 卡豆农场 - 首页
+export async function fetchFarmMainPage(params) {
+  return request('/user/game/farm/mainPage', {
+    params,
+  });
+}
+
 // get 免费领商品游戏 - 首页
 export async function fetchFreeGoodMainPage(params) {
   return request('/user/game/freeGood/mainPage', {

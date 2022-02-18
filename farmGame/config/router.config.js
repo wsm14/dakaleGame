@@ -1,7 +1,7 @@
 export default [
   {
     path: '/index',
-    name: '选商品',
+    name: '卡豆农场',
     component: './Farm',
   },
   {
@@ -9,14 +9,20 @@ export default [
     name: '收货地址',
     component: './Address',
   },
-  {
-    path: '/rule',
-    name: '规则',
-    component: './Rule',
-  },
+
   {
     path: '/farm',
-    name: '首页',
+    name: '卡豆农场',
     component: './Farm',
+  },
+  {
+    path: '/footer',
+    name: '我的足迹',
+    component: './FootPrint',
+  },
+  {
+    path: '/demo',
+    name: '我的足迹',
+    component: './Demo',
   },
 ];

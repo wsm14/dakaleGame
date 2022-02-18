@@ -15,7 +15,7 @@ import { deviceName } from '@/utils/birdgeContent';
 function index() {
   const [addressList, setAddressList] = useState([]); //地址列表
   const [addressBol, setAddressBol] = useState(true);
-  const { addressObj } = useSelector((state) => state.receiveGoods); //地址的数据
+  const { addressObj } = useSelector((state) => state.collectCards); //地址的数据
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function index() {
 
   const checkAddress = (item) => {
     dispatch({
-      type: 'receiveGoods/fetchSetAddressObj',
+      type: 'collectCards/fetchSetAddressObj',
       payload: {
         addressObj: item,
       },
