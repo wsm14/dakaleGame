@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Drawer from '@/components/drawer';
 import classNames from 'classnames';
 import { fetchTaskList, fetchTaskReward } from '@/server/registerServers';
-import { linkTo, deviceName } from '@/utils/birdgeContent';
+import { linkTo, deviceName, getUrlKey } from '@/utils/birdgeContent';
 import { fetchCommand } from '@/server/registerServers';
 import './index.less';
 import { toast, cobyInfo, reloadTab } from '@/utils/utils';
@@ -163,7 +163,7 @@ export default (props) => {
   };
   const fetchTask = () => {
     fetchTaskList({
-      source: deviceName() === 'miniProgram' ? 'miniGroup' : 'app',
+      source: deviceName() === 'miniProgram' ? getUrlKey('device') || 'miniClock' : 'app',
       token,
       gameName: 'signGame',
     }).then((val) => {

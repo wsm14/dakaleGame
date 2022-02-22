@@ -1,5 +1,13 @@
 import native from './bridge';
 import { toast } from './utils';
+export const getUrlKey = (key) => {
+  return native.getUrlKey(key);
+};
+export const filterFacility = (obj) => {
+  let key = native.getUrlKey('device') || 'wechat';
+  return obj[key];
+};
+//根据不同小程序映射对应页面
 export const hideTitle = (data) => {
   try {
     native.nativeInit('hideTitle');
@@ -23,9 +31,14 @@ export const linkTo = (data) => {
 export const linkRule = () => {
   if (native.getPhone() === 'miniProgram') {
     native.nativeInit('linkTo', {
-      wechat: {
-        url: `/pages/share/webView/index?link=https://resource-new.dakale.net/product/html/active/771c4177-4995-4735-9537-376a674bb083.html`,
-      },
+      wechat: filterFacility({
+        wechat: {
+          url: `/pages/share/webView/index?link=https://resource-new.dakale.net/product/html/active/771c4177-4995-4735-9537-376a674bb083.html`,
+        },
+        mark: {
+          url: `/pages/Other/WebView/index?url=https://resource-new.dakale.net/product/html/active/771c4177-4995-4735-9537-376a674bb083.html`,
+        },
+      }),
     });
   } else {
     window.location.href =
@@ -58,6 +71,27 @@ export const getToken = (fn) => {
   } catch (e) {}
 };
 //获取token
+export const shopDetails = (ownerIdString, specialActivityIdString) => {
+  linkTo({
+    ios: {
+      path: 'DKLAroundDiscountGoodsDetailViewController',
+      param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
+    },
+    android: {
+      path: 'AroundGood',
+      specialActivityId: specialActivityIdString,
+      ownerId: ownerIdString,
+    },
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
+      },
+      mark: {
+        url: `/pages/Dakale/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
+      },
+    }),
+  });
+};
 export const getLogin = () => {
   if (native.getPhone() === 'miniProgram') {
     native.nativeInit('linkTo', {
@@ -118,9 +152,15 @@ export const linkToCoupon = () => {
     android: {
       path: 'MyCoupon',
     },
-    wechat: {
-      url: `/pages/coupon/wraparound/index`,
-    },
+
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/coupon/wraparound/index`,
+      },
+      mark: {
+        url: `/pages/Dakale/wraparound/index`,
+      },
+    }),
   });
 };
 //券包
@@ -132,9 +172,14 @@ export const linkToWallet = () => {
     android: {
       path: 'myBeanBalancePage',
     },
-    wechat: {
-      url: `/pages/newUser/wallet/index`,
-    },
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/newUser/wallet/index`,
+      },
+      mark: {
+        url: `/pages/Dakale/rewardDetails/index`,
+      },
+    }),
   });
 };
 //卡豆钱包
@@ -150,9 +195,15 @@ export const linkToPrize = () => {
       path: 'ScanClockPrize',
       type: 'gameSign',
     },
-    wechat: {
-      url: `/pages/blindBox/gamePrize/index?channel=gameSign`,
-    },
+
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/blindBox/gamePrize/index?channel=gameSign`,
+      },
+      mark: {
+        url: `/pages/Other/MyPrize/index?channel=gameSign`,
+      },
+    }),
   });
 };
 //我的奖品
@@ -243,9 +294,14 @@ export const nativeOneVideo = () => {
       path: 'AdvertisementVideoContainer',
       nativeTask: 'game_to_watch_video_once',
     },
-    wechat: {
-      url: `/pages/perimeter/nearVideo/index?type=goods&blindBox=true`,
-    },
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/perimeter/nearVideo/index?type=goods&blindBox=true`,
+      },
+      mark: {
+        url: `/pages/Dakale/taskVideo/index?type=goods&blindBox=true`,
+      },
+    }),
   });
 };
 export const openWx = () => {
@@ -282,6 +338,34 @@ export const closeAnimate = () => {
   } catch (e) {}
 };
 //关闭安卓动画
+
+export const linkToWechatShare = () => {
+  linkTo({
+    wechat: {
+      url: `/pages/share/gameHelp/index?subType=blindBoxHelp`,
+    },
+  });
+};
+//签到助力
+export const linkToShopActive = () => {
+  linkTo({
+    ios: {
+      path: 'DKLExquisiteChosenHomeViewController',
+    },
+    android: {
+      path: 'ShopAround',
+    },
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/perimeter/goodThings/index`,
+      },
+      mark: {
+        url: `/pages/Dakale/goodThings/index`,
+      },
+    }),
+  });
+};
+//跳转精彩好物
 export const linkToPhone = () => {
   try {
     linkTo({

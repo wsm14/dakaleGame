@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import Mask from '@/components/mask';
 import { backgroundObj, filterStrList } from '@/utils/utils';
-import {
-  linkToCoupon,
-  linkToWallet,
-  linkToPrize,
-  nativeOneVideo,
-  linkTo,
-} from '@/utils/birdgeContent';
+import { linkToCoupon, linkToPrize, nativeOneVideo, linkToShopActive } from '@/utils/birdgeContent';
 import './index.less';
 export default (props) => {
   const { show, onClose, data = {}, onOpenCoby } = props;
@@ -26,7 +20,6 @@ export default (props) => {
     commerce: '恭喜您获得超级大奖',
     rightGood: '恭喜您获得霸王餐',
   }[prizeType];
-  console.log(data);
   const templateContent = {
     bean: (
       <div>
@@ -70,17 +63,7 @@ export default (props) => {
         <div
           className="blindPop_shop_bgBtn"
           onClick={() => {
-            linkTo({
-              ios: {
-                path: 'DKLExquisiteChosenHomeViewController',
-              },
-              android: {
-                path: 'ShopAround',
-              },
-              wechat: {
-                url: `/pages/perimeter/goodThings/index`,
-              },
-            });
+            linkToShopActive();
           }}
         >
           去使用抵扣

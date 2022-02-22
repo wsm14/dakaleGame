@@ -5,11 +5,18 @@ import { Swiper } from 'antd-mobile';
 import { backgroundObj, toast, cobyInfo, reloadTab, filterStrList } from '@/utils/utils';
 import classNames from 'classnames';
 import Pop from './components/blindPop';
-import { linkToCoupon, linkToWallet, linkToPrize, deviceName, linkTo } from '@/utils/birdgeContent';
+import {
+  linkToCoupon,
+  linkToWallet,
+  linkToPrize,
+  deviceName,
+  linkToWechatShare,
+} from '@/utils/birdgeContent';
 import CobyMask from '@/components/cobyMask';
 import Lottie from 'react-lottie';
 import animationData from './components/lottie/blindBox/data.json';
 import './index.less';
+import { Class } from 'hilojs';
 class Index extends React.Component {
   constructor() {
     super(...arguments);
@@ -40,11 +47,7 @@ class Index extends React.Component {
   }
   cobyOpenInfo() {
     if (deviceName() === 'miniProgram') {
-      linkTo({
-        wechat: {
-          url: `/pages/share/gameHelp/index?subType=blindBoxHelp`,
-        },
-      });
+      linkToWechatShare();
       return;
     }
     fetchCommand({
@@ -181,7 +184,7 @@ class Index extends React.Component {
               </div>
             </Swiper.Item>
             <Swiper.Item className="blind_key_left font_hide">
-              本期奖池：iPhone13、肯德基霸王…
+              本期奖池：iPhone13、肯德基霸王餐…
             </Swiper.Item>
           </Swiper>
           <div

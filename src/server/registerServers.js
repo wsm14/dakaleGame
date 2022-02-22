@@ -128,3 +128,11 @@ export function fetchTaskReward(data) {
   });
 }
 //领取任务奖励
+
+export function fakeOperatingLog(data) {
+  return request('/common/operatingLog/saveOperatingSystemLog', {
+    method: 'POST',
+    data,
+  });
+}
+// 埋点接口

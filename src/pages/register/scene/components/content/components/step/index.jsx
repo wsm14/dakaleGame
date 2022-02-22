@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { getUrlKey } from '@/utils/birdgeContent';
 import { history } from 'umi';
 import './index.less';
-export default () => {
+export default ({ data = [], show, close }) => {
   const [step, setStep] = useState(null);
   useEffect(() => {
-    let flag = window.localStorage.getItem('dakale_new');
-    if (!flag) {
-      setStep(0);
-      document.getElementsByTagName('body')[0].className = 'adm-overflow-hidden';
+    let flag =
+      data &&
+      data.filter((item) => {
+        return item.currentDayFlag === '1';
+      })[0];
+
+    if (flag && flag.signFlag === '1' && !show && !close) {
+      let flag = window.localStorage.getItem('dakale_new');
+      if (!flag) {
+        setStep(0);
+        document.getElementsByTagName('body')[0].className = 'adm-overflow-hidden';
+      }
     }
-  }, []);
+  }, [show, close]);
   const template = {
     0: (
       <div className="step_box step_box_child0">
@@ -60,7 +69,7 @@ export default () => {
             document.getElementsByTagName('body')[0].className = '';
             setStep(null);
             setTimeout(() => {
-              history.push('/blind');
+              history.push(`/blind?device=${getUrlKey('device') || 'wechat'}`);
             }, 1000);
           }}
         >

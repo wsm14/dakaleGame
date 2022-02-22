@@ -10,20 +10,20 @@ export default (props) => {
         <div className="imper_mask_top"></div>
         <div className="imper_mask_icon"></div>
         <div className="imper_mask_title">恭喜签到成功获得</div>
+        <div className="imper_mask_bean">{tomorrowBean}卡豆</div>
         <div
-          className="imper_mask_bean"
           onClick={() => {
-            onClose && onClose();
             linkTo({
               wechat: {
-                url: `/pages/share/gameHelp/index?subType=fillSign&fillSignTime=${date}`,
+                url: `/pages/share/ImperVideo/index`,
               },
             });
+            onClose && onClose();
           }}
+          className="kol_imper_btnBox"
         >
-          {tomorrowBean}卡豆
+          再领最高60卡豆
         </div>
-        <div className="kol_imper_btnBox">再领最高60卡豆</div>
       </div>
     </Mask>
   );

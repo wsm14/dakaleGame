@@ -8,7 +8,7 @@ import {
   fakefillSign,
   fetchCommand,
 } from '@/server/registerServers';
-import { deviceName, linkTo } from '@/utils/birdgeContent';
+import { deviceName, linkTo, getUrlKey } from '@/utils/birdgeContent';
 import { toast, cobyInfo } from '@/utils/utils';
 import Imper from './components/signSuccess';
 import day from 'dayjs';
@@ -24,6 +24,7 @@ export default (props) => {
     remindFlag,
     openCommond,
     tomorrowBean,
+    closeImper,
   } = props;
   const [checkFlag, setCheckFlag] = useState(false);
   const [time, setTime] = useState(0);
@@ -65,7 +66,7 @@ export default (props) => {
         await reload();
         await setTime(5);
         await onOpen();
-        if (deviceName() === 'miniProgram') {
+        if (deviceName() === 'miniProgram' && !getUrlKey('device')) {
           await setImperMask(true);
         }
       }
@@ -259,6 +260,7 @@ export default (props) => {
       <Imper
         onClose={() => {
           setImperMask(false);
+          closeImper(false);
         }}
         show={imperMask}
         tomorrowBean={tomorrowBean}

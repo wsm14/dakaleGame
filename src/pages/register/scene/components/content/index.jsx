@@ -27,7 +27,8 @@ import GrowPop from './components/growPop';
 import CobyMask from '@/components/cobyMask';
 import Step from './components/step';
 import BottomContent from './components/BottomContent';
-import { getToken } from '@/utils/birdgeContent';
+import { getToken, deviceName, getUrlKey } from '@/utils/birdgeContent';
+import Track from '@/components/tracking';
 import { toast, computedSeconds, pxComputed, reloadTab } from '@/utils/utils';
 import './index.less';
 let beanSprite = null;
@@ -39,6 +40,7 @@ let key = null;
 let stageObj = null;
 let token = '';
 export default ({ responent }) => {
+  const ref = useRef();
   const [visible, setVisible] = useState(false);
   const [packVisible, setPackVisible] = useState(false);
   const [eatVisible, setEatVisible] = useState(false);
@@ -54,6 +56,7 @@ export default ({ responent }) => {
   const [userInfo, setUserInfo] = useState({});
   const [gameData, setGameData] = useState({});
   const [packData, setPackData] = useState({});
+  const [imperVisible, setimperVisible] = useState(true);
   const [loseCreateTime, setCreateTime] = useState({
     timeLose: null,
     computedTime: 0,
@@ -205,20 +208,50 @@ export default ({ responent }) => {
     const blindBox = createBgInit(stageinfo, 7);
     eat.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
-      clickInEase(eat, () => setEatVisible(true));
+      clickInEase(eat, () => {
+        setEatVisible(true);
+        ref.current.setHandleOpen({
+          name: 'eat',
+          extraParams: JSON.stringify({
+            device: deviceName(),
+          }),
+        });
+      });
     });
     pack.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
-      clickInEase(pack, () => setPackVisible(true));
+      clickInEase(pack, () => {
+        ref.current.setHandleOpen({
+          name: 'pack',
+          extraParams: JSON.stringify({
+            device: deviceName(),
+          }),
+        });
+        setPackVisible(true);
+      });
     });
     grow.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
-      clickInEase(grow, () => setGrowVisible(true));
+      clickInEase(grow, () => {
+        ref.current.setHandleOpen({
+          name: 'grow',
+          extraParams: JSON.stringify({
+            device: deviceName(),
+          }),
+        });
+        setGrowVisible(true);
+      });
     });
     blindBox.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
       clickInEase(blindBox, () => {
-        history.push('/blind');
+        ref.current.setHandleOpen({
+          name: 'blind',
+          args: {
+            device: deviceName(),
+          },
+        });
+        history.push(`/blind?device=${getUrlKey('device') || 'wechat'}`);
       });
     });
   };
@@ -794,12 +827,12 @@ export default ({ responent }) => {
           toast('领取成功');
           fetchGame();
           setTimeout(() => {
-            history.push('/blind');
+            history.push(`/blind?device=${getUrlKey('device') || 'wechat'}`);
           }, 1000);
         }
       });
     } else {
-      history.push('/blind');
+      history.push(`/blind?device=${getUrlKey('device') || 'wechat'}`);
     }
   };
   return (
@@ -814,6 +847,9 @@ export default ({ responent }) => {
         tomorrowBean={tomorrowBean}
         remindFlag={remindFlag}
         openCommond={setCobyVisible}
+        closeImper={() => {
+          setimperVisible(false);
+        }}
         reloadRequest={() => {
           fetchPack();
         }}
@@ -927,7 +963,8 @@ export default ({ responent }) => {
         show={WorkVisible.visible}
       ></CobyMask>
       <BottomContent userInfo={userInfo}></BottomContent>
-      <Step></Step>
+      <Step show={imperVisible} close={visible} data={packData.signRecordInfo}></Step>
+      <Track cRef={ref}></Track>
     </div>
   );
 };

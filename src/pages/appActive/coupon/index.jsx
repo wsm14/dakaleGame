@@ -4,7 +4,7 @@ import {
   fetchUserAcquiredPlatformGift,
   fetchUserPopUpCommerceGoods,
 } from '@/server/appActiveServers';
-import { getToken, deviceName, linkToMember, linkToPhone, linkTo } from '@/utils/birdgeContent';
+import { getToken, linkToMember, linkToPhone, linkTo } from '@/utils/birdgeContent';
 import { backgroundObj } from '@/utils/utils';
 import './index.less';
 export default ({}) => {
