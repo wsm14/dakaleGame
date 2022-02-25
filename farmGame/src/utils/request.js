@@ -67,7 +67,7 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use(async (url, options) => {
-  let { data = {}, params = {}, method = 'get' } = options;
+  let { data = {}, params = {}, method = 'get', headerOther = {} } = options;
   switch (method) {
     case 'get':
       params = { ...params, token: sessionStorage.getItem('dakaleToken') };
@@ -88,6 +88,7 @@ request.interceptors.request.use(async (url, options) => {
     'Content-Type': 'application/json;charset=utf-8',
     Accept: 'application/json',
     appType: 'user',
+    ...headerOther,
   };
 
   return {

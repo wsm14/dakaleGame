@@ -7,7 +7,7 @@ export async function fetchUserDefaultAddress(params) {
   });
 }
 
-// get 查询用户默认地址
+// get 查询用户默认地址列表
 export async function fetchAddressListUserAddress(params) {
   return request('/user/user/address/listUserAddress', {
     params,

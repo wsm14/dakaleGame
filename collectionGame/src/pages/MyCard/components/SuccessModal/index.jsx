@@ -2,8 +2,8 @@ import React from 'react';
 import BasicModal from '@/components/BasicModal';
 import { openWx } from '@/utils/birdgeContent';
 import { cobyInfo } from '@/utils/utils';
-import { fetchCommandGetCommand } from '@/services/game';
-import { deviceName, linkTo } from '@/utils/birdgeContent';
+import { fetchCommandGetCommand, fetchExchangeReward } from '@/services/game';
+import { deviceName, linkTo, nativeOneVideo } from '@/utils/birdgeContent';
 
 import './index.less';
 
@@ -16,9 +16,10 @@ function index(props) {
   };
   const copyCode = async () => {
     if (deviceName() == 'miniProgram') {
+      onClose();
       linkTo({
         wechat: {
-          url: `/pages/share/shareSign/index?userType=share`,
+          url: `/pages/share/shareSign/index?userType=help&shareId=${data.identification}`,
         },
       });
     } else {
@@ -35,6 +36,17 @@ function index(props) {
       }
     }
   };
+
+  const watchTV = async () => {
+    const res = await fetchExchangeReward({
+      identification: data.identification,
+    });
+    if (res.success) {
+      nativeOneVideo();
+      onClose();
+    }
+  };
+
   return (
     <BasicModal modalProps={{ ...modalProps }}>
       <div className="SuccessModal_content">
@@ -45,7 +57,7 @@ function index(props) {
         </div>
         <div className="SuccessModal_tips">仅差一步就可拿到奖励</div>
         <div className="SuccessModal_bottom">
-          <div className="SuccessModal_button" onClick={() => {}}>
+          <div className="SuccessModal_button" onClick={watchTV}>
             看视频
           </div>
           <div className="SuccessModal_button" onClick={copyCode}>

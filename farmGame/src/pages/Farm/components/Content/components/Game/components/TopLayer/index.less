@@ -74,21 +74,35 @@
 
 .bean_barrge_info {
   position: absolute;
-  top: 450px;
   left: 50%;
-  width: 340px;
+  width: 380px;
   height: 46px;
   margin: 0 auto;
   transform: translateX(-50%);
   line-height: 1;
   background: url(~@/asstes/image/treeTips.png) no-repeat;
   background-size: 100% 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .bean_barrge_desc {
-    padding: 6px 14px 12px;
     color: #ffffff;
     font-weight: 400;
     font-size: 24px;
     line-height: 30px;
     text-align: center;
   }
+}
+.bean_barrge_info_sapling {
+  top: 430px;
+}
+.bean_barrge_info_truck {
+  top: 350px;
+}
+.bean_barrge_info_smallTree {
+  top: 370px;
+}
+.bean_barrge_info_bigTree {
+  width: 140px !important;
+  top: 330px;
 }

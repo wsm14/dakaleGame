@@ -370,10 +370,10 @@ export default ({ userInfo }) => {
             indicator={() => {}}
             className="Bottom_swiper"
           >
-            <Swiper.Item className="swiper_box public_center">签到可以获得卡豆和成长值</Swiper.Item>
-            <Swiper.Item className="swiper_box public_center">
+            {/* <Swiper.Item className="swiper_box public_center">签到可以获得卡豆和成长值</Swiper.Item> */}
+            {/* <Swiper.Item className="swiper_box public_center">
               成长值兑换的钥匙，可以开盲盒赢大奖
-            </Swiper.Item>
+            </Swiper.Item> */}
             <Swiper.Item className="swiper_box public_center">
               卡豆可以在平台消费时抵扣使用
             </Swiper.Item>
@@ -420,7 +420,7 @@ export default ({ userInfo }) => {
           </div>
         </>
       )}
-      {beanList.length > 0 && (
+      {/* {beanList.length > 0 && (
         <>
           <div className="BottomContent_goods_box">
             <div className="BottomContent_goods_title">
@@ -451,7 +451,7 @@ export default ({ userInfo }) => {
             })}
           </div>
         </>
-      )}
+      )} */}
       {gameList.length > 0 && (
         <>
           <div className="BottomContent_goods_box">

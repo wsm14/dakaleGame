@@ -32,8 +32,10 @@ const index = () => {
       (e) => {
         setState(e);
       },
-      (_, val) => {
-        if (Object.keys(val).length === imgList.length) {
+      (num, val) => {
+        console.log(num, val);
+        if (num === imgList.length) {
+          console.log(val.get('star'));
           getToken((e) => {
             if (e) {
               setImgObj(val);

@@ -24,6 +24,9 @@ function index(props) {
   const getAddress = async () => {
     let addressCopy = addressInfo.addressInfo;
     addressCopy = (addressCopy && JSON.parse(addressCopy)) || {};
+    if (addressInfo.addressIdStr) {
+      addressCopy.userAddressId = addressInfo.addressIdStr;
+    }
     dispatch({
       type: 'collectCards/save',
       payload: { addressObj: addressCopy },

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import BasicModal from '@/components/BasicModal';
 import SuccessModal from '../SuccessModal';
-import { fetchPreExchangeReward } from '@/services/game';
 
 import './index.less';
 
@@ -15,14 +14,8 @@ function index(props) {
   };
 
   const exchangePre = async () => {
-    const res = await fetchPreExchangeReward({
-      identification: data.identification,
-    });
-    getCardDetail();
-    if (res.success) {
-      onClose();
-      setExchangeVisible(true);
-    }
+    onClose();
+    setExchangeVisible(true);
   };
   return (
     <>

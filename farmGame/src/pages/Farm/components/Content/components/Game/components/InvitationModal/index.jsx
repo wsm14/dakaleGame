@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PopupModal from '@/components/PopupModal';
 import { Button, Toast } from 'antd-mobile';
-import { fetchFreeGoodGetTogetherList } from '@/services/game';
+import { fetchFarmGetTeamList } from '@/services/game';
+import { deviceName, linkTo } from '@/utils/birdgeContent';
+import { fetchCommandGetCommand } from '@/services/game';
 import { filterList } from '@/utils/game';
+import { cobyInfo } from '@/utils/utils';
 import SignOutModal from '@/components/SignOutModal';
+import ShareModal from '@/components/ShareModal';
 import './index.less';
 import friends from '@/asstes/common/friends.png';
-import taskClose from '@/asstes/image/close.png';
+import taskClose from '@/asstes/common/close.png';
 import invite from '@/asstes/common/invite.png';
 
 function index(props = {}) {
@@ -14,12 +18,10 @@ function index(props = {}) {
     visible, //显示关闭
     onClose, //关闭事件
     processId, //进度id
-    openModal,
-    supplyLevel, //等级
   } = props;
   const [outVisible, setOutVisible] = useState(false);
   const [invitaList, setInvitaList] = useState([]); //邀请列表
-
+  const [shareVisible, setShareVisible] = useState({ show: false });
   useEffect(() => {
     if (visible) {
       getInvitaInfo();
@@ -28,17 +30,38 @@ function index(props = {}) {
 
   //获取助力列表
   const getInvitaInfo = async () => {
-    const res = await fetchFreeGoodGetTogetherList({
-      processId,
+    const res = await fetchFarmGetTeamList({
+      progressIdStr: processId,
     });
     const { content = {} } = res;
     let { userList = [] } = content;
     userList = filterList(userList, 3);
     setInvitaList(userList);
   };
+
+  //赋值口令
+  //打开弹窗并且复制口令
+  const copyCode = async (type, id) => {
+    if (deviceName() != 'miniProgram') {
+      const res = await fetchCommandGetCommand({
+        commandType: type,
+        relateId: id,
+      });
+      const { command } = res.content;
+      cobyInfo(command, { show: true, type, value: id }, (val) => {
+        setShareVisible(val);
+      });
+    } else {
+      linkTo({
+        wechat: {
+          url: `/pages/share/gameHelp/index?subType=${type}&shareId=${id}`,
+        },
+      });
+    }
+  };
+
   //是否有自己的小组成员
   const groupFlag = useMemo(() => invitaList.some((item) => item.profile), [invitaList.length]);
-  console.log(groupFlag, 'groupFlag', invitaList);
   const popupProps = {
     visible,
     onClose,
@@ -66,7 +89,7 @@ function index(props = {}) {
                 className="invita_one"
                 key={index + 1}
                 onClick={() => {
-                  !item.profile && openModal('nativeShareClose', processId);
+                  !item.profile && copyCode('farmTogether', processId);
                 }}
               >
                 <img src={item.profile ? item.profile : invite} alt="" />
@@ -101,6 +124,14 @@ function index(props = {}) {
         getInvitaInfo={getInvitaInfo}
         processId={processId}
       ></SignOutModal>
+
+      {/* 邀请合力弹窗 */}
+      <ShareModal
+        visible={shareVisible}
+        onClose={() => {
+          setShareVisible({ show: false });
+        }}
+      ></ShareModal>
     </>
   );
 }

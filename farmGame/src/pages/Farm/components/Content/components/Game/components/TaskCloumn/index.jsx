@@ -1,86 +1,85 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Popup, Toast } from 'antd-mobile';
-import { linkTo } from '@/utils/birdgeContent';
-import { useUpdateEffect } from 'ahooks';
-import {
-  fetchFreeGoodSaveSign,
-  fetchTaskGetTaskList,
-  fetchTaskDoneTask,
-  fetchTaskReceiveTaskReward,
-} from '@/services/game';
+import { fetchTaskGetTaskList, fetchTaskReceiveTaskReward } from '@/services/game';
 import { reloadTab } from '@/utils/utils';
-import { deviceName } from '@/utils/birdgeContent';
+import { deviceName, linkTo } from '@/utils/birdgeContent';
+import { fetchCommandGetCommand } from '@/services/game';
+import { cobyInfo } from '@/utils/utils';
+import ShareModal from '@/components/ShareModal';
 import './index.less';
 import taskTitle from '@/asstes/common/taskTitle.png';
-import taskClose from '@/asstes/image/close.png';
-
-let timer = null;
+import taskClose from '@/asstes/common/close.png';
 
 function index(props) {
-  const { visible, onClose, getHomeDetail, openModal, countDistance } = props;
+  const { visible, onClose, getGameDetail, processId } = props;
   const [taskList, setTaskList] = useState([]); //任务信息
-  const [count, setCount] = useState(30); //倒计时
-  const [taskStrapId, setTaskStrapId] = useState(''); //倒计时id
-  const [timeBol, setTimeBol] = useState(false);
-  const timerRef = useRef(1);
+  const [shareVisible, setShareVisible] = useState({ show: false });
 
   useEffect(() => {
     getTaskList();
     reloadTab(getTaskList);
   }, []);
-  useUpdateEffect(() => {
-    // console.log(timeBol, 'setTimeBol');
-    if (timerRef.current === 1) {
-      timerRef.current = 2;
-      timeOut();
-    }
-  }, [timeBol]);
-
-  //签到
-  const signEvent = async () => {
-    const res = await fetchFreeGoodSaveSign();
-    getHomeDetail();
-  };
 
   //任务列表
   const getTaskList = async () => {
     const source = deviceName() == 'miniProgram' ? 'miniClock' : 'app';
     const res = await fetchTaskGetTaskList({
-      gameName: 'freeGoodGame',
+      gameName: 'farmGame',
       source: source,
     });
     const { content = {} } = res;
     const { taskList = [] } = content;
-    let times, strapId1;
-    taskList.forEach((item = {}) => {
-      const { receiveRule, hasDoneTimes, taskStatus, strapId } = item;
-      const rule = JSON.parse(receiveRule) || {};
-      const { condition = [] } = rule;
-      if (condition.length && taskStatus == 0) {
-        setTaskStrapId(strapId);
-        if (timerRef.current === 1) {
-          clearInterval(timer);
-          setCount(condition[hasDoneTimes]);
-        }
-        setTimeBol(!timeBol);
-      }
-    });
     setTaskList([...taskList]);
   };
+
+  //打开弹窗并且复制口令
+  const copyCode = async (type, id, taskType) => {
+    if (deviceName() != 'miniProgram') {
+      const res = await fetchCommandGetCommand({
+        commandType: type,
+        relateId: id,
+        extraParam: processId,
+      });
+      const { command } = res.content;
+      cobyInfo(command, { show: true, type, value: id, taskType }, (val) => {
+        setShareVisible(val);
+      });
+    } else {
+      linkTo({
+        wechat: {
+          url: `/pages/share/gameHelp/index?subType=${btnType}&shareId=${id}`,
+        },
+      });
+    }
+  };
+
+  //跳转app
+  const goApp = (item) => {
+    const { jumpRule, strapId } = item;
+    let json = (jumpRule && JSON.parse(jumpRule)) || {};
+    const { jumpUrl, param } = json;
+    const paramJson = (param && JSON.parse(param)) || {};
+    const { browseType } = paramJson;
+    const { iosUrl, androidUrl, weChatUrl } = jumpUrl;
+    linkTo({
+      wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=collect` },
+      ios: {
+        path: iosUrl,
+        param: { strapId, browserType: browseType },
+      },
+      android: {
+        path: androidUrl,
+        strapId,
+        browseType,
+      },
+    });
+  };
+
   //判断显示的按钮
   const checkButton = (item) => {
-    const { taskStatus, strapId, jumpRule, taskType } = item;
-    let json = (jumpRule && JSON.parse(jumpRule)) || {};
-    const { iosUrl, androidUrl, weChatUrl } = json;
+    const { taskStatus, strapId, taskType } = item;
     if (taskStatus === '0') {
-      if (taskType === 'free') {
-        return (
-          <div className="taskLine_right taskLine_button1">
-            {parseInt(count / 60) < 10 ? `0${parseInt(count / 60)}` : parseInt(count / 60)}:
-            {count % 60 < 10 ? `0${count % 60}` : count % 60}
-          </div>
-        );
-      } else if (taskType === 'invite' || taskType === 'share') {
+      if (taskType === 'invite' || taskType === 'share') {
         return (
           <div>
             <div
@@ -90,8 +89,7 @@ function index(props) {
                 if (taskType === 'share') {
                   paramId = taskList.filter((item) => item.taskType === 'share')[0].strapId;
                 }
-                console.log(paramId, 'paramId');
-                openModal('nativeShareWork', paramId, taskType);
+                copyCode('farmTaskHelp', paramId, taskType);
               }}
             >
               去完成
@@ -105,17 +103,7 @@ function index(props) {
             <div
               className="taskLine_right taskLine_button1"
               onClick={() => {
-                linkTo({
-                  wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
-                  ios: {
-                    path: iosUrl,
-                    param: { strapId },
-                  },
-                  android: {
-                    path: androidUrl,
-                    strapId,
-                  },
-                });
+                goApp(item);
               }}
             >
               去完成
@@ -139,17 +127,7 @@ function index(props) {
         <div
           className="taskLine_right taskLine_button3"
           onClick={() => {
-            linkTo({
-              wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
-              ios: {
-                path: iosUrl,
-                param: { strapId },
-              },
-              android: {
-                path: androidUrl,
-                strapId,
-              },
-            });
+            goApp(item);
           }}
         >
           已领取
@@ -158,44 +136,17 @@ function index(props) {
     }
   };
 
-  const timeOut = () => {
-    timer = setInterval(() => {
-      setCount((n) => {
-        if (n) {
-          // 3.1 倒计时每秒减少1
-          return n - 1;
-        } else {
-          // 3.2 倒计时为0时，清空倒计时
-          clearInterval(timer);
-          timerRef.current = 1;
-          downTask();
-          return 0;
-        }
-      });
-    }, 1000);
-  };
-
-  //完成任务
-
-  const downTask = async () => {
-    const res = await fetchTaskDoneTask({
-      taskStrapId,
-    });
-    getTaskList();
-  };
-
   //领取奖励
   const receiveRewards = async (item) => {
     const { strapId, taskId, rewardNum } = item;
     const res = await fetchTaskReceiveTaskReward({
       strapId,
-      gameName: 'freeGoodGame',
+      gameName: 'farmGame',
       taskId,
     });
     if (res.success) {
-      countDistance(rewardNum);
       getTaskList();
-      getHomeDetail();
+      getGameDetail();
     }
   };
 
@@ -245,6 +196,14 @@ function index(props) {
           </div>
         </div>
       </Popup>
+
+      {/* 赋值口令弹窗 */}
+      <ShareModal
+        visible={shareVisible}
+        onClose={() => {
+          setShareVisible({ show: false });
+        }}
+      ></ShareModal>
     </>
   );
 }

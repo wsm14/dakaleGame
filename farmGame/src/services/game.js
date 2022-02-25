@@ -6,21 +6,106 @@ export async function fetchFarmMainPage(params) {
     params,
   });
 }
-
-// get 免费领商品游戏 - 首页
-export async function fetchFreeGoodMainPage(params) {
-  return request('/user/game/freeGood/mainPage', {
-    params,
-  });
-}
-
-// post 免费领商品游戏 - 首页
-export async function fetchFreeGoodBeginGame(data) {
-  return request('/user/game/freeGood/beginGame', {
+// post 卡豆农场 - 开始游戏
+export async function fetchFarmBeginGame(data) {
+  return request('/user/game/farm/beginGame', {
     method: 'POST',
     data,
   });
 }
+
+// get 卡豆农场 - 获取合力列表
+export async function fetchFarmGetTeamList(params) {
+  return request('/user/game/farm/getTeamList', {
+    params,
+  });
+}
+
+// post 卡豆农场 - 退出小队
+export async function fetchFarmQuitTeam(data) {
+  return request('/user/game/farm/quitTeam', {
+    method: 'POST',
+    data,
+  });
+}
+
+// get 卡豆农场 - 查看卡豆旅行奖励(分页)
+
+export async function fetchFarmGetTravelRewardListPage(params) {
+  return request('/user/game/farm/getTravelRewardListPage', {
+    params,
+  });
+}
+
+// POST 卡豆农场 - 施肥
+
+export async function fetchFarmSpreadManure(data) {
+  return request('/user/game/farm/spreadManure', {
+    method: 'POST',
+    data,
+  });
+}
+
+// POST 卡豆农场 - 领取奖励
+
+export async function fetchFarmReceiveReward(data) {
+  return request('/user/game/farm/receiveReward', {
+    method: 'POST',
+    data,
+  });
+}
+
+// Post 卡豆农场 - 查看卡豆旅行奖励
+
+export async function fetchFarmGetReceiveTravelReward(data) {
+  return request('/user/game/farm/receiveTravelReward', {
+    method: 'POST',
+    data,
+  });
+}
+
+// Post 卡豆农场 - 加入队伍
+
+export async function fetchFarmJoinTeam(data) {
+  return request('/user/game/farm/joinTeam', {
+    method: 'POST',
+    data,
+  });
+}
+
+// post 游戏 - 完成任务
+export async function fetchTaskDoneTask(data) {
+  return request('/user/game/task/doneTask', {
+    method: 'POST',
+    data,
+  });
+}
+
+// get 卡豆农场 - 获取奖品信息
+
+export async function fetchFarmGetFarmReward(params) {
+  return request('/user/game/farm/getFarmReward', {
+    params,
+  });
+}
+
+// get 卡豆农场 - 分享接口(新)
+export async function fetchShareGetNewShareInfo(params) {
+  return request('/common/share/getNewShareInfo', {
+    params,
+  });
+}
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 // get 免费领商品游戏 - 领取补贴
 export async function fetchFreeGoodGetSupply(params) {
@@ -81,25 +166,9 @@ export async function fetchCommandGetCommand(params) {
   });
 }
 
-// post 免费领商品游戏 - 完成任务
-export async function fetchTaskDoneTask(data) {
-  return request('/user/game/task/doneTask', {
-    method: 'POST',
-    data,
-  });
-}
-
 // get 免费领商品游戏 - 领取任务奖励
 export async function fetchTaskReceiveTaskReward(data) {
   return request('/user/game/task/receiveTaskReward', {
-    method: 'POST',
-    data,
-  });
-}
-
-// post 免费领商品游戏 - 领取奖励
-export async function fetchFreeGoodReceiveGameReward(data) {
-  return request('/user/game/freeGood/receiveGameReward', {
     method: 'POST',
     data,
   });

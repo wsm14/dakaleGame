@@ -8,28 +8,29 @@ import {
   fetchFreeGoodSetRewardAddress,
 } from '@/services/address';
 import { checkCityName } from '@/utils/utils';
-import closeIcon from '@public/closeIcon.png';
-import address from '@public/usual/address.png';
-import rightPng from '@public/right.png';
-import { set } from '@umijs/deps/compiled/lodash';
+import closeIcon from '@/asstes/common/close.png';
+import address from '@/asstes/common/address.png';
+import rightPng from '@/asstes/common/right.png';
 
 function index(props) {
   const { visible = false, onClose, getHomeDetail } = props;
-  const { packageObj = {}, addressObj } = useSelector((state) => state.receiveGoods); //商品信息  地址信息
+  const { packageObj = {}, addressObj } = useSelector((state) => state.farmGame); //商品信息  地址信息
   const dispatch = useDispatch();
 
   const addressLength = Object.keys(addressObj).length;
 
   useEffect(() => {
-    !addressLength && getAddress();
-  }, []);
+    if (visible) {
+      !addressLength && getAddress();
+    }
+  }, [visible]);
   //获取默认地址
   const getAddress = async () => {
     const res = await fetchUserDefaultAddress();
     const { content = {} } = res;
     const { userAddressInfo = {} } = content;
     dispatch({
-      type: 'receiveGoods/save',
+      type: 'farmGame/save',
       payload: { addressObj: userAddressInfo },
     });
   };
@@ -42,35 +43,14 @@ function index(props) {
     const { content = {} } = res;
     const { goodInfo } = content;
     dispatch({
-      type: 'receiveGoods/save',
+      type: 'farmGame/save',
       payload: { packageObj: goodInfo, orderVisible: true },
     });
   };
 
   const confirmAddress = async () => {
     if (addressLength) {
-      if (processId) {
-        const { userAddressId } = addressObj;
-        const res = await fetchFreeGoodSetRewardAddress({
-          gameProcessId: processId,
-          addressId: userAddressId,
-        });
-        dispatch({
-          type: 'receiveGoods/save',
-          payload: {
-            orderVisible: false,
-          },
-        });
-        getHomeDetail();
-      } else {
-        onClose();
-        dispatch({
-          type: 'receiveGoods/save',
-          payload: {
-            type: 'startSupply',
-          },
-        });
-      }
+      onClose();
     } else {
       Toast.show({
         content: '请填写收货地址',
@@ -111,9 +91,9 @@ function index(props) {
             <div className="overlayContent_line"></div>
 
             <div className="overlay_goods">
-              <img src={packageObj.packageImg}></img>
+              <img src={packageObj.rewardImg}></img>
               <div className="overlay_goods_right">
-                <div className="overlay_goods_name">{packageObj.packageName}</div>
+                <div className="overlay_goods_name">{packageObj.treeName}</div>
                 {/* <div className="overlay_goods_remark">一袋/250g</div> */}
                 <div className="overlay_goods_label">100%超容易获得</div>
               </div>

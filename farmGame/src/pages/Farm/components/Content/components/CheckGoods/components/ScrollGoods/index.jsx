@@ -1,22 +1,22 @@
 import React from 'react';
 import './index.less';
 import { useSelector, useDispatch } from 'umi';
-import checkon from '@public/checkon.png';
-import checkoff from '@public/checkoff.png';
+import checkon from '@/asstes/common/checkon.png';
+import checkoff from '@/asstes/common/checkoff.png';
 
 function index(props) {
   const { list = [] } = props;
-  const { packageObj } = useSelector((state) => state.receiveGoods); //商品信息
+  const { packageObj } = useSelector((state) => state.farmGame); //商品信息
   const dispatch = useDispatch();
   return (
     <div className="scrollContent">
       {list.map((item) => (
         <div
           className="scrollGoods"
-          key={item.packageId}
+          key={item.identification}
           onClick={() => {
             dispatch({
-              type: 'receiveGoods/save',
+              type: 'farmGame/save',
               payload: {
                 packageObj: item,
               },
@@ -25,14 +25,14 @@ function index(props) {
         >
           <div>
             <img
-              src={packageObj.packageId == item.packageId ? checkon : checkoff}
+              src={packageObj.identification == item.identification ? checkon : checkoff}
               className="scrollGoods_checkImg"
             />
           </div>
           <div className="scrollGoods_contentImg">
-            <img src={item.packageImg} className="scrollGoods_goodsImg" />
+            <img src={item.rewardImg} className="scrollGoods_goodsImg" />
           </div>
-          <div className="scrollGoods_name">{item.packageName}</div>
+          <div className="scrollGoods_name">{item.treeName}</div>
         </div>
       ))}
     </div>

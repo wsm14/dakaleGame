@@ -192,7 +192,7 @@ export const nativeShareWork = (shareId) => {
     android: {
       param: {
         shareType: 'game',
-        subType: 'freeTaskHelp',
+        subType: 'farmTaskHelp',
         shareId: shareId,
       },
       sharePlatform: 'SharePlatformWechatMiniProgram',
@@ -202,11 +202,11 @@ export const nativeShareWork = (shareId) => {
       param: {
         shareId: shareId,
         shareType: 'game',
-        subType: 'freeTaskHelp',
+        subType: 'farmTaskHelp',
       },
     },
     wechat: {
-      url: `/pages/share/gameHelp/index?subType=freeTaskHelp&shareId=${shareId}`,
+      url: `/pages/share/gameHelp/index?subType=farmTaskHelp&shareId=${shareId}`,
     },
   });
 };
@@ -215,7 +215,7 @@ export const nativeShareWork = (shareId) => {
 export const nativeShareClose = (shareId) => {
   native.nativeInit('goShare', {
     android: {
-      param: { shareType: 'game', shareId: shareId, subType: 'gameTogether' },
+      param: { shareType: 'game', shareId: shareId, subType: 'farmTogether' },
       sharePlatform: 'SharePlatformWechatMiniProgram',
     },
     ios: {
@@ -223,10 +223,10 @@ export const nativeShareClose = (shareId) => {
       param: {
         shareType: 'game',
         shareId: shareId,
-        subType: 'gameTogether',
+        subType: 'farmTogether',
       },
       wechat: {
-        url: `/pages/share/gameHelp/index?subType=gameTogether&shareId=${shareId}`,
+        url: `/pages/share/gameHelp/index?subType=farmTogether&shareId=${shareId}`,
       },
     },
   });
@@ -287,15 +287,42 @@ export const linkToMyGoods = () => {
     ios: {
       path: 'smallClockRewardList',
       param: {
-        channelStyle: 'gameFree',
+        channelStyle: 'gameFarm',
       },
     },
     android: {
       path: 'ScanClockPrize',
-      type: 'gameFree',
+      type: 'gameFarm',
     },
     wechat: {
-      url: `/pages/blindBox/gamePrize/index?channel=gameFree`,
+      url: `/pages/blindBox/gamePrize/index?channel=gameFarm`,
+    },
+  });
+};
+
+//看视频刷卡豆
+export const linkWatchTv = () => {
+  linkTo({
+    ios: {
+      path: 'DKLSmallClockVideoAdController',
+    },
+    android: {
+      path: 'AdvertisementVideoContainer',
+    },
+    wechat: {
+      url: `/pages/perimeter/nearVideo/index`,
+    },
+  });
+};
+
+//秘籍
+export const linkToSecret = () => {
+  linkTo({
+    ios: {
+      path: 'https://web-new.dakale.net/dev/game/collectGame/index.html#/secret',
+    },
+    android: {
+      path: 'https://web-new.dakale.net/dev/game/collectGame/index.html#/secret',
     },
   });
 };
@@ -310,8 +337,14 @@ export const linkToAddress = () => {
       path: 'AddressAdd',
     },
     wechat: {
-      url: `/pages/relay/community/delivery/index?mode=list`,
+      url: `/pages/perimeter/delivery/index?mode=list`,
     },
+  });
+};
+//生成海报
+export const makeReport = (val) => {
+  native.nativeInit('saveFile', {
+    url: val,
   });
 };
 

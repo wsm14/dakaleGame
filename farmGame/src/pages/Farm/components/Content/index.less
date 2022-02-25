@@ -1,0 +1,30 @@
+//动画开始的时候 页面一定要定位住 不然页面组件的布局是上下布局 导致动画效果不显示
+.main {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  min-height: 100vh;
+  background: white;
+}
+
+.transtionBox-enter {
+  &:extend(.main);
+  transform: translateX(100%);
+}
+
+.transtionBox-enter-active {
+  &:extend(.main);
+  transform: translateX(0);
+  transition: all 300ms ease-in;
+}
+
+.transtionBox-exit {
+  &:extend(.main);
+  transform: translateX(0);
+}
+
+.transtionBox-exit-active {
+  &:extend(.main);
+  transform: translateX(-100%);
+  transition: all 300ms ease-in;
+}

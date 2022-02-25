@@ -25,4 +25,9 @@ export default [
     name: '我的足迹',
     component: './Demo',
   },
+  {
+    path: '/secret',
+    name: '秘籍',
+    component: './Secret',
+  },
 ];

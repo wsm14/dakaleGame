@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.less';
-import { fetchFreeGoodQuitTeam } from '@/services/game';
+import { fetchFarmQuitTeam } from '@/services/game';
 import BasicModal from '@/components/BasicModal';
 
 function index(props) {
@@ -15,8 +15,8 @@ function index(props) {
 
   //退出小队
   const signOut = async () => {
-    const res = await fetchFreeGoodQuitTeam({
-      processIdStr: processId,
+    const res = await fetchFarmQuitTeam({
+      gameProgressIdStr: processId,
     });
     getInvitaInfo();
     onClose();

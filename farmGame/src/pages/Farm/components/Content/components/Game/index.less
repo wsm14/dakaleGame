@@ -1,5 +1,9 @@
+.content_scene {
+  width: 100vw;
+  height: 1240px;
+}
 .messageTips {
-  width: 180px;
+  width: 0;
   height: 108px;
   background: url(~@/asstes/image/messageTips.png) no-repeat center / 100% 100%;
   font-size: 20px;
@@ -12,18 +16,96 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+}
+.messageTips_animation {
   animation: left 1s linear forwards;
 }
 
 @keyframes left {
   0% {
     width: 0;
+    opacity: 0;
     transform: scaleY(0);
   }
   100% {
-    width: 180px;
-    transform: scaley(1);
+    width: 200px;
+    opacity: 1;
+    transform: scaleY(1);
   }
+}
+
+.messageTipsEmpty {
+  width: 0;
+  height: 108px;
+  background: url(~@/asstes/image/messageTips.png) no-repeat center / 100% 100%;
+  font-size: 20px;
+  font-weight: 500;
+  color: #399c3f;
+  line-height: 20px;
+  position: absolute;
+  right: 10px;
+  top: 750px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.messageTipsEmpty_animation {
+  animation: left 1s linear forwards;
+}
+
+.myGoods {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .myGoods_img {
+    width: 88px;
+    height: 88px;
+    background: #ffffff;
+    border-radius: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .myGoods_nickName {
+    width: 110px;
+    height: 36px;
+    background: #43981b;
+    border-radius: 18px;
+    border: 2px solid #ffffff;
+    font-size: 24px;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 36px;
+    text-align: center;
+    margin-top: -15px;
+  }
+}
+.myGoods_sapling {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 490px;
+}
+
+.myGoods_truck {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 400px;
+}
+.myGoods_smallTree {
+  left: 50%;
+  transform: translateX(-40%);
+  top: 490px;
+}
+
+.myGoods_bigTree {
+  left: 50%;
+  transform: translateX(-45%);
+  top: 620px;
 }
 
 .myFertilizer {
@@ -35,4 +117,12 @@
   position: absolute;
   top: 1120px;
   text-align: center;
+}
+
+.emptyMessage {
+  position: absolute;
+  width: 120px;
+  height: 150px;
+  top: 590px;
+  right: 32px;
 }

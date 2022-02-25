@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Hilo, { Stage, Tween, Sprite } from 'hilojs';
-import { fetchUserShareCommission } from '@/services/game';
-import { nativeClose } from '@/utils/birdgeContent';
-import { createBitmap, conversionSize, HiloCreateSpirit } from '@/utils/game';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import Hilo from 'hilojs';
+import { useUpdateLayoutEffect } from 'ahooks';
+import {
+  fetchUserShareCommission,
+  fetchFarmSpreadManure,
+  fetchFarmGetReceiveTravelReward,
+} from '@/services/game';
+import { nativeClose, linkToMyGoods } from '@/utils/birdgeContent';
+import { createBitmap, conversionSize, HiloCreateSpirit, getLevel } from '@/utils/game';
 import { TrunkScene } from './components/Scene/index';
 import { history } from 'umi';
 import TitleBlock from '@/components/TitleBlock';
@@ -15,27 +20,112 @@ import ProgressBar from './components/ProgressBar';
 import InvitationModal from './components/InvitationModal';
 import TaskCloumn from './components/TaskCloumn';
 import title_Img from '@/asstes/image/titleImg.png';
+import mailbox from '@/asstes/common/mailbox.png';
 import './index.less';
 
 let stage = null;
 let SpriteGroup = null;
 let fertilizerSprite = null;
 let handSprite = null;
+let beanSprite = null;
+let messageSprite = null;
+let whiteGullSprite = null;
+let starSprite = null;
+let ticker = null;
 const index = (props) => {
-  const { imgObj } = props;
+  const { imgObj, gameDetail, getGameDetail } = props;
   console.log(imgObj);
   const width = window.innerWidth * 2;
   const height = (window.innerWidth / 375) * 620 * 2;
   const [userInfo, setUserInfo] = useState({});
   const [gameData, setGameData] = useState({});
+  const [prizeVisible, setPrizeVisible] = useState(false); //奖品弹窗
+  const [levelVisible, setLevelVisible] = useState(false); //等级弹窗
+  const [travelVisible, setTravelVisible] = useState(false); //旅行弹窗
+  const [travelData, setTravelData] = useState({});
   const [invitaVisible, setInvitaVisible] = useState(false); //合种弹窗
   const [taskVisible, setTaskVisible] = useState(false); //任务弹窗
   const containerRef = useRef(); //canvas的ref
 
+  const {
+    gameProcessStrapInfo = {},
+    gameInfo = {},
+    gameProcessInfo = {}, //奖品信息
+    travelStatus, //卡豆旅行状态2 - 待出走1 - 已返回,未领取 0 - 已出走,未返回
+  } = gameDetail;
+  const {
+    progressIdStr, //进度id
+  } = gameProcessStrapInfo;
+
+  const {
+    gameLevel = 1, //等级
+    prizeName, //奖品名称
+    prizeImg, //奖品图片
+    status, //状态 0 - 已结束 1 - 正在进行
+  } = gameProcessInfo;
+
+  const levelType = useMemo(() => getLevel(gameLevel, status), [gameLevel, status]);
+
   useEffect(() => {
-    // fetchUserShare();
+    fetchUserShare();
     initStage();
   }, []);
+
+  useEffect(() => {
+    if (travelStatus === '0') {
+      createBgInit(stage, 6);
+      if (messageSprite) {
+        messageSprite.removeFromParent(stage);
+      }
+      if (beanSprite) {
+        beanSprite.removeFromParent(stage);
+      }
+    } else if (travelStatus === '1') {
+      stage.getChildById('mailBox') && stage.getChildById('mailBox').removeFromParent(stage);
+      //信箱精灵图
+      creatMessage(stage);
+      //添加豆子精灵图
+      creatBean(stage);
+    } else if (travelStatus === '2') {
+      if (messageSprite) {
+        messageSprite.removeFromParent(stage);
+      }
+      createBgInit(stage, 6);
+      //添加豆子精灵图
+      creatBean(stage);
+    }
+  }, [travelStatus]);
+
+  useEffect(() => {
+    //树的动画
+    SpriteGroup = TrunkScene(stage, imgObj, levelType);
+    //添加施肥
+    creatFertilizer(stage);
+    if (levelType === 'bigTree') {
+      const mature = createBgInit(stage, 7);
+      mature.on(Hilo.event.POINTER_START, (e) => {
+        e.preventDefault();
+        clickInEase(mature, () => {
+          setPrizeVisible(true);
+        });
+      });
+    } else {
+      stage.getChildById('mature') && stage.getChildById('mature').removeFromParent(stage);
+    }
+  }, [levelType]);
+
+  useEffect(() => {
+    //手指动画
+    if (!localStorage.getItem('hand')) {
+      creatHand(stage);
+    }
+  }, []);
+
+  useUpdateLayoutEffect(() => {
+    if (gameLevel < 15) {
+      setLevelVisible(true);
+    }
+  }, [gameLevel]);
 
   //初始化舞台
   const initStage = () => {
@@ -54,8 +144,8 @@ const index = (props) => {
   const initOther = (stage) => {
     createBgInit(stage, 0);
 
-    // //白鹭动画
-    // creatWhiteGull(stage);
+    //白鸥动画
+    creatWhiteGull(stage);
 
     const receive = createBgInit(stage, 1);
     const foote = createBgInit(stage, 2);
@@ -63,26 +153,14 @@ const index = (props) => {
     const task = createBgInit(stage, 4);
     const meng = createBgInit(stage, 5);
 
-    //树的动画
-    SpriteGroup = TrunkScene(stage, imgObj);
-    //添加施肥
-    creatFertilizer(stage);
-
-    //信箱精灵图
-    creatMessage(stage);
-
-    //豆子精灵图
-    creatBean(stage);
-
     //一段间隔的星星精灵图
     // creatStar(stage);
 
-    //手指动画
-    creatHand(stage);
-
     receive.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
-      clickInEase(receive, () => {});
+      clickInEase(receive, () => {
+        linkToMyGoods();
+      });
     });
     help.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
@@ -101,11 +179,9 @@ const index = (props) => {
   };
 
   const createTick = (stage) => {
-    let ticker = new Hilo.Ticker(60);
-    //把舞台加入到tick队列
+    ticker = new Hilo.Ticker(60);
     ticker.addTick(stage);
-    ticker.addTick(Tween);
-    //启动ticker
+    ticker.addTick(Hilo.Tween);
     ticker.start();
   };
 
@@ -115,7 +191,7 @@ const index = (props) => {
       list: [
         {
           id: 'bg',
-          image: imgObj.bg.src,
+          image: imgObj.get('bg').content,
           x: 0,
           y: 0,
           width: width,
@@ -123,7 +199,7 @@ const index = (props) => {
         },
         {
           id: 'receiveIcon',
-          image: imgObj.receiveIcon.src,
+          image: imgObj.get('receiveIcon').content,
           x: conversionSize(32),
           y: conversionSize(240),
           width: conversionSize(120),
@@ -131,7 +207,7 @@ const index = (props) => {
         },
         {
           id: 'footIcon',
-          image: imgObj.footIcon.src,
+          image: imgObj.get('footIcon').content,
           x: conversionSize(32),
           y: conversionSize(380),
           width: conversionSize(120),
@@ -139,7 +215,7 @@ const index = (props) => {
         },
         {
           id: 'helpIcon',
-          image: imgObj.helpIcon.src,
+          image: imgObj.get('helpIcon').content,
           x: conversionSize(32),
           y: conversionSize(1048),
           width: conversionSize(120),
@@ -147,7 +223,7 @@ const index = (props) => {
         },
         {
           id: 'taskIcon',
-          image: imgObj.taskIcon.src,
+          image: imgObj.get('taskIcon').content,
           x: conversionSize(598),
           y: conversionSize(1048),
           width: conversionSize(120),
@@ -155,11 +231,27 @@ const index = (props) => {
         },
         {
           id: 'meng',
-          image: imgObj.meng.src,
+          image: imgObj.get('meng').content,
           x: conversionSize(195),
           y: conversionSize(1048),
           width: conversionSize(360),
           height: conversionSize(120),
+        },
+        {
+          id: 'mailBox',
+          image: imgObj.get('mailBox').content,
+          x: conversionSize(595),
+          y: conversionSize(580),
+          width: conversionSize(120),
+          height: conversionSize(150),
+        },
+        {
+          id: 'mature',
+          image: imgObj.get('mature').content,
+          x: conversionSize(310),
+          y: conversionSize(720),
+          width: conversionSize(150),
+          height: conversionSize(112),
         },
       ],
     });
@@ -190,30 +282,53 @@ const index = (props) => {
 
   //白鹭精灵图
   const creatWhiteGull = (stage) => {
-    let whiteGullSprite = new Hilo.Sprite({
+    if (whiteGullSprite) {
+      whiteGullSprite.removeFromParent(stage);
+    }
+
+    whiteGullSprite = new Hilo.Sprite({
       id: 'whiteGull',
       currentFrame: 0,
-      interval: 24,
+      interval: 50,
       timeBased: true,
-      width: conversionSize(750),
-      height: conversionSize(188),
-      x: 0,
+      width: conversionSize(80),
+      height: conversionSize(78),
+      x: 0 - 80,
       y: conversionSize(170),
     });
 
-    let whiteGullAnimate = HiloCreateSpirit(imgObj.whiteGull.src, 189, 5, 750, 188, 'whiteGull');
+    let whiteGullAnimate = HiloCreateSpirit(
+      imgObj.get('whiteGull').content,
+      11,
+      12,
+      80,
+      78,
+      'whiteGull',
+    );
     whiteGullSprite.addFrame(whiteGullAnimate.getSprite('whiteGull'));
-    // whiteGullSprite.setFrameCallback(whiteGullSprite.getNumFrames() - 1, () => {
-    //   whiteGullSprite.removeFromParent(stage);
-    //   setTimeout(() => {
-    //     creatWhiteGull(stage);
-    //   }, 3000);
-    // });
+    Hilo.Tween.to(
+      whiteGullSprite,
+      {
+        x: width + 80,
+        y: conversionSize(170),
+      },
+      {
+        duration: 10000,
+        delay: 0,
+        loop: true,
+        repeatDelay: 3000,
+        ease: Hilo.Ease.Quad.EaseIn,
+      },
+    );
     stage.addChild(whiteGullSprite);
   };
 
   //添加施肥精灵图
-  const creatFertilizer = (stage) => {
+  const creatFertilizer = async (stage) => {
+    if (fertilizerSprite) {
+      fertilizerSprite.removeFromParent(stage);
+    }
+
     fertilizerSprite = new Hilo.Sprite({
       id: 'fertilizer',
       currentFrame: 0,
@@ -225,17 +340,33 @@ const index = (props) => {
       x: conversionSize(215),
       y: conversionSize(660),
     });
-    let fertilizerAnimate = HiloCreateSpirit(imgObj.fertilizer.src, 46, 15, 320, 458, 'fertilizer');
+    let fertilizerAnimate = HiloCreateSpirit(
+      imgObj.get('fertilizer').content,
+      46,
+      15,
+      320,
+      458,
+      'fertilizer',
+    );
     fertilizerSprite.addFrame(fertilizerAnimate.getSprite('fertilizer'));
     fertilizerSprite.stop();
     fertilizerSprite.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
-      handSprite.removeFromParent(stage);
+      localStorage.setItem('hand', '1');
+      handSprite && handSprite.removeFromParent(stage);
       fertilizerSprite.play();
-      fertilizerSprite.setFrameCallback(fertilizerSprite.getNumFrames() - 1, () => {
+      fertilizerSprite.setFrameCallback(fertilizerSprite.getNumFrames() - 1, async () => {
         SpriteGroup.endClick();
         fertilizerSprite.goto(0);
         fertilizerSprite.stop();
+        const res = await fetchFarmSpreadManure({
+          gameProgressIdStr: progressIdStr,
+        });
+        if (res.success) {
+          getGameDetail();
+        } else {
+          setTaskVisible(true);
+        }
       });
     });
     stage.addChild(fertilizerSprite);
@@ -243,8 +374,12 @@ const index = (props) => {
 
   //信箱精灵图
   const creatMessage = (stage) => {
-    let messageSprite = new Hilo.Sprite({
-      id: 'fertilizer',
+    if (messageSprite) {
+      messageSprite.removeFromParent(stage);
+    }
+
+    messageSprite = new Hilo.Sprite({
+      id: 'message',
       currentFrame: 0,
       interval: 24,
       timeBased: true,
@@ -253,18 +388,38 @@ const index = (props) => {
       x: conversionSize(595),
       y: conversionSize(580),
     });
-    let messageAnimate = HiloCreateSpirit(imgObj.message.src, 74, 41, 120, 150, 'message');
+    let messageAnimate = HiloCreateSpirit(
+      imgObj.get('message').content,
+      74,
+      41,
+      120,
+      150,
+      'message',
+    );
     messageSprite.addFrame(messageAnimate.getSprite('message'));
-    messageSprite.on(Hilo.event.POINTER_START, (e) => {
+    messageSprite.on(Hilo.event.POINTER_START, async (e) => {
       e.preventDefault();
+
+      const res = await fetchFarmGetReceiveTravelReward({
+        gameProgressIdStr: progressIdStr,
+        needDoubleFlag: '0',
+      });
+      if (res.success) {
+        const { rewardInfo = {} } = res.content;
+        setTravelData(rewardInfo);
+        setTravelVisible(true);
+      }
     });
     stage.addChild(messageSprite);
   };
 
   //豆子精灵图
   const creatBean = (stage) => {
-    let beanFlag = true;
-    let beanSprite = new Hilo.Sprite({
+    if (beanSprite) {
+      beanSprite.removeFromParent(stage);
+    }
+
+    beanSprite = new Hilo.Sprite({
       id: 'beanImg1',
       currentFrame: 0,
       interval: 24,
@@ -274,12 +429,19 @@ const index = (props) => {
       x: conversionSize(555),
       y: conversionSize(650),
     });
-    let messageAnimate = HiloCreateSpirit(imgObj.beanImg1.src, 71, 27, 180, 220, 'beanImg1');
+    let messageAnimate = HiloCreateSpirit(
+      imgObj.get('beanImg1').content,
+      71,
+      27,
+      180,
+      220,
+      'beanImg1',
+    );
     beanSprite.addFrame(messageAnimate.getSprite('beanImg1'));
-    beanSprite.setFrameCallback(beanSprite.getNumFrames() - 1, () => {
-      // beanSprite.removeFromParent(stage);
-      // creatBeanLoop(stage);
-    });
+    // beanSprite.setFrameCallback(beanSprite.getNumFrames() - 1, () => {
+    //   creatBeanLoop(stage);
+    //   beanSprite.removeFromParent(stage);
+    // });
     stage.addChild(beanSprite);
   };
 
@@ -312,7 +474,7 @@ const index = (props) => {
       x: conversionSize(420),
       y: conversionSize(1000),
     });
-    let handAnimate = HiloCreateSpirit(imgObj.hand.src, 15, 16, 159, 109, 'hand');
+    let handAnimate = HiloCreateSpirit(imgObj.get('hand').content, 15, 16, 159, 109, 'hand');
     handSprite.addFrame(handAnimate.getSprite('hand'));
     handSprite.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
@@ -322,23 +484,26 @@ const index = (props) => {
 
   //星星精灵图
   const creatStar = (stage) => {
-    let starSprite = new Hilo.Sprite({
+    if (starSprite) {
+      starSprite.removeFromParent(stage);
+    }
+    starSprite = new Hilo.Sprite({
       id: 'star',
       currentFrame: 0,
-      interval: 24,
+      interval: 30,
       timeBased: true,
-      width: conversionSize(746),
-      height: conversionSize(452),
-      x: 0,
+      width: conversionSize(582),
+      height: conversionSize(370),
+      x: conversionSize(50),
       y: conversionSize(450),
     });
-    let starAnimate = HiloCreateSpirit(imgObj.star.src, 23, 6, 746, 452, 'star');
+    let starAnimate = HiloCreateSpirit(imgObj.get('star').content, 26, 8, 582, 370, 'star');
     starSprite.addFrame(starAnimate.getSprite('star'));
     starSprite.setFrameCallback(starSprite.getNumFrames() - 1, () => {
       starSprite.removeFromParent(stage);
       setTimeout(() => {
         creatStar(stage);
-      }, 10000);
+      }, 4000);
     });
     stage.addChild(starSprite);
   };
@@ -354,31 +519,86 @@ const index = (props) => {
     });
   };
 
+  const removeAll = () => {
+    stage.removeAllChildren();
+    ticker.removeTick(stage);
+    ticker.removeTick(Hilo.Tween);
+  };
   return (
     <>
       <TitleBlock src={title_Img} back={nativeClose}></TitleBlock>
-      <TopLayer data={gameData}></TopLayer>
+      <TopLayer data={gameDetail} type={levelType}></TopLayer>
       <div ref={containerRef} className="content_scene"></div>
 
       {/* 通知信息 */}
-      <div className="messageTips">你有一封信</div>
+      <div className={`messageTips ${travelStatus === '1' ? 'messageTips_animation' : ''}`}>
+        你有一封信
+      </div>
+
+      {/* 空邮箱 */}
+
+      {/* {travelStatus !== '1' && <img src={mailbox} alt="" className="emptyMessage" />} */}
+
+      {/* 通知信息  不在家 */}
+      <div
+        className={`messageTipsEmpty ${travelStatus === '0' ? 'messageTipsEmpty_animation' : ''}`}
+      >
+        我去旅行啦~
+      </div>
 
       {/*进度条*/}
-      <ProgressBar></ProgressBar>
+      <ProgressBar data={gameProcessInfo}></ProgressBar>
+
+      {/* 商品信息 */}
+
+      <div
+        className={`myGoods myGoods_${levelType}`}
+        onClick={() => {
+          setPrizeVisible(true);
+        }}
+      >
+        <div className="myGoods_img">
+          <img src={prizeImg} alt="" />
+        </div>
+        <div className="myGoods_nickName">{prizeName}</div>
+      </div>
 
       {/* 我的肥料 */}
-      <div className="myFertilizer">我的肥料 260</div>
+      <div className="myFertilizer">我的肥料 {gameInfo.gameBalance}</div>
 
-      {/* <BottomContent userInfo={userInfo}></BottomContent> */}
+      <BottomContent userInfo={userInfo}></BottomContent>
 
       {/* 奖品弹窗 */}
-      {/* <PrizeModal></PrizeModal> */}
+      <PrizeModal
+        prizeData={gameProcessInfo}
+        visible={prizeVisible}
+        onClose={() => {
+          setPrizeVisible(false);
+        }}
+        status={status}
+        addressData={gameProcessStrapInfo}
+        getGameDetail={getGameDetail}
+        removeAll={removeAll}
+      ></PrizeModal>
 
       {/* 等级弹窗 */}
-      {/* <LevelModal></LevelModal> */}
+      <LevelModal
+        levelData={gameProcessInfo}
+        visible={levelVisible}
+        onClose={() => {
+          setLevelVisible(false);
+        }}
+      ></LevelModal>
 
       {/* 旅行弹窗 */}
-      {/* <TravelModal></TravelModal> */}
+      <TravelModal
+        visible={travelVisible}
+        onClose={() => {
+          setTravelVisible(false);
+          getGameDetail();
+        }}
+        travelInfo={travelData}
+      ></TravelModal>
 
       {/* 合种弹窗 */}
       <InvitationModal
@@ -386,15 +606,18 @@ const index = (props) => {
         onClose={() => {
           setInvitaVisible(false);
         }}
+        processId={progressIdStr}
       ></InvitationModal>
 
       {/* 任务弹窗 */}
-      {/* <TaskCloumn
+      <TaskCloumn
         visible={taskVisible}
         onClose={() => {
           setTaskVisible(false);
         }}
-      ></TaskCloumn> */}
+        processId={progressIdStr}
+        getGameDetail={getGameDetail}
+      ></TaskCloumn>
     </>
   );
 };

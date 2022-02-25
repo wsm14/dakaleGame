@@ -118,7 +118,6 @@ function index() {
     totalLuckCard, //多少人集齐
     rewardList = [], //兑换商品信息
   } = cardDetail;
-
   const {
     lastChild = {}, //福卡信息
     checkInfo = {}, //选择卡的信息
@@ -222,41 +221,43 @@ function index() {
 
             {/*  */}
           </div>
-          <div className="exchangeCard">
-            <img src={exchange} alt="" className="exchangeCard_titleImg" />
-            {rewardList.map((item) => (
-              <div className="exchangeCard_list" key={item.identification}>
-                <div className="exchangeCard_goodsImg">
-                  <img src={item.prizeImg} alt="" />
-                </div>
-                <div className="exchangeCard_goodsName">{item.prizeName}</div>
-                <div className="exchangeCard_line"></div>
-                <div className="exchangeCard_bottom">
-                  <div className="exchangeCard_cards">
-                    {(item.conditions || []).map((item, index) => (
-                      <div className="exchangeCard_item">
-                        <img src={[card0, card1, card2, card3, card4][index]} alt="" />
-                        <div>{item.needNums}</div>
-                      </div>
-                    ))}
+          {rewardList.length && (
+            <div className="exchangeCard">
+              <img src={exchange} alt="" className="exchangeCard_titleImg" />
+              {rewardList.map((item) => (
+                <div className="exchangeCard_list" key={item.identification}>
+                  <div className="exchangeCard_goodsImg">
+                    <img src={item.prizeImg} alt="" />
                   </div>
-                  <div
-                    className={`exchangeCard_button ${
-                      item.prizeStatus === '1' ? 'exchangeCard_button1' : 'exchangeCard_button2'
-                    }`}
-                    onClick={() => {
-                      if (item.prizeStatus === '1') {
-                        setExchangeItem(item);
-                        setTipsVisible(true);
-                      }
-                    }}
-                  >
-                    {item.prizeStatus === '1' || item.prizeStatus === '0' ? '兑换0/1' : '已兑换'}
+                  <div className="exchangeCard_goodsName">{item.prizeName}</div>
+                  <div className="exchangeCard_line"></div>
+                  <div className="exchangeCard_bottom">
+                    <div className="exchangeCard_cards">
+                      {(item.conditions || []).map((item, index) => (
+                        <div className="exchangeCard_item" key={item.cardIdentification}>
+                          <img src={[card0, card1, card2, card3, card4][index]} alt="" />
+                          <div>{item.needNums}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div
+                      className={`exchangeCard_button ${
+                        item.prizeStatus === '1' ? 'exchangeCard_button1' : 'exchangeCard_button2'
+                      }`}
+                      onClick={() => {
+                        if (item.prizeStatus === '1') {
+                          setExchangeItem(item);
+                          setTipsVisible(true);
+                        }
+                      }}
+                    >
+                      {item.prizeStatus === '1' || item.prizeStatus === '0' ? '兑换0/1' : '已兑换'}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

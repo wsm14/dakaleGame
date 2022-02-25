@@ -1,5 +1,4 @@
 import Hilo, { DOMElement } from 'hilojs';
-import { createTextureAtlas } from '@/components/createTextureAtlas';
 import { deviceName } from '@/utils/birdgeContent';
 import math from '@/utils/math';
 
@@ -26,6 +25,13 @@ export const createBitmap = ({ list }) => {
       ...item,
     });
     return !visible && element;
+  });
+};
+
+//精灵数组
+export const createTextureAtlas = (data) => {
+  return new Hilo.TextureAtlas({
+    ...data,
   });
 };
 
@@ -83,149 +89,8 @@ export const HiloCreateSpiritbac = (path, length, num, width, height, id) => {
   });
 };
 
-//生成随机的星星
-export const createStar = (stage, imgObj, bigStar, fn, gameHeight) => {
-  const list = [];
-  for (let i = 0; i < 5; i++) {
-    let starObj = {
-      id: `star${i}`,
-      type: 'Bitmap',
-      image: imgObj.star.src,
-      x:
-        stage.getChildById('beanBottle').x +
-        stage.getChildById('beanBottle').width / 2 +
-        (i % 2 == 0 ? -10 : 10),
-      y: stage.getChildById('beanBottle').y + stage.getChildById('beanBottle').height / 2,
-      width: 38,
-      height: 37,
-      animate: {
-        x: stage.getChildById('bigStar').x + stage.getChildById('bigStar').width / 2,
-        y: stage.getChildById('bigStar').y,
-      },
-      from: {
-        duration: 500,
-        delay: 0 + i * 100,
-        loop: false,
-        onComplete: (e) => {
-          e.target.removeFromParent(stage);
-          if (i === 4) {
-            Hilo.Tween.remove(bigStar);
-            Hilo.Tween.to(
-              bigStar,
-              {
-                x: conversionSize(320),
-                y: computedY - conversionSize(200 - gameHeight),
-                scaleX: 0.8,
-                scaleY: 0.8,
-              },
-              {
-                duration: 100,
-                ease: Hilo.Ease.Linear.EaseNone,
-                repeat: 2,
-                loop: true,
-                reverse: true,
-                onComplete: () => {
-                  fn();
-                },
-              },
-            );
-          }
-        },
-      },
-    };
-    list.push(starObj);
-  }
-  const mapItem = createBitmap({
-    list,
-  });
-  stage.addChild(...mapItem);
-  setAnimate(mapItem, list);
-};
-
-//下方随机的星星
-export const createBottomStar = (stage, imgObj, fn, fn1) => {
-  const list = [];
-  for (let i = 0; i < 5; i++) {
-    let starObj = {
-      id: `star`,
-      type: 'Bitmap',
-      image: imgObj.star.src,
-      x:
-        stage.getChildById('bigStar').x +
-        stage.getChildById('bigStar').width / 2 +
-        (i % 2 == 0 ? -10 : 10),
-      y: stage.getChildById('bigStar').y,
-      width: 70,
-      height: 69,
-      alpha: 1,
-      animate: {
-        x: stage.getChildById('packageImg').x + stage.getChildById('packageImg').width / 2,
-        y: stage.getChildById('packageImg').y + stage.getChildById('packageImg').height / 2,
-        alpha: 0,
-      },
-      from: {
-        duration: 500,
-        delay: 0 + i * 100,
-        loop: false,
-        onComplete: (e) => {
-          stage.removeChild(stage.getChildById('star'));
-          e.target.removeFromParent(stage);
-          if (i === 4) {
-            fn && fn();
-            fn1 && fn1();
-          }
-        },
-      },
-    };
-    list.push(starObj);
-  }
-  const mapItem = createBitmap({
-    list,
-  });
-  stage.addChild(...mapItem);
-  setAnimate(mapItem, list);
-};
-
-//设置动画
-export const setAnimate = (mapItem, list) => {
-  return mapItem.map((item, index) => {
-    const { animate, from = {}, animateType = 'to' } = list[index];
-    const { onComplete } = from;
-    return (
-      animate &&
-      Hilo.Tween[animateType](
-        item,
-        {
-          ...animate,
-        },
-        {
-          loop: true,
-          ease: Hilo.Ease.Linear.EaseNone,
-          ...from,
-        },
-      )
-    );
-  });
-};
-
-//设置飞机和豆长精灵图的加速动画
-export const setPlaneAnimation = (target, times, mark1, mark2) => {
-  const tween = Hilo.Tween.fromTo(
-    target,
-    { ...mark1 },
-    { ...mark2 },
-    {
-      duration: times,
-      loop: true,
-      ease: Hilo.Ease.Linear.EaseNone,
-      reverse: true,
-    },
-  );
-  return tween;
-};
-
 //邀请人的数组
-export const filterList = (oldList, count = 2) => {
+export const filterList = (oldList, count = 3) => {
   let list = [];
   for (let i = 0; i < count; i++) {
     if (oldList[i]) {
@@ -233,4 +98,22 @@ export const filterList = (oldList, count = 2) => {
     } else list.push({});
   }
   return list;
+};
+
+//判断等级
+export const getLevel = (val, status) => {
+  let level;
+  if (status === '1') {
+    if (val >= 0 && val < 5) {
+      level = 'sapling';
+    } else if (val >= 5 && val < 10) {
+      level = 'truck';
+    } else if (val >= 10) {
+      level = 'smallTree';
+    }
+  } else if (status === '0') {
+    level = 'bigTree';
+  }
+
+  return level;
 };

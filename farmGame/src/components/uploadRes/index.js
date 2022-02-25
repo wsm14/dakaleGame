@@ -13,6 +13,6 @@ export const uploadResponents = (list = [], fn, fn2) => {
       prev[cur.id] = responents.getContent(cur.id);
       return prev;
     }, {});
-    fn && fn2(responents.getLoaded(), imgObj);
+    fn2 && fn2(responents.getLoaded(), responents);
   });
 };

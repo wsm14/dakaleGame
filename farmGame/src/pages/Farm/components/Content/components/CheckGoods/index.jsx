@@ -6,31 +6,44 @@ import TitleBlock from '@/components/TitleBlock';
 import SwiperReceive from './components/SwiperReceive';
 import ScrollGoods from './components/ScrollGoods';
 import OrderModal from '@/components/OrderModal';
-import { fetchListGameRewardBarrage } from '@/services/game';
+import { fetchListGameRewardBarrage, fetchFarmBeginGame } from '@/services/game';
 import checkTitle from '@/asstes/image/checkTitle.png';
 
 function index(props) {
-  const { homeDetail, packageObj } = useSelector((state) => state.receiveGoods);
+  const { gameDetail, getGameDetail } = props;
+  const { packageObj, addressObj } = useSelector((state) => state.farmGame);
   const dispatch = useDispatch();
   const [barrageList, setBarrageList] = useState([]); //游戏弹幕
   const [orderVisible, setOrderVisible] = useState(false);
   const {
-    freeGoodList = [], //商品列表
-  } = homeDetail;
+    rewardList = [], //商品列表
+  } = gameDetail;
 
   useEffect(() => {
     getBrrageList();
   }, []);
 
-  const checkGoods = () => {
+  const checkGoods = async () => {
+    console.log(packageObj);
     if (Object.keys(packageObj).length) {
-      setOrderVisible(true);
+      console.log(addressObj);
+      if (Object.keys(addressObj).length) {
+        const res = await fetchFarmBeginGame({
+          prize: packageObj.identification,
+          addressIdStr: addressObj.userAddressId,
+        });
+        if (res.success) {
+          getGameDetail();
+        }
+      } else {
+        setOrderVisible(true);
+      }
     } else {
       Toast.show({
         content: '请选择商品',
       });
     }
-    setOrderVisible(true);
+    // setOrderVisible(true);
   };
 
   const getBrrageList = async () => {
@@ -48,7 +61,7 @@ function index(props) {
         <img src={checkTitle} alt="" />
       </div>
       {/*左滑*/}
-      <ScrollGoods list={freeGoodList}></ScrollGoods>
+      <ScrollGoods list={rewardList}></ScrollGoods>
       {/* 确认按钮 */}
       <div className="mailButton">
         <Button onClick={checkGoods} className="mailButton_button">

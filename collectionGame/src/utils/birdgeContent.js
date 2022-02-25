@@ -46,9 +46,9 @@ export const getToken = (fn) => {
   } catch (e) {
     sessionStorage.setItem(
       'dakaleToken',
-      'ZYLhfPBumA46vz9WOeYbW4WAXL2zBgU380PC2YgNj0ew54Cal7lHJ9O9epBYyXDQ',
+      'OKOmwEwK0NjYsFp6lUzjmOJ38dlwdHAUr8dCS9IlBHMWQVD3BOn0CZNpMBqBEJ72',
     );
-    fn && fn('ZYLhfPBumA46vz9WOeYbW4WAXL2zBgU380PC2YgNj0ew54Cal7lHJ9O9epBYyXDQ');
+    fn && fn('OKOmwEwK0NjYsFp6lUzjmOJ38dlwdHAUr8dCS9IlBHMWQVD3BOn0CZNpMBqBEJ72');
   }
 };
 //获取token
@@ -234,14 +234,12 @@ export const nativeOneVideo = () => {
   linkTo({
     ios: {
       path: 'DKLSmallClockVideoAdController',
-      param: { nativeTask: 'game_to_watch_video_once' },
     },
     android: {
       path: 'ScanClockHomeVideoContainer',
-      nativeTask: 'game_to_watch_video_once',
     },
     wechat: {
-      url: `/pages/blindBox/prize/index`,
+      url: `/pages/perimeter/nearVideo/index?type=goods`,
     },
   });
 };
@@ -294,7 +292,7 @@ export const linkToMyGoods = () => {
       type: 'gameGather',
     },
     wechat: {
-      url: `/pages/blindBox/gamePrize/index?channel=gatherCardGame`,
+      url: `/pages/blindBox/gamePrize/index?channel=gameGather`,
     },
   });
 };
@@ -309,7 +307,7 @@ export const linkToAddress = () => {
       path: 'AddressAdd',
     },
     wechat: {
-      url: `/pages/relay/community/delivery/index?mode=list`,
+      url: `/pages/perimeter/delivery/index?mode=list`,
     },
   });
 };

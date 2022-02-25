@@ -8,101 +8,101 @@ export const SaplingScene = ({ stage, imgObj }) => {
 };
 
 //第二阶段树干
-export const TrunkScene = (stage, imgObj, type = 'bigTree') => {
+export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
   //根据等级显示
   const scene = {
     sapling: {
-      width: '340',
-      height: '280',
+      width: 340,
+      height: 280,
       x: 210,
       y: 587,
       load: {
         id: 'sapling1',
-        img: imgObj.sapling1.src,
+        img: imgObj.get('sapling1').content,
         num: 75,
         lineNum: 14,
       },
       start: {
         id: 'sapling2',
-        img: imgObj.sapling2.src,
+        img: imgObj.get('sapling2').content,
         num: 71,
         lineNum: 14,
       },
       end: {
         id: 'sapling3',
-        img: imgObj.sapling3.src,
+        img: imgObj.get('sapling3').content,
         num: 32,
         lineNum: 14,
       },
     },
     truck: {
-      width: '340',
-      height: '380',
+      width: 340,
+      height: 380,
       x: 210,
       y: 485,
       load: {
         id: 'trunk1',
-        img: imgObj.trunk1.src,
+        img: imgObj.get('trunk1').content,
         num: 26,
         lineNum: 14,
       },
       start: {
         id: 'trunk2',
-        img: imgObj.trunk2.src,
+        img: imgObj.get('trunk2').content,
         num: 53,
         lineNum: 14,
       },
       end: {
         id: 'trunk3',
-        img: imgObj.trunk3.src,
+        img: imgObj.get('trunk3').content,
         num: 22,
         lineNum: 14,
       },
     },
     smallTree: {
-      width: '380',
-      height: '450',
+      width: 380,
+      height: 450,
       x: 200,
       y: 420,
       load: {
         id: 'smallTree1',
-        img: imgObj.smallTree1.src,
+        img: imgObj.get('smallTree1').content,
         num: 98,
         lineNum: 13,
       },
       start: {
         id: 'smallTree2',
-        img: imgObj.smallTree2.src,
+        img: imgObj.get('smallTree2').content,
         num: 98,
         lineNum: 13,
       },
       end: {
         id: 'smallTree3',
-        img: imgObj.smallTree3.src,
+        img: imgObj.get('smallTree3').content,
         num: 32,
         lineNum: 13,
       },
     },
     bigTree: {
-      width: '450',
-      height: '520',
+      width: 450,
+      height: 520,
       x: 160,
       y: 360,
       load: {
         id: 'bigTree1',
-        img: imgObj.bigTree1.src,
-        num: 36,
+        img: imgObj.get('bigTree1').content,
+        num: 35,
         lineNum: 11,
       },
       start: {
         id: 'bigTree2',
-        img: imgObj.bigTree2.src,
-        num: 97,
+        img: imgObj.get('bigTree2').content,
+        num: 71,
         lineNum: 11,
       },
       end: {
         id: 'bigTree3',
-        img: imgObj.bigTree3.src,
+        img: imgObj.get('bigTree3').content,
         num: 31,
         lineNum: 11,
       },
@@ -110,12 +110,15 @@ export const TrunkScene = (stage, imgObj, type = 'bigTree') => {
   }[type];
 
   let { SpriteLoading, SpriteStart, SpriteEnd } = SpriteObj;
-  Object.keys(SpriteObj).forEach((item) => {
-    console.log(SpriteObj[item], 'SpriteObj[item]');
-    SpriteObj[item] && SpriteObj[item].removeFromParent(stage);
-  });
-  //第二阶段树干生张精灵图
+  // Object.keys(SpriteObj).forEach((item) => {
+  //   console.log(SpriteObj[item], 'SpriteObj[item]');
+  //   SpriteObj[item] && SpriteObj[item].removeFromParent(stage);
+  // });
+  //开始
   const creatTrunkPrepare = () => {
+    if (SpriteLoading) {
+      SpriteLoading.removeFromParent(stage);
+    }
     SpriteLoading = new Hilo.Sprite({
       id: scene.load.id,
       currentFrame: 0,
@@ -145,7 +148,11 @@ export const TrunkScene = (stage, imgObj, type = 'bigTree') => {
     stage.addChild(SpriteLoading);
   };
 
+  //循环
   const creatTrunkStart = () => {
+    if (SpriteStart) {
+      SpriteStart.removeFromParent(stage);
+    }
     SpriteStart = new Hilo.Sprite({
       id: scene.start.id,
       currentFrame: 0,
@@ -171,6 +178,9 @@ export const TrunkScene = (stage, imgObj, type = 'bigTree') => {
   };
 
   const creatTrunkEnd = () => {
+    if (SpriteEnd) {
+      SpriteEnd.removeFromParent(stage);
+    }
     SpriteEnd = new Hilo.Sprite({
       id: scene.end.id,
       currentFrame: 0,
@@ -198,7 +208,6 @@ export const TrunkScene = (stage, imgObj, type = 'bigTree') => {
 
   const endClick = () => {
     SpriteStart.visible = false;
-    SpriteLoading.removeFromParent(stage);
     SpriteEnd.goto(0);
     SpriteEnd.play();
     SpriteEnd.visible = true;
@@ -210,7 +219,6 @@ export const TrunkScene = (stage, imgObj, type = 'bigTree') => {
         SpriteEnd.visible = false;
       });
     });
-    SpriteEnd.play();
   };
   creatTrunkPrepare();
   creatTrunkStart();

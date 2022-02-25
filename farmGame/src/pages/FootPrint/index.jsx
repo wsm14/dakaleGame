@@ -1,14 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchFarmGetTravelRewardListPage, fetchShareGetNewShareInfo } from '@/services/game';
+import { filterList } from '@/utils/game';
 import TitleBlock from '@/components/TitleBlock';
 import FooterModal from '@/components/FooterModal';
+import { Toast } from 'antd-mobile';
 import { history } from 'umi';
 import './index.less';
 
 import footTitle from '@/asstes/common/footTitle.png';
-import footBac from '@/asstes/common/footBac.png';
 
 const index = () => {
+  const [page, setPage] = useState(1);
+  const [footObj, setFootObj] = useState({});
   const [visible, setVisible] = useState(false);
+  const [footItem, setFootItem] = useState({});
+  const [shareImg, setShareImg] = useState(''); //二维码图片
+
+  useEffect(() => {
+    getList();
+    getShareImg();
+  }, [page]);
+
+  const getList = async () => {
+    const res = await fetchFarmGetTravelRewardListPage({ page: page, limit: 4 });
+
+    if (res.success) {
+      const { content = {} } = res;
+      content.recordList = filterList(content.recordList || [], 4);
+      setFootObj(content);
+    }
+  };
+
+  //获取二维码
+  const getShareImg = async () => {
+    const res = await fetchShareGetNewShareInfo({
+      shareType: 'game',
+      subType: 'shareGameImage',
+      needHyaline: '1',
+    });
+    const { content = {} } = res;
+    const { shareInfo = {} } = content;
+    setShareImg(shareInfo.qcodeUrl);
+  };
+  console.log(footObj.recordList);
   return (
     <div className="footPrint">
       <TitleBlock
@@ -21,21 +55,63 @@ const index = () => {
       </div>
       <div className="footPrint_content">
         <div className="footPrint_padding">
-          <div
-            className="footPrint_item"
-            onClick={() => {
-              setVisible(true);
-            }}
-          >
-            <img src={footBac} alt="" />
-          </div>
-          <div className="footPrint_item"></div>
-          <div className="footPrint_item"></div>
-          <div className="footPrint_item"></div>
+          {(footObj.recordList || []).map((item, index) => (
+            <div
+              key={`${index}1`}
+              className="footPrint_item"
+              onClick={() => {
+                if (item.image) {
+                  setVisible(true);
+                  setFootItem(item);
+                }
+              }}
+            >
+              <img src={item.image} alt="" className={item.image ? 'footPrint_show' : null} />
+            </div>
+          ))}
         </div>
         <div className="footPrint_button">
-          <div>上一页</div>
-          <div>下一页</div>
+          <div
+            onClick={() => {
+              if (page > 1) {
+                setPage((e) => e - 1);
+              } else {
+                Toast.show({
+                  content: '当前为第一页',
+                });
+              }
+            }}
+          >
+            上一页
+          </div>
+          <div
+            onClick={() => {
+              if (parseInt(footObj.total / 4) === 0) {
+                Toast.show({
+                  content: '当前为最后一页',
+                });
+                return false;
+              }
+
+              if (footObj.total % 4 !== 0 && parseInt(footObj.total / 4) === page - 1) {
+                Toast.show({
+                  content: '当前为最后一页',
+                });
+                return false;
+              }
+
+              if (footObj.total % 4 === 0 && parseInt(footObj.total / 4) === page) {
+                Toast.show({
+                  content: '当前为最后一页',
+                });
+                return false;
+              }
+
+              setPage((e) => e + 1);
+            }}
+          >
+            下一页
+          </div>
         </div>
       </div>
 
@@ -45,6 +121,8 @@ const index = () => {
         onClose={() => {
           setVisible(false);
         }}
+        data={footItem}
+        shareImg={shareImg}
       ></FooterModal>
     </div>
   );

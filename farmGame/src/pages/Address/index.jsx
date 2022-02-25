@@ -4,18 +4,18 @@ import { useSelector, useDispatch, history } from 'umi';
 import { fetchAddressListUserAddress } from '@/services/address';
 import { checkCityName } from '@/utils/utils';
 import { linkToAddress } from '@/utils/birdgeContent';
-import checkAddress1 from '@public/usual/checkAddress1.png';
-import checkAddress2 from '@public/usual/checkAddress2.png';
-import addAddress from '@public/usual/addAddress.png';
-import backImg from '@public/usual/backImg.png';
-import emptyAddress from '@public/usual/emptyAddress.png';
+import checkAddress1 from '@asstes/common/checkAddress1.png';
+import checkAddress2 from '@asstes/common/checkAddress2.png';
+import addAddress from '@asstes/common/addAddress.png';
+import backImg from '@asstes/common/backImg.png';
+import emptyAddress from '@asstes/common/emptyAddress.png';
 import { reloadTab } from '@/utils/utils';
 import { deviceName } from '@/utils/birdgeContent';
 
 function index() {
   const [addressList, setAddressList] = useState([]); //地址列表
   const [addressBol, setAddressBol] = useState(true);
-  const { addressObj } = useSelector((state) => state.receiveGoods); //地址的数据
+  const { addressObj } = useSelector((state) => state.farmGame); //地址的数据
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function index() {
 
   const checkAddress = (item) => {
     dispatch({
-      type: 'receiveGoods/fetchSetAddressObj',
+      type: 'farmGame/fetchSetAddressObj',
       payload: {
         addressObj: item,
       },

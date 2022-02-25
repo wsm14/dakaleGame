@@ -1,6 +1,4 @@
 import loadBac from '@asstes/image/loadBac.png';
-import checkBg from '@asstes/image/checkBg.png';
-import checkTitle from '@asstes/image/checkTitle.png';
 import bg from '@asstes/image/bg.png';
 import helpIcon from '@asstes/image/helpIcon.png';
 import taskIcon from '@asstes/image/taskIcon.png';
@@ -25,14 +23,13 @@ import beanImg2 from '@/asstes/image/beanImg2.png';
 import hand from '@/asstes/image/hand.png';
 import meng from '@/asstes/image/meng.png';
 import star from '@/asstes/image/star.png';
-import cloud from '@/asstes/image/cloud.png';
-import whiteGull from '@/asstes/image/whiteGull.png';
+import mailBox from '@/asstes/image/mailbox.png';
+import mature from '@/asstes/image/mature.png';
+import whiteGull from '@asstes/image/whiteGull.png';
 
 //下载图片
 export const imgList = [
   { id: 'loadBac', noCache: true, src: loadBac },
-  { id: 'checkBg', noCache: true, src: checkBg },
-  { id: 'checkTitle', noCache: true, src: checkTitle },
   { id: 'bg', noCache: true, src: bg },
   { id: 'helpIcon', noCache: true, src: helpIcon },
   { id: 'taskIcon', noCache: true, src: taskIcon },
@@ -56,9 +53,10 @@ export const imgList = [
   { id: 'beanImg2', noCache: true, src: beanImg2 },
   { id: 'meng', noCache: true, src: meng },
   { id: 'star', noCache: true, src: star },
-  { id: 'cloud', noCache: true, src: cloud },
   { id: 'hand', noCache: true, src: hand },
   { id: 'whiteGull', noCache: true, src: whiteGull },
+  { id: 'mailBox', noCache: true, src: mailBox },
+  { id: 'mature', noCache: true, src: mature },
 ];
 
 //等级判断位置
