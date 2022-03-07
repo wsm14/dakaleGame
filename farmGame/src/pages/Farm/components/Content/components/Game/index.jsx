@@ -8,6 +8,8 @@ import {
 } from '@/services/game';
 import { nativeClose, linkToMyGoods } from '@/utils/birdgeContent';
 import { createBitmap, conversionSize, HiloCreateSpirit, getLevel } from '@/utils/game';
+import evens from '@/utils/evens';
+import { reloadTab } from '@/utils/utils';
 import { TrunkScene } from './components/Scene/index';
 import { history } from 'umi';
 import TitleBlock from '@/components/TitleBlock';
@@ -20,8 +22,8 @@ import ProgressBar from './components/ProgressBar';
 import InvitationModal from './components/InvitationModal';
 import TaskCloumn from './components/TaskCloumn';
 import title_Img from '@/asstes/image/titleImg.png';
-import mailbox from '@/asstes/common/mailbox.png';
 import './index.less';
+import { Toast } from 'antd-mobile-v5';
 
 let stage = null;
 let SpriteGroup = null;
@@ -34,7 +36,6 @@ let starSprite = null;
 let ticker = null;
 const index = (props) => {
   const { imgObj, gameDetail, getGameDetail } = props;
-  console.log(imgObj);
   const width = window.innerWidth * 2;
   const height = (window.innerWidth / 375) * 620 * 2;
   const [userInfo, setUserInfo] = useState({});
@@ -46,7 +47,6 @@ const index = (props) => {
   const [invitaVisible, setInvitaVisible] = useState(false); //合种弹窗
   const [taskVisible, setTaskVisible] = useState(false); //任务弹窗
   const containerRef = useRef(); //canvas的ref
-
   const {
     gameProcessStrapInfo = {},
     gameInfo = {},
@@ -69,17 +69,38 @@ const index = (props) => {
   useEffect(() => {
     fetchUserShare();
     initStage();
+    reloadTab(
+      () => {
+        if (ticker) {
+          ticker.removeTick(stage);
+          ticker.removeTick(Hilo.Tween);
+          ticker = null;
+        }
+        createTick(stage);
+      },
+      () => {
+        ticker.removeTick(stage);
+        ticker.removeTick(Hilo.Tween);
+        ticker = null;
+      },
+    );
+    history.listen((location, action) => {
+      if (location.pathname === '/farm') {
+        if (ticker) {
+          ticker.removeTick(stage);
+          ticker.removeTick(Hilo.Tween);
+          ticker = null;
+        }
+        createTick(stage);
+      }
+    });
   }, []);
 
   useEffect(() => {
     if (travelStatus === '0') {
       createBgInit(stage, 6);
-      if (messageSprite) {
-        messageSprite.removeFromParent(stage);
-      }
-      if (beanSprite) {
-        beanSprite.removeFromParent(stage);
-      }
+      messageSprite && messageSprite.removeFromParent(stage);
+      beanSprite && beanSprite.removeFromParent(stage);
     } else if (travelStatus === '1') {
       stage.getChildById('mailBox') && stage.getChildById('mailBox').removeFromParent(stage);
       //信箱精灵图
@@ -87,9 +108,7 @@ const index = (props) => {
       //添加豆子精灵图
       creatBean(stage);
     } else if (travelStatus === '2') {
-      if (messageSprite) {
-        messageSprite.removeFromParent(stage);
-      }
+      messageSprite && messageSprite.removeFromParent(stage);
       createBgInit(stage, 6);
       //添加豆子精灵图
       creatBean(stage);
@@ -98,20 +117,9 @@ const index = (props) => {
 
   useEffect(() => {
     //树的动画
-    SpriteGroup = TrunkScene(stage, imgObj, levelType);
+    SpriteGroup = TrunkScene(stage, imgObj, levelType, addSpirit);
     //添加施肥
-    creatFertilizer(stage);
-    if (levelType === 'bigTree') {
-      const mature = createBgInit(stage, 7);
-      mature.on(Hilo.event.POINTER_START, (e) => {
-        e.preventDefault();
-        clickInEase(mature, () => {
-          setPrizeVisible(true);
-        });
-      });
-    } else {
-      stage.getChildById('mature') && stage.getChildById('mature').removeFromParent(stage);
-    }
+    addSpirit();
   }, [levelType]);
 
   useEffect(() => {
@@ -122,8 +130,10 @@ const index = (props) => {
   }, []);
 
   useUpdateLayoutEffect(() => {
-    if (gameLevel < 15) {
+    if (gameLevel % 5 === 0) {
       setLevelVisible(true);
+    } else {
+      setPrizeVisible(true);
     }
   }, [gameLevel]);
 
@@ -138,8 +148,14 @@ const index = (props) => {
       scaleY: 0.5,
     });
     stage.enableDOMEvent(Hilo.event.POINTER_START, true);
+    // stage.enableDOMEvent(Hilo.event.POINTER_MOVE, true);
+    stage.enableDOMEvent(Hilo.event.POINTER_END, true);
+
     createTick(stage);
     initOther(stage);
+    evens.$on('tickInit', () => {
+      createTick(stage);
+    });
   };
   const initOther = (stage) => {
     createBgInit(stage, 0);
@@ -173,6 +189,9 @@ const index = (props) => {
     foote.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
       clickInEase(foote, () => {
+        ticker.removeTick(stage);
+        ticker.removeTick(Hilo.Tween);
+        ticker = null;
         history.push('/footer');
       });
     });
@@ -248,7 +267,7 @@ const index = (props) => {
         {
           id: 'mature',
           image: imgObj.get('mature').content,
-          x: conversionSize(310),
+          x: conversionSize(305),
           y: conversionSize(720),
           width: conversionSize(150),
           height: conversionSize(112),
@@ -278,6 +297,21 @@ const index = (props) => {
         },
       },
     );
+  };
+
+  const addSpirit = () => {
+    creatFertilizer(stage, true);
+    if (levelType === 'bigTree') {
+      const mature = createBgInit(stage, 7);
+      mature.on(Hilo.event.POINTER_START, (e) => {
+        e.preventDefault();
+        clickInEase(mature, () => {
+          setPrizeVisible(true);
+        });
+      });
+    } else {
+      stage.getChildById('mature') && stage.getChildById('mature').removeFromParent(stage);
+    }
   };
 
   //白鹭精灵图
@@ -324,10 +358,63 @@ const index = (props) => {
   };
 
   //添加施肥精灵图
-  const creatFertilizer = async (stage) => {
-    if (fertilizerSprite) {
-      fertilizerSprite.removeFromParent(stage);
-    }
+  const creatFertilizer = async (stage, reload = false) => {
+    // if (reload) {
+    //   let test = new Hilo.Sprite({
+    //     id: 'fertilizer',
+    //     currentFrame: 0,
+    //     loop: false,
+    //     interval: 24,
+    //     timeBased: true,
+    //     width: conversionSize(320),
+    //     height: conversionSize(458),
+    //     x: conversionSize(215),
+    //     y: conversionSize(660),
+    //   });
+    //   let fertilizerAnimate = HiloCreateSpirit(
+    //     imgObj.get('fertilizer').content,
+    //     46,
+    //     15,
+    //     320,
+    //     458,
+    //     'fertilizer',
+    //   );
+    //   test.addFrame(fertilizerAnimate.getSprite('fertilizer'));
+    //   test.stop();
+    //   test.on(Hilo.event.POINTER_START, (e) => {
+    //     if (status == 1) {
+    //       e.preventDefault();
+    //       localStorage.setItem('hand', '1');
+    //       handSprite && handSprite.removeFromParent(stage);
+    //       fertilizerSprite.play();
+    //       fertilizerSprite.setFrameCallback(fertilizerSprite.getNumFrames() - 1, async () => {
+    //         SpriteGroup.creatTrunkEnd();
+    //         fertilizerSprite.goto(0);
+    //         fertilizerSprite.stop();
+    //         const res = await fetchFarmSpreadManure({
+    //           gameProgressIdStr: progressIdStr,
+    //         });
+    //         if (res.success) {
+    //           getGameDetail();
+    //         } else {
+    //           setTaskVisible(true);
+    //         }
+    //       });
+    //     } else {
+    //       Toast.show({
+    //         content: '游戏已结束',
+    //       });
+    //     }
+    //   });
+    //   stage.addChild(test);
+    //   setTimeout(() => {
+    //     fertilizerSprite.removeFromParent(stage);
+    //     fertilizerSprite = test;
+    //   }, 100);
+    //   return;
+    // }
+    fertilizerSprite && fertilizerSprite.removeFromParent(stage);
+    let stageX = 0;
 
     fertilizerSprite = new Hilo.Sprite({
       id: 'fertilizer',
@@ -350,25 +437,43 @@ const index = (props) => {
     );
     fertilizerSprite.addFrame(fertilizerAnimate.getSprite('fertilizer'));
     fertilizerSprite.stop();
+
     fertilizerSprite.on(Hilo.event.POINTER_START, (e) => {
-      e.preventDefault();
-      localStorage.setItem('hand', '1');
-      handSprite && handSprite.removeFromParent(stage);
-      fertilizerSprite.play();
-      fertilizerSprite.setFrameCallback(fertilizerSprite.getNumFrames() - 1, async () => {
-        SpriteGroup.endClick();
-        fertilizerSprite.goto(0);
-        fertilizerSprite.stop();
-        const res = await fetchFarmSpreadManure({
-          gameProgressIdStr: progressIdStr,
-        });
-        if (res.success) {
-          getGameDetail();
-        } else {
-          setTaskVisible(true);
-        }
-      });
+      stageX = e.stageX;
     });
+    fertilizerSprite.on(Hilo.event.POINTER_END, (e) => {
+      e.preventDefault();
+      let difference = stageX - e.stageX;
+      console.log(difference);
+      if (difference === 0) {
+        if (status == 1) {
+          e.preventDefault();
+          localStorage.setItem('hand', '1');
+          handSprite && handSprite.removeFromParent(stage);
+          fertilizerSprite.play();
+          fertilizerSprite.setFrameCallback(fertilizerSprite.getNumFrames() - 1, async () => {
+            SpriteGroup.endClick();
+            fertilizerSprite.goto(0);
+            fertilizerSprite.stop();
+            const res = await fetchFarmSpreadManure({
+              gameProgressIdStr: progressIdStr,
+            });
+            if (res.resultDesc === '肥料不足') {
+              Toast.show({
+                content: res.resultDesc,
+              });
+              setTaskVisible(true);
+            }
+            getGameDetail();
+          });
+        } else {
+          Toast.show({
+            content: '游戏已结束',
+          });
+        }
+      }
+    });
+
     stage.addChild(fertilizerSprite);
   };
 
@@ -397,20 +502,23 @@ const index = (props) => {
       'message',
     );
     messageSprite.addFrame(messageAnimate.getSprite('message'));
-    messageSprite.on(Hilo.event.POINTER_START, async (e) => {
+    messageSprite.on(Hilo.event.POINTER_START, (e) => {
       e.preventDefault();
-
-      const res = await fetchFarmGetReceiveTravelReward({
-        gameProgressIdStr: progressIdStr,
-        needDoubleFlag: '0',
-      });
-      if (res.success) {
-        const { rewardInfo = {} } = res.content;
-        setTravelData(rewardInfo);
-        setTravelVisible(true);
-      }
+      getMessage();
     });
     stage.addChild(messageSprite);
+  };
+
+  const getMessage = async () => {
+    const res = await fetchFarmGetReceiveTravelReward({
+      gameProgressIdStr: progressIdStr,
+      needDoubleFlag: '0',
+    });
+    if (res.success) {
+      const { rewardInfo = {} } = res.content;
+      setTravelData(rewardInfo);
+      setTravelVisible(true);
+    }
   };
 
   //豆子精灵图
@@ -531,7 +639,10 @@ const index = (props) => {
       <div ref={containerRef} className="content_scene"></div>
 
       {/* 通知信息 */}
-      <div className={`messageTips ${travelStatus === '1' ? 'messageTips_animation' : ''}`}>
+      <div
+        className={`messageTips ${travelStatus === '1' ? 'messageTips_animation' : ''}`}
+        onClick={getMessage}
+      >
         你有一封信
       </div>
 
@@ -607,6 +718,7 @@ const index = (props) => {
           setInvitaVisible(false);
         }}
         processId={progressIdStr}
+        getGameDetail={getGameDetail}
       ></InvitationModal>
 
       {/* 任务弹窗 */}

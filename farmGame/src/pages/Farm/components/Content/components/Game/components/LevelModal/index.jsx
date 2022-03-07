@@ -7,6 +7,8 @@ const index = (props) => {
   const modalProps = {
     visible: visible,
     onClose: onClose,
+    opacity: 0.8,
+    forceRender: true,
   };
   return (
     <BasicModal modalProps={modalProps}>

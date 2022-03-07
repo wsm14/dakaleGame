@@ -30,12 +30,12 @@ const index = () => {
     uploadResponents(
       imgList,
       (e) => {
-        setState(e);
+        if (!imgFlag) {
+          setState(e);
+        }
       },
       (num, val) => {
-        console.log(num, val);
         if (num === imgList.length) {
-          console.log(val.get('star'));
           getToken((e) => {
             if (e) {
               setImgObj(val);

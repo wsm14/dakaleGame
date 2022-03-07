@@ -25,12 +25,12 @@ function index(props) {
   return (
     <>
       <BasicModal modalProps={{ ...modalProps }}>
-        <div className="signOutModal_content">
-          <div className="signOutModal_content_sign">温馨提示</div>
-          <div className="signOutModal_content_title">是否确认退出小队？</div>
-          <div className="signOutModal_doubleButton">
+        <div className="TipsModal_content">
+          <div className="TipsModal_content_sign">温馨提示</div>
+          <div className="TipsModal_content_title">是否确认退出小队？</div>
+          <div className="TipsModal_doubleButton">
             <div
-              className="signOutModal_content_button"
+              className="TipsModal_content_button"
               onClick={() => {
                 signOut();
               }}
@@ -38,7 +38,7 @@ function index(props) {
               立即退出
             </div>
             <div
-              className="signOutModal_content_button1"
+              className="TipsModal_content_button1"
               onClick={() => {
                 onClose();
               }}

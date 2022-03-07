@@ -34,6 +34,7 @@ function index(props) {
 
   //打开弹窗并且复制口令
   const copyCode = async (type, id, taskType) => {
+    console.log(type);
     if (deviceName() != 'miniProgram') {
       const res = await fetchCommandGetCommand({
         commandType: type,
@@ -47,7 +48,7 @@ function index(props) {
     } else {
       linkTo({
         wechat: {
-          url: `/pages/share/gameHelp/index?subType=${btnType}&shareId=${id}`,
+          url: `/pages/share/gameHelp/index?subType=${type}&shareId=${id}`,
         },
       });
     }
@@ -165,13 +166,7 @@ function index(props) {
       <Popup {...popupProps}>
         <div className="taskPopup">
           {/* 标题 */}
-          <img
-            src={taskClose}
-            alt=""
-            className=""
-            className="taskPopup_closeImg"
-            onClick={onClose && onClose}
-          />
+          <img src={taskClose} alt="" className="taskPopup_closeImg" onClick={onClose && onClose} />
           <div className="taskPopup_titleImg">
             <img src={taskTitle} alt="" />
           </div>

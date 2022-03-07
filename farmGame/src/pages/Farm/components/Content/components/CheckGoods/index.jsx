@@ -6,6 +6,7 @@ import TitleBlock from '@/components/TitleBlock';
 import SwiperReceive from './components/SwiperReceive';
 import ScrollGoods from './components/ScrollGoods';
 import OrderModal from '@/components/OrderModal';
+import { nativeClose } from '@/utils/birdgeContent';
 import { fetchListGameRewardBarrage, fetchFarmBeginGame } from '@/services/game';
 import checkTitle from '@/asstes/image/checkTitle.png';
 
@@ -20,13 +21,11 @@ function index(props) {
   } = gameDetail;
 
   useEffect(() => {
-    getBrrageList();
+    // getBrrageList();
   }, []);
 
   const checkGoods = async () => {
-    console.log(packageObj);
     if (Object.keys(packageObj).length) {
-      console.log(addressObj);
       if (Object.keys(addressObj).length) {
         const res = await fetchFarmBeginGame({
           prize: packageObj.identification,
@@ -56,7 +55,7 @@ function index(props) {
   return (
     <div className="checkGoods">
       {/* 规则 */}
-      <TitleBlock></TitleBlock>
+      <TitleBlock back={nativeClose}></TitleBlock>
       <div className="checkGoods_tips">
         <img src={checkTitle} alt="" />
       </div>
@@ -69,7 +68,7 @@ function index(props) {
         </Button>
       </div>
       {/* 领取轮播 */}
-      <SwiperReceive list={barrageList}></SwiperReceive>
+      {/* <SwiperReceive list={barrageList}></SwiperReceive> */}
       {/* 确认弹窗 */}
       <OrderModal
         visible={orderVisible}

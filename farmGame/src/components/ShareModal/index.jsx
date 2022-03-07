@@ -9,7 +9,6 @@ import BasicModal from '@/components/BasicModal';
 function index(props) {
   const { visible = {}, onClose } = props;
   const { show, type, value, taskType } = visible;
-  console.log(type, 'type');
   const btnType = {
     farmTaskHelp: nativeShareWork,
     farmTogether: nativeShareClose,

@@ -24,11 +24,14 @@ export default ({ data = {}, type }) => {
           >
             <Swiper.Item className="swiper_box public_center">
               <div className="topLayer_scoend_fontFamily">
-                {userBeanNums && (userBeanNums / 100).toFixed(2)}元
+                <span>{userBeanNums && (userBeanNums / 100).toFixed(2)}</span> 元
               </div>
             </Swiper.Item>
             <Swiper.Item className="swiper_box public_center">
-              <div>{userBeanNums}卡豆</div>
+              <div>
+                {' '}
+                <span>{userBeanNums}</span> 卡豆
+              </div>
             </Swiper.Item>
           </Swiper>
         </div>

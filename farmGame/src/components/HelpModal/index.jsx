@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import './index.less';
 import { useLocation } from 'umi';
 import BasicModal from '@/components/BasicModal';
+import { Toast } from 'antd-mobile';
 import { fetchFarmJoinTeam, fetchTaskDoneTask, fetchFarmGetFarmReward } from '@/services/game';
 
 function index(props) {
-  const { getGameDetail, data = {} } = props;
+  const { getGameDetail } = props;
   const [visible, setVisible] = useState(false);
   const [detail, setDetail] = useState({});
   const location = useLocation();
   const { query = {} } = location;
-  const { userId, relateId, commandType } = query;
+  const { userId, relateId, commandType, extraParam } = query;
 
   useEffect(() => {
     if (userId && relateId) {
@@ -21,7 +22,7 @@ function index(props) {
 
   const getDetail = async () => {
     const res = await fetchFarmGetFarmReward({
-      progressIdStr: data.progressIdStr,
+      progressIdStr: commandType == 'farmTaskHelp' ? extraParam : relateId,
     });
     if (res.success) {
       setDetail(res.content.rewardInfo);
@@ -38,6 +39,7 @@ function index(props) {
         Toast.show({
           content: '助力成功',
         });
+        setVisible(false);
       }
     } else if (commandType === 'farmTogether') {
       const res = await fetchFarmJoinTeam({
@@ -49,9 +51,9 @@ function index(props) {
           content: '加入成功',
         });
         getGameDetail();
+        setVisible(false);
       }
     }
-    setVisible(false);
   };
 
   const modalProps = {

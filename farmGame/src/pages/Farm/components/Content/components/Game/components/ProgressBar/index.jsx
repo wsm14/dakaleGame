@@ -10,7 +10,10 @@ const index = ({ data = {} }) => {
         ></div>
       </div>
       <div className="ProgressBar_tips">
-        再施肥{data.currentLevelLimit - data.gameProgress}次可升级（{data.gameLevel}/15级）
+        {data.status === '1'
+          ? `再施肥${data.currentLevelLimit - data.gameProgress}次可升级（
+        ${data.gameLevel}/15级）`
+          : '你已满足领取条件'}
       </div>
     </div>
   );

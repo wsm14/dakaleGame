@@ -36,26 +36,34 @@ const index = (props) => {
   }, [visible]);
 
   const getPrize = async () => {
-    const res = await fetchFarmReceiveReward({
-      addressIdStr: addressObj.userAddressId,
-      gameProgressIdStr: addressData.progressIdStr,
-    });
-    if (res.success) {
-      Toast.show({
-        content: '领取成功',
+    if (Object.keys(addressObj).length) {
+      const res = await fetchFarmReceiveReward({
+        addressIdStr: addressObj.userAddressId,
+        gameProgressIdStr: addressData.progressIdStr,
       });
-      removeAll();
-      onClose();
-      getGameDetail();
-      dispatch({
-        type: 'farmGame/save',
-        payload: { addressObj: {} },
+      if (res.success) {
+        Toast.show({
+          content: '领取成功',
+        });
+        removeAll();
+        onClose();
+        getGameDetail();
+        dispatch({
+          type: 'farmGame/save',
+          payload: { addressObj: {} },
+        });
+      }
+    } else {
+      Toast.show({
+        content: '请填写地址',
       });
     }
   };
   const modalProps = {
     visible: visible,
     onClose: onClose,
+    opacity: 0.8,
+    forceRender: true,
   };
   return (
     <BasicModal modalProps={modalProps}>

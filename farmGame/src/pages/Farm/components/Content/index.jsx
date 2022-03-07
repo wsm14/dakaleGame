@@ -9,7 +9,6 @@ const index = (props) => {
   const { imgObj, gameDetail, getGameDetail } = props;
   const {
     pageFlag, //标识
-    gameProcessStrapInfo = {},
   } = gameDetail;
   return (
     <>
@@ -31,7 +30,7 @@ const index = (props) => {
       {/* </TransitionGroup> */}
 
       {/* 帮助弹窗 */}
-      <HelpModal getGameDetail={getGameDetail} data={gameProcessStrapInfo} />
+      <HelpModal getGameDetail={getGameDetail} />
     </>
   );
 };

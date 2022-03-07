@@ -104,3 +104,19 @@ export async function fetchListGameRewardBarrage(params) {
     params,
   });
 }
+
+// post 免费领商品游戏 - 重置游戏
+export async function fetchFreeGoodResetGamePrize(data) {
+  return request('/user/game/freeGood/resetGamePrize', {
+    method: 'POST',
+    data,
+  });
+}
+
+// get 免费领商品游戏 - 任务卡豆兑换
+export async function fetchTaskExchangeBalance(data) {
+  return request('/user/game/task/exchangeBalance', {
+    method: 'POST',
+    data,
+  });
+}

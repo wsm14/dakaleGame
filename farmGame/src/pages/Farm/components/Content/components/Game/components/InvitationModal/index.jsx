@@ -18,6 +18,7 @@ function index(props = {}) {
     visible, //显示关闭
     onClose, //关闭事件
     processId, //进度id
+    getGameDetail,
   } = props;
   const [outVisible, setOutVisible] = useState(false);
   const [invitaList, setInvitaList] = useState([]); //邀请列表
@@ -34,14 +35,15 @@ function index(props = {}) {
       progressIdStr: processId,
     });
     const { content = {} } = res;
-    let { userList = [] } = content;
-    userList = filterList(userList, 3);
-    setInvitaList(userList);
+    let { teamMemberList = [] } = content;
+    teamMemberList = filterList(teamMemberList, 3);
+    setInvitaList(teamMemberList);
   };
 
   //赋值口令
   //打开弹窗并且复制口令
   const copyCode = async (type, id) => {
+    console.log(type, id);
     if (deviceName() != 'miniProgram') {
       const res = await fetchCommandGetCommand({
         commandType: type,
@@ -123,6 +125,7 @@ function index(props = {}) {
         }}
         getInvitaInfo={getInvitaInfo}
         processId={processId}
+        getGameDetail={getGameDetail}
       ></SignOutModal>
 
       {/* 邀请合力弹窗 */}

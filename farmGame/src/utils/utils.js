@@ -30,7 +30,7 @@ export const cobyInfo = (data, val, callback) => {
   callback && callback(val);
 };
 
-export const reloadTab = (callback) => {
+export const reloadTab = (callback, callback2) => {
   let hiddenProperty =
     'hidden' in document
       ? 'hidden'
@@ -43,6 +43,7 @@ export const reloadTab = (callback) => {
     console.log(document[hiddenProperty]);
     if (document[hiddenProperty]) {
       //当离开H5 跳转到app原生的页面时,这里会被触发
+      callback2 && callback2();
     } else {
       //当从原生页面用户一系列操作后,返回H5的时候,这里会被触发
       console.log(1111111);

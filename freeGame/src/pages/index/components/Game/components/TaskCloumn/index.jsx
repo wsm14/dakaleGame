@@ -9,9 +9,12 @@ import {
   fetchTaskGetTaskList,
   fetchTaskDoneTask,
   fetchTaskReceiveTaskReward,
+  fetchFreeGoodResetGamePrize,
+  fetchTaskExchangeBalance,
 } from '@/services/game';
 import { reloadTab } from '@/utils/utils';
 import { deviceName } from '@/utils/birdgeContent';
+import TipsModal from '@/components/TipsModal';
 import './index.less';
 import taskTitle from '@public/usual/taskTitle.png';
 import taskClose from '@public/usual/taskClose.png';
@@ -22,11 +25,13 @@ import taskOn from '@public/usual/taskOn.png';
 let timer = null;
 
 function index(props) {
-  const { visible, onClose, getHomeDetail, openModal, countDistance } = props;
+  const { visible, onClose, getHomeDetail, openModal, countDistance, processId } = props;
   const [signContent, setSignContent] = useState({}); //签到信息
   const [taskList, setTaskList] = useState([]); //任务信息
   const [count, setCount] = useState(30); //倒计时
   const [taskStrapId, setTaskStrapId] = useState(''); //倒计时id
+  const [restVisible, setRestVisible] = useState(false); //重置弹窗
+  const [exchangeVisible, setExchangeVisible] = useState(false); //兑换弹窗
   const [timeBol, setTimeBol] = useState(false);
   const scrollRef = useRef();
   const timerRef = useRef(1);
@@ -73,6 +78,28 @@ function index(props) {
     getHomeDetail();
   };
 
+  //跳转app
+  const goApp = (item) => {
+    const { jumpRule, strapId } = item;
+    let json = (jumpRule && JSON.parse(jumpRule)) || {};
+    const { jumpUrl, param } = json;
+    const paramJson = (param && JSON.parse(param)) || {};
+    const { browseType } = paramJson;
+    const { iosUrl, androidUrl, weChatUrl } = jumpUrl;
+    linkTo({
+      wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=collect` },
+      ios: {
+        path: iosUrl,
+        param: { strapId, browserType: browseType },
+      },
+      android: {
+        path: androidUrl,
+        strapId,
+        browseType,
+      },
+    });
+  };
+
   //任务列表
   const getTaskList = async () => {
     const source = deviceName() == 'miniProgram' ? 'miniClock' : 'app';
@@ -88,27 +115,25 @@ function index(props) {
       const rule = JSON.parse(receiveRule) || {};
       const { condition = [] } = rule;
       if (condition.length && taskStatus == 0) {
-        // times = condition[hasDoneTimes];
-        // strapId1 = strapId;
         setTaskStrapId(strapId);
         if (timerRef.current === 1) {
           clearInterval(timer);
           setCount(condition[hasDoneTimes]);
         }
-
         setTimeBol(!timeBol);
-        // countRef.current = !countRef.current;
       }
     });
-    // setTaskStrapId(strapId1);
-    // setCount(times);
+    taskList.push({
+      content: '重新选择商品后当前进度将会清空',
+      image: 'https://resource-new.dakale.net/common/game/task/freeTask/share.png',
+      name: '商品重置',
+      taskType: 'reset',
+    });
     setTaskList([...taskList]);
   };
   //判断显示的按钮
   const checkButton = (item) => {
-    const { taskStatus, strapId, jumpRule, taskType } = item;
-    let json = (jumpRule && JSON.parse(jumpRule)) || {};
-    const { iosUrl, androidUrl, weChatUrl } = json;
+    const { taskStatus, strapId, taskType } = item;
     if (taskStatus === '0') {
       if (taskType === 'free') {
         return (
@@ -142,17 +167,7 @@ function index(props) {
             <div
               className="taskLine_right taskLine_button1"
               onClick={() => {
-                linkTo({
-                  wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
-                  ios: {
-                    path: iosUrl,
-                    param: { strapId },
-                  },
-                  android: {
-                    path: androidUrl,
-                    strapId,
-                  },
-                });
+                goApp(item);
               }}
             >
               去完成
@@ -176,20 +191,21 @@ function index(props) {
         <div
           className="taskLine_right taskLine_button3"
           onClick={() => {
-            linkTo({
-              wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
-              ios: {
-                path: iosUrl,
-                param: { strapId },
-              },
-              android: {
-                path: androidUrl,
-                strapId,
-              },
-            });
+            goApp(item);
           }}
         >
           已领取
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className="taskLine_right taskLine_button1"
+          onClick={() => {
+            setRestVisible(true);
+          }}
+        >
+          重置
         </div>
       );
     }
@@ -236,6 +252,22 @@ function index(props) {
     }
   };
 
+  //重置游戏
+  const resetGame = async () => {
+    const res = await fetchFreeGoodResetGamePrize({
+      processId: processId,
+    });
+    if (res.success) {
+      getHomeDetail();
+    }
+    setRestVisible(false);
+  };
+
+  //兑换星豆
+  const exchangeBean = async () => {
+    const res = await fetchTaskExchangeBalance();
+  };
+
   const popupProps = {
     visible,
     onClose,
@@ -258,13 +290,7 @@ function index(props) {
       <Popup {...popupProps}>
         <div className="taskPopup">
           {/* 标题 */}
-          <img
-            src={taskClose}
-            alt=""
-            className=""
-            className="taskPopup_closeImg"
-            onClick={onClose && onClose}
-          />
+          <img src={taskClose} alt="" className="taskPopup_closeImg" onClick={onClose && onClose} />
           <div className="taskPopup_titleImg">
             <img src={taskTitle} alt="" />
           </div>
@@ -293,18 +319,12 @@ function index(props) {
                           <img
                             src={flag ? starOn : starOff}
                             alt=""
-                            className=""
                             className="taskSteps_line_img1"
                           />
                           <div className="taskSteps_line_days">
                             {['1'].includes(signFlag) && signDay == item.number ? (
                               <div className="taskSteps_line_today">
-                                <img
-                                  src={taskOn}
-                                  alt=""
-                                  className=""
-                                  className="taskSteps_line_img2"
-                                />
+                                <img src={taskOn} alt="" className="taskSteps_line_img2" />
                                 <div>今天</div>
                               </div>
                             ) : (
@@ -346,6 +366,30 @@ function index(props) {
           </div>
         </div>
       </Popup>
+
+      {/* 重置弹窗 */}
+      <TipsModal
+        visible={restVisible}
+        leftButton="确定"
+        rightButton="再想想"
+        title="确定要重新选择奖品吗，确定
+后当前奖品进度将会清除"
+        onClose={() => {
+          setRestVisible(false);
+        }}
+        onOK={resetGame}
+      />
+
+      {/* 兑换弹窗 */}
+      <TipsModal
+        visible={exchangeVisible}
+        leftButton="兑换"
+        rightButton="再想想"
+        title="确定要使用100卡豆兑换100星豆吗"
+        onClose={() => {
+          setExchangeVisible(false);
+        }}
+      />
     </>
   );
 }

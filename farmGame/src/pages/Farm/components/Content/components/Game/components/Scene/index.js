@@ -3,10 +3,6 @@ import { HiloCreateSpirit, conversionSize } from '@/utils/game';
 
 let SpriteObj = { SpriteLoading: null, SpriteStart: null, SpriteEnd: null };
 
-export const SaplingScene = ({ stage, imgObj }) => {
-  return <div>index</div>;
-};
-
 //第二阶段树干
 export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
   //根据等级显示
@@ -67,7 +63,7 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
       load: {
         id: 'smallTree1',
         img: imgObj.get('smallTree1').content,
-        num: 98,
+        num: 35,
         lineNum: 13,
       },
       start: {
@@ -110,10 +106,10 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
   }[type];
 
   let { SpriteLoading, SpriteStart, SpriteEnd } = SpriteObj;
-  // Object.keys(SpriteObj).forEach((item) => {
-  //   console.log(SpriteObj[item], 'SpriteObj[item]');
-  //   SpriteObj[item] && SpriteObj[item].removeFromParent(stage);
-  // });
+  Object.keys(SpriteObj).forEach((item) => {
+    console.log(SpriteObj[item], 'SpriteObj[item]');
+    SpriteObj[item] && SpriteObj[item].removeFromParent(stage);
+  });
   //开始
   const creatTrunkPrepare = () => {
     if (SpriteLoading) {
@@ -207,15 +203,16 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
   };
 
   const endClick = () => {
+    SpriteStart.goto(0, true);
     SpriteStart.visible = false;
     SpriteEnd.goto(0);
     SpriteEnd.play();
     SpriteEnd.visible = true;
     SpriteEnd.setFrameCallback(SpriteEnd.getNumFrames() - 1, () => {
-      SpriteStart.goto(0);
       SpriteStart.visible = true;
       SpriteStart.play();
       setTimeout(() => {
+        SpriteEnd.stop();
         SpriteEnd.visible = false;
       });
     });

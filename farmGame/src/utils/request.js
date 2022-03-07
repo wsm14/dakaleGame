@@ -115,6 +115,9 @@ request.interceptors.response.use(async (response) => {
     getLogin();
     return false;
   }
+  if (resultDesc === '肥料不足') {
+    return response;
+  }
   if (!success && response.status == 200) {
     Toast.show({ content: resultDesc || errorHandler(response) });
     // notification.info({

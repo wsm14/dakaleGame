@@ -1,10 +1,11 @@
 import React from 'react';
 import './index.less';
 import { fetchFarmQuitTeam } from '@/services/game';
+import { Toast } from 'antd-mobile';
 import BasicModal from '@/components/BasicModal';
 
 function index(props) {
-  const { visible, onClose, getInvitaInfo, processId } = props;
+  const { visible, onClose, getInvitaInfo, processId, getGameDetail } = props;
 
   const modalProps = {
     visible: visible,
@@ -18,8 +19,14 @@ function index(props) {
     const res = await fetchFarmQuitTeam({
       gameProgressIdStr: processId,
     });
-    getInvitaInfo();
-    onClose();
+    if (res.success) {
+      Toast.show({
+        content: '退出成功',
+      });
+      getInvitaInfo();
+      getGameDetail();
+      onClose();
+    }
   };
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Mask } from 'antd-mobile';
 import html2canvas from 'html2canvas';
-import { makeReport } from '@/utils/birdgeContent';
+import { makeReport, deviceName, linkTo } from '@/utils/birdgeContent';
 import './index.less';
 
 const index = (props) => {
@@ -10,15 +10,22 @@ const index = (props) => {
 
   //画海报
   const makeImage = () => {
-    html2canvas(reportRef.current, {
-      useCORS: true,
-      scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2,
-    }).then(function (canvas) {
-      const base64 = canvas.toDataURL('image/png');
-      console.log(base64);
-      // // base64转换
-      makeReport(`shareType=wechat,${base64}`);
-    });
+    if (deviceName() === 'miniProgram') {
+      linkTo({
+        wechat: {
+          url: `/pages/share/download/index`,
+        },
+      });
+    } else {
+      html2canvas(reportRef.current, {
+        useCORS: true,
+        scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2,
+      }).then(function (canvas) {
+        const base64 = canvas.toDataURL('image/png');
+        // // base64转换
+        makeReport(`shareType=wechat,${base64}`);
+      });
+    }
   };
   return (
     <>

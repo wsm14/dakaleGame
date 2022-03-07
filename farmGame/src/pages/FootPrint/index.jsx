@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFarmGetTravelRewardListPage, fetchShareGetNewShareInfo } from '@/services/game';
 import { filterList } from '@/utils/game';
+import evens from '@/utils/evens';
 import TitleBlock from '@/components/TitleBlock';
 import FooterModal from '@/components/FooterModal';
 import { Toast } from 'antd-mobile';
@@ -15,7 +16,11 @@ const index = () => {
   const [visible, setVisible] = useState(false);
   const [footItem, setFootItem] = useState({});
   const [shareImg, setShareImg] = useState(''); //二维码图片
-
+  // useEffect(() => {
+  //   return () => {
+  //     evens.$emit('tickInit');
+  //   };
+  // }, []);
   useEffect(() => {
     getList();
     getShareImg();
@@ -42,7 +47,6 @@ const index = () => {
     const { shareInfo = {} } = content;
     setShareImg(shareInfo.qcodeUrl);
   };
-  console.log(footObj.recordList);
   return (
     <div className="footPrint">
       <TitleBlock
