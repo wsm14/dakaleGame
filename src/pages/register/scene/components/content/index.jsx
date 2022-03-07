@@ -769,27 +769,27 @@ export default ({ responent }) => {
   const fetchPack = () => {
     fetchSignInfo({}).then((val) => {
       if (val) {
-        let { hasFillSignFlag, signRecordInfo = [] } = val.content;
-        let listIndex = signRecordInfo
-          .map((item, index) => {
-            return { ...item, index };
-          })
-          .filter((item) => {
-            const { currentDayFlag } = item;
-            return currentDayFlag === '1';
-          })[0];
-        listIndex = listIndex && listIndex.index;
-        signRecordInfo = signRecordInfo.map((item, index) => {
-          const { signFlag } = item;
-          return {
-            ...item,
-            hasFillSignFlag:
-              listIndex > index && hasFillSignFlag === '0' && signFlag === '0' ? '0' : '1',
-          };
+        let {
+          signRecordList = [],
+          hasUseWeeklyCardFlag = '0',
+          ableReceiveFlag = '0',
+          currentSignFlag = '0',
+        } = val.content;
+        let index = signRecordList.findIndex((currentValue) => {
+          const { currentDayFlag } = currentValue;
+          return currentDayFlag === '1';
         });
         setPackData({
-          signRecordInfo,
-          hasFillSignFlag,
+          signRecordList: signRecordList.reduce((item, val, current) => {
+            const {} = val;
+            return [
+              ...item,
+              { ...val, needSubscribe: current <= index && val.signStatus === '0' ? '1' : '0' },
+            ];
+          }, []),
+          hasUseWeeklyCardFlag,
+          ableReceiveFlag,
+          currentSignFlag,
         });
       }
     });
@@ -963,7 +963,7 @@ export default ({ responent }) => {
         show={WorkVisible.visible}
       ></CobyMask>
       <BottomContent userInfo={userInfo}></BottomContent>
-      <Step show={imperVisible} close={visible} data={packData.signRecordInfo}></Step>
+      <Step show={imperVisible} close={visible} data={packData.currentSignFlag}></Step>
       <Track cRef={ref}></Track>
     </div>
   );

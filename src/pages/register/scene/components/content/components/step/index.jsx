@@ -3,16 +3,10 @@ import { useEffect } from 'react';
 import { getUrlKey } from '@/utils/birdgeContent';
 import { history } from 'umi';
 import './index.less';
-export default ({ data = [], show, close }) => {
+export default ({ data, show, close }) => {
   const [step, setStep] = useState(null);
   useEffect(() => {
-    let flag =
-      data &&
-      data.filter((item) => {
-        return item.currentDayFlag === '1';
-      })[0];
-
-    if (flag && flag.signFlag === '1' && !show && !close) {
+    if (data === '1' && !show && !close) {
       let flag = window.localStorage.getItem('dakale_new');
       if (!flag) {
         setStep(0);

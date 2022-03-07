@@ -7,10 +7,11 @@ export function fetchGameInfo(params) {
 }
 //签到游戏首页
 export function fetchSignInfo(params) {
-  return request('/user/game/sign/getSignInfo', {
+  return request('/user/game/sign/getUserSignRecord', {
     params,
   });
 }
+// VnoOSpWzwrwqpjPMWekDgCOs9nDBNpjkU5p5ZYpBjSzIlsy2ODYQVlSY1W4lSmlC
 export function fetchFoodList(params) {
   return request('/user/sign/game/getFoodList', {
     params,
@@ -39,7 +40,7 @@ export function fakeFeedFood(data) {
   });
 }
 export function fakeSignInfo(data) {
-  return request('/user/game/sign/saveSignInfo', {
+  return request('/user/game/sign/saveSignRecord', {
     method: 'POST',
     data,
   });
@@ -62,7 +63,7 @@ export function fakeUpdateUserPersonalSetting(data) {
 //领取喂食奖励
 
 export function fakefillSign(data) {
-  return request('/user/game/sign/fillSign', {
+  return request('/user/game/sign/saveUserFillSignRecord', {
     method: 'POST',
     data,
   });
@@ -135,4 +136,12 @@ export function fakeOperatingLog(data) {
     data,
   });
 }
-// 埋点接口
+//埋点接口
+
+export function fakeSignGift(data) {
+  return request('/user/game/sign/receiveSignGift', {
+    method: 'POST',
+    data,
+  });
+}
+//领取大礼包

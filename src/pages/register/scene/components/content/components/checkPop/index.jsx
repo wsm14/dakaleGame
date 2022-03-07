@@ -7,10 +7,13 @@ import {
   fakeUpdateUserPersonalSetting,
   fakefillSign,
   fetchCommand,
+  fakeSignGift,
 } from '@/server/registerServers';
 import { deviceName, linkTo, getUrlKey } from '@/utils/birdgeContent';
 import { toast, cobyInfo } from '@/utils/utils';
 import Imper from './components/signSuccess';
+import SignTask from './components/signTask';
+import SignPrize from './components/blindPop';
 import day from 'dayjs';
 import './index.less';
 export default (props) => {
@@ -31,8 +34,16 @@ export default (props) => {
   const [data, setData] = useState({});
   const [imperMask, setImperMask] = useState(false);
   const [maskVisible, setMaskVisible] = useState(false);
+  const [signPrize, setSignPrize] = useState({
+    show: false,
+    type: 'fail',
+  });
+  const [saveSignCount, setSignCount] = useState({
+    show: false,
+    data: {},
+  });
   const [maskData, setMaskData] = useState({
-    type: 'success',
+    type: 'bean',
     data: {},
   });
   useEffect(() => {
@@ -42,25 +53,28 @@ export default (props) => {
       setCheckFlag(true);
     }
   }, [remindFlag]);
-  const { signRecordInfo = [], hasFillSignFlag } = list;
+  const {
+    signRecordList = [],
+    hasUseWeeklyCardFlag = '0',
+    ableReceiveFlag = '0',
+    currentSignFlag = '0',
+  } = list;
   useEffect(() => {
-    signRecordInfo.forEach((item) => {
-      const { currentDayFlag, signFlag } = item;
-      if (currentDayFlag === '1') {
-        setData(item);
-      }
-      if (currentDayFlag === '1' && signFlag === '0') {
-        savePack(item);
-      } else return;
-    });
-  }, [signRecordInfo]);
-  const { rewardBean, rewardGrowthValue } = data;
-  const savePack = (item) => {
-    const { identification } = item;
-    fakeSignInfo({
-      token,
-      identification,
-    }).then(async (val) => {
+    if (signRecordList.length > 0) {
+      signRecordList.forEach((item) => {
+        const { currentDayFlag } = item;
+        if (currentDayFlag === '1') {
+          setData(item);
+        }
+      });
+    }
+    if (currentSignFlag === '0' && signRecordList.length > 0) {
+      savePack();
+    }
+  }, [list]);
+  const { fillBean, rewardGrowthValue } = data;
+  const savePack = () => {
+    fakeSignInfo({}).then(async (val) => {
       if (val) {
         await reloadRequest();
         await reload();
@@ -72,30 +86,27 @@ export default (props) => {
       }
     });
   };
-  const fakeSign = (item) => {
-    const { identification } = item;
-    let num = 0;
+  const fakeSign = (item, type) => {
+    const { weekIndex } = item;
+    let num = weekIndex;
     let nowNum = 0;
-    signRecordInfo.forEach((val, index) => {
-      if (val.identification === identification) {
-        num = index;
-      }
+    signRecordList.forEach((val, index) => {
       if (val.currentDayFlag === '1') {
-        nowNum = index;
+        nowNum = val.weekIndex;
       }
     });
     let date = day(Date.now() - (nowNum - num) * 86400000).format('YYYY-MM-DD HH:mm:ss');
     fakefillSign({
-      signDate: date,
+      fillSignDate: date,
       token,
-      fillSignType: 'bean',
+      fillSignWay: type,
     }).then((val) => {
       if (val) {
         reloadRequest();
         reload();
         setMaskVisible(() => {
           setMaskData({
-            type: 'success',
+            type: 'card',
             data: {},
           });
           return false;
@@ -104,15 +115,12 @@ export default (props) => {
     });
   };
   const fetchUserCommand = (item) => {
-    const { identification } = item;
-    let num = 0;
+    const { weekIndex } = item;
+    let num = weekIndex;
     let nowNum = 0;
-    signRecordInfo.forEach((val, index) => {
-      if (val.identification === identification) {
-        num = index;
-      }
+    signRecordList.forEach((val, index) => {
       if (val.currentDayFlag === '1') {
-        nowNum = index;
+        nowNum = val.weekIndex;
       }
     });
     let date = day(Date.now() - (nowNum - num) * 86400000).format('YYYY-MM-DD HH:mm:ss');
@@ -134,7 +142,7 @@ export default (props) => {
         cobyInfo(command, () => {
           openCommond(() => {
             setMaskData({
-              type: 'success',
+              type: 'card',
               data: {},
             });
             setMaskVisible(() => {
@@ -186,54 +194,86 @@ export default (props) => {
             />
           </div>
           <div className="checkPop_getContent">
-            获得<span className="checkPop_font_color">{rewardBean}</span>卡豆+
+            获得<span className="checkPop_font_color">{fillBean}</span>卡豆+
             <span className="checkPop_font_color">{rewardGrowthValue}</span>盲盒成长值
           </div>
           <div className="checkPop_reg">
-            {signRecordInfo.map((item, index) => {
-              const { signFlag, rewardBean, hasFillSignFlag } = item;
-              if (index !== signRecordInfo.length - 1) {
+            {signRecordList.map((item, index) => {
+              const { signStatus, needSubscribe, prizeBean } = item;
+              if (index !== signRecordList.length - 1) {
                 return (
                   <div
                     key={index}
                     className={`checkPop_reg_today ${index + 1 !== 4 && 'checkPop_margin'}`}
                     onClick={() => {
-                      if (hasFillSignFlag === '0') {
-                        setMaskVisible(() => {
-                          setMaskData({ type: 'fail', data: { ...item } });
-                          return true;
-                        });
+                      if (needSubscribe === '1') {
+                        if (hasUseWeeklyCardFlag === '1') {
+                          setMaskVisible(() => {
+                            setMaskData({
+                              type: 'card',
+                              data: { ...item },
+                            });
+                            return true;
+                          });
+                        } else {
+                          setSignCount({
+                            show: true,
+                            data: { ...item },
+                          });
+                        }
+                      } else {
+                        return;
                       }
                     }}
                   >
-                    {hasFillSignFlag === '1' ? (
+                    {needSubscribe === '0' ? (
                       <div className="checkPop_day">第{index + 1}天</div>
                     ) : (
                       <div className="checkPop_lost">补签</div>
                     )}
-                    {signFlag === '1' ? (
+                    {signStatus === '1' ? (
                       <div className="checkPop_regFlag_icon"></div>
                     ) : (
                       <div className="checkPop_bean_icon"></div>
                     )}
-                    <div className="checkPop_reg_bean">{rewardBean}卡豆</div>
+                    <div className="checkPop_reg_bean">{prizeBean}卡豆</div>
                   </div>
                 );
               } else {
                 return (
-                  <div key={index} className="checkPop_reg_last">
-                    {hasFillSignFlag === '1' ? (
+                  <div
+                    key={index}
+                    className="checkPop_reg_last"
+                    onClick={() => {
+                      if (ableReceiveFlag === '0') {
+                        setSignPrize({
+                          show: true,
+                          type: 'fail',
+                        });
+                      } else {
+                        fakeSignGift({}).then((val) => {
+                          if (val) {
+                            setSignPrize({
+                              show: true,
+                              type: 'success',
+                            });
+                          }
+                        });
+                      }
+                    }}
+                  >
+                    {needSubscribe === '0' ? (
                       <div className="checkPop_day">第{index + 1}天</div>
                     ) : (
                       <div className="checkPop_lost">补签</div>
                     )}
                     <div className="checkPop_regBig_box">
-                      {signFlag === '1' ? (
+                      {signStatus === '1' ? (
                         <div className="checkPop_regFlag_icon checkPop_reg_big"></div>
                       ) : (
                         <div className="checkPop_bean_icon checkPop_reg_sm"></div>
                       )}
-                      <div className="checkPop_reg_bigBean">{rewardBean}卡豆</div>
+                      <div className="checkPop_reg_bigBean">{prizeBean}卡豆</div>
                     </div>
                   </div>
                 );
@@ -253,10 +293,34 @@ export default (props) => {
       <Signature
         val={maskData}
         show={maskVisible}
-        beanSign={fakeSign}
-        shareSign={fetchUserCommand}
+        fakeSign={fakeSign}
         onClose={() => setMaskVisible(false)}
       ></Signature>
+      <SignTask
+        {...saveSignCount}
+        fetchUserCommand={fetchUserCommand}
+        onOpenSign={() => {
+          setSignCount(() => {
+            setMaskVisible(() => {
+              setMaskData({
+                type: 'bean',
+                data: { ...saveSignCount.data },
+              });
+              return true;
+            });
+            return {
+              show: false,
+              data: {},
+            };
+          });
+        }}
+        onClose={() =>
+          setSignCount({
+            show: false,
+            data: {},
+          })
+        }
+      ></SignTask>
       <Imper
         onClose={() => {
           setImperMask(false);
@@ -265,6 +329,16 @@ export default (props) => {
         show={imperMask}
         tomorrowBean={tomorrowBean}
       ></Imper>
+      <SignPrize
+        data={list}
+        onClose={() => {
+          setSignPrize({
+            show: false,
+            type: 'fail',
+          });
+        }}
+        {...signPrize}
+      ></SignPrize>
     </div>
   );
 };

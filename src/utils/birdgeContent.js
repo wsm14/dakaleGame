@@ -381,6 +381,7 @@ export const linkToPhone = () => {
     });
   } catch (e) {}
 };
+//话费充值
 export const linkToMember = () => {
   try {
     linkTo({
@@ -396,3 +397,20 @@ export const linkToMember = () => {
     });
   } catch (e) {}
 };
+//跳转会员页面
+
+export const linkToShipCardPage = () => {
+  try {
+    linkTo({
+      ios: {
+        path: 'weekMemberShipCardPage',
+      },
+      android: {
+        path: 'BeanWeeklyCard',
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+//周卡
