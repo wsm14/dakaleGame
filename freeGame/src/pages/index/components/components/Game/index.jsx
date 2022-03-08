@@ -7,9 +7,9 @@ function index(props) {
 
   return (
     <div>
-      <KeepAlive>
-        <TargetGame imgObj={imgObj} getHomeDetail={getHomeDetail}></TargetGame>
-      </KeepAlive>
+      {/* <KeepAlive> */}
+      <TargetGame imgObj={imgObj} getHomeDetail={getHomeDetail}></TargetGame>
+      {/* </KeepAlive> */}
     </div>
   );
 }

@@ -22,10 +22,10 @@ function index(props) {
           <div className="signOutModal_content_sign">温馨提示</div>
           <div className="signOutModal_content_title">{title}</div>
           <div className="signOutModal_doubleButton">
-            <div className="signOutModal_content_button" onClick={() => {}}>
+            <div className="signOutModal_content_button" onClick={onOk}>
               {leftButton}
             </div>
-            <div className="signOutModal_content_button1" onClick={() => {}}>
+            <div className="signOutModal_content_button1" onClick={onClose}>
               {rightButton}
             </div>
           </div>

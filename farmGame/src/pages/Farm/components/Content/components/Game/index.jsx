@@ -117,7 +117,7 @@ const index = (props) => {
 
   useEffect(() => {
     //树的动画
-    SpriteGroup = TrunkScene(stage, imgObj, levelType, addSpirit);
+    SpriteGroup = TrunkScene(stage, imgObj, levelType);
     //添加施肥
     addSpirit();
   }, [levelType]);
@@ -300,7 +300,7 @@ const index = (props) => {
   };
 
   const addSpirit = () => {
-    creatFertilizer(stage, true);
+    creatFertilizer(stage);
     if (levelType === 'bigTree') {
       const mature = createBgInit(stage, 7);
       mature.on(Hilo.event.POINTER_START, (e) => {

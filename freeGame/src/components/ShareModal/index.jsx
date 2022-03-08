@@ -8,7 +8,6 @@ import BasicModal from '@/components/BasicModal';
 function index(props) {
   const { visible, onClose, type, data = {} } = props;
   const { show, taskType } = visible;
-  console.log(taskType, 'taskType');
   const { value } = data;
   const btnType = {
     nativeShareWork: nativeShareWork,

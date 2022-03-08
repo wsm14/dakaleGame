@@ -69,13 +69,13 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
       start: {
         id: 'smallTree2',
         img: imgObj.get('smallTree2').content,
-        num: 98,
+        num: 99,
         lineNum: 13,
       },
       end: {
         id: 'smallTree3',
         img: imgObj.get('smallTree3').content,
-        num: 32,
+        num: 30,
         lineNum: 13,
       },
     },
@@ -106,10 +106,10 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
   }[type];
 
   let { SpriteLoading, SpriteStart, SpriteEnd } = SpriteObj;
-  Object.keys(SpriteObj).forEach((item) => {
-    console.log(SpriteObj[item], 'SpriteObj[item]');
-    SpriteObj[item] && SpriteObj[item].removeFromParent(stage);
-  });
+  // Object.keys(SpriteObj).forEach((item) => {
+  //   console.log(SpriteObj[item], 'SpriteObj[item]');
+  //   SpriteObj[item] && SpriteObj[item].removeFromParent(stage);
+  // });
   //开始
   const creatTrunkPrepare = () => {
     if (SpriteLoading) {
@@ -222,5 +222,6 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
   creatTrunkEnd();
   console.log(SpriteStart);
   SpriteObj = { SpriteLoading, SpriteStart, SpriteEnd };
+  console.log(SpriteObj);
   return { ...SpriteObj, endClick };
 };

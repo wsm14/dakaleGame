@@ -418,6 +418,12 @@ function index(props) {
     setBeanModalVisible({ show: true, type: 4, num: num, progress: distance });
   };
 
+  const removeAll = () => {
+    stage.removeAllChildren();
+    ticker.removeTick(stage);
+    ticker.removeTick(Hilo.Tween);
+  };
+
   return (
     <>
       <div ref={containerRef} className="container"></div>
@@ -463,6 +469,7 @@ function index(props) {
         processId={processId}
         openModal={openModal}
         countDistance={countDistance}
+        removeAll={removeAll}
       ></TaskCloumn>
       {/* 合力弹窗 */}
       <InvitationModal

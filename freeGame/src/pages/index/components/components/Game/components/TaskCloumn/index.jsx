@@ -25,7 +25,8 @@ import taskOn from '@public/usual/taskOn.png';
 let timer = null;
 
 function index(props) {
-  const { visible, onClose, getHomeDetail, openModal, countDistance, processId } = props;
+  const { visible, onClose, getHomeDetail, openModal, countDistance, processId, removeAll } = props;
+  console.log(processId, 'processId');
   const [signContent, setSignContent] = useState({}); //签到信息
   const [taskList, setTaskList] = useState([]); //任务信息
   const [count, setCount] = useState(30); //倒计时
@@ -36,11 +37,6 @@ function index(props) {
   const scrollRef = useRef();
   const timerRef = useRef(1);
 
-  useEffect(() => {
-    setTimeout(() => {
-      document.getElementById('scrollId').scrollLeft = 10000;
-    }, 100);
-  }, [visible, signContent.length]);
   useEffect(() => {
     getTaskList();
     reloadTab(getTaskList);
@@ -82,20 +78,17 @@ function index(props) {
   const goApp = (item) => {
     const { jumpRule, strapId } = item;
     let json = (jumpRule && JSON.parse(jumpRule)) || {};
-    const { jumpUrl, param } = json;
-    const paramJson = (param && JSON.parse(param)) || {};
-    const { browseType } = paramJson;
-    const { iosUrl, androidUrl, weChatUrl } = jumpUrl;
+    const { iosUrl, androidUrl, weChatUrl } = json;
+    console.log(iosUrl);
     linkTo({
-      wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=collect` },
+      wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods&gameType=free` },
       ios: {
         path: iosUrl,
-        param: { strapId, browserType: browseType },
+        param: { strapId },
       },
       android: {
         path: androidUrl,
         strapId,
-        browseType,
       },
     });
   };
@@ -128,6 +121,7 @@ function index(props) {
       image: 'https://resource-new.dakale.net/common/game/task/freeTask/share.png',
       name: '商品重置',
       taskType: 'reset',
+      strapId: '14',
     });
     setTaskList([...taskList]);
   };
@@ -140,6 +134,17 @@ function index(props) {
           <div className="taskLine_right taskLine_button1">
             {parseInt(count / 60) < 10 ? `0${parseInt(count / 60)}` : parseInt(count / 60)}:
             {count % 60 < 10 ? `0${count % 60}` : count % 60}
+          </div>
+        );
+      } else if (taskType === 'exchange') {
+        return (
+          <div
+            className="taskLine_right taskLine_button1"
+            onClick={() => {
+              setExchangeVisible({ strapId: item.strapId });
+            }}
+          >
+            兑换
           </div>
         );
       } else if (taskType === 'invite' || taskType === 'share') {
@@ -259,20 +264,28 @@ function index(props) {
     });
     if (res.success) {
       getHomeDetail();
+      removeAll();
+      onClose();
     }
     setRestVisible(false);
   };
 
   //兑换星豆
   const exchangeBean = async () => {
-    const res = await fetchTaskExchangeBalance();
+    const res = await fetchTaskExchangeBalance({
+      strapId: exchangeVisible.strapId,
+    });
+    if (res.success) {
+      getTaskList();
+      getHomeDetail();
+    }
+    setExchangeVisible(false);
   };
 
   const popupProps = {
     visible,
     onClose,
     forceRender: true,
-
     bodyStyle: {
       borderTopLeftRadius: '20px',
       borderTopRightRadius: '20px',
@@ -355,7 +368,8 @@ function index(props) {
                     <img src={item.image} alt="" />
                     <div className="taskLine_left_info">
                       <div className="taskLine_left_title">
-                        {item.name}({item.hasDoneTimes}/{item.times})
+                        {item.name}
+                        {item.times && `(${item.hasDoneTimes}/${item.times})`}
                       </div>
                       <div className="taskLine_left_description">{item.content}</div>
                     </div>
@@ -377,7 +391,7 @@ function index(props) {
         onClose={() => {
           setRestVisible(false);
         }}
-        onOK={resetGame}
+        onOk={resetGame}
       />
 
       {/* 兑换弹窗 */}
@@ -389,6 +403,7 @@ function index(props) {
         onClose={() => {
           setExchangeVisible(false);
         }}
+        onOk={exchangeBean}
       />
     </>
   );
