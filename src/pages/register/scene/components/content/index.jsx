@@ -971,11 +971,3 @@ export default ({ responent }) => {
     </div>
   );
 };
-
-[
-  { identification: 'communityDefault', preferentialActivityRuleObject: { payBeanCommission: 90 } },
-  { identification: 'a', preferentialActivityRuleObject: { payBeanCommission: 80 } },
-  { identification: 'b', preferentialActivityRuleObject: { payBeanCommission: 70 } },
-  { identification: 'c', preferentialActivityRuleObject: { payBeanCommission: 60 } },
-  { identification: 'd', preferentialActivityRuleObject: { payBeanCommission: 50 } },
-];
