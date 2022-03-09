@@ -3,7 +3,6 @@ import { Swiper } from 'antd-mobile';
 import { filterStrList } from '@/utils/utils';
 import './index.less';
 export default ({ prizeInfoList }) => {
-  console.log(prizeInfoList);
   return (
     <div className="blind_swiper">
       <div className="blind_swiper_btn">盲盒奖池</div>

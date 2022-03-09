@@ -774,6 +774,8 @@ export default ({ responent }) => {
           hasUseWeeklyCardFlag = '0',
           ableReceiveFlag = '0',
           currentSignFlag = '0',
+          giftBean,
+          giftContent,
         } = val.content;
         let index = signRecordList.findIndex((currentValue) => {
           const { currentDayFlag } = currentValue;
@@ -781,7 +783,6 @@ export default ({ responent }) => {
         });
         setPackData({
           signRecordList: signRecordList.reduce((item, val, current) => {
-            const {} = val;
             return [
               ...item,
               { ...val, needSubscribe: current <= index && val.signStatus === '0' ? '1' : '0' },
@@ -790,6 +791,8 @@ export default ({ responent }) => {
           hasUseWeeklyCardFlag,
           ableReceiveFlag,
           currentSignFlag,
+          giftBean,
+          giftContent,
         });
       }
     });
@@ -968,3 +971,11 @@ export default ({ responent }) => {
     </div>
   );
 };
+
+[
+  { identification: 'communityDefault', preferentialActivityRuleObject: { payBeanCommission: 90 } },
+  { identification: 'a', preferentialActivityRuleObject: { payBeanCommission: 80 } },
+  { identification: 'b', preferentialActivityRuleObject: { payBeanCommission: 70 } },
+  { identification: 'c', preferentialActivityRuleObject: { payBeanCommission: 60 } },
+  { identification: 'd', preferentialActivityRuleObject: { payBeanCommission: 50 } },
+];
