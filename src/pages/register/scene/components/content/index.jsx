@@ -897,6 +897,8 @@ export default ({ responent }) => {
       <GrowPop
         show={growVisible}
         position={'bottom'}
+        data={gameData}
+        listData={packData}
         className="growPop_pack_box"
         bodyClassName={'growPop_pack_radius'}
         openWork={setWorkVisible}

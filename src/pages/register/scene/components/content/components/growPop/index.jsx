@@ -7,7 +7,9 @@ import { fetchCommand } from '@/server/registerServers';
 import './index.less';
 import { toast, cobyInfo, reloadTab } from '@/utils/utils';
 export default (props) => {
-  const { onClose, token, show, openWork, reload } = props;
+  const { onClose, token, show, openWork, reload, data, listData } = props;
+  const { continuitySignDay } = data;
+  const { ableReceiveFlag } = listData;
   const [reloading, setReloading] = useState(false);
   useEffect(() => {
     if (show) {
@@ -30,135 +32,147 @@ export default (props) => {
     let receiveJson = (receiveRule && JSON.parse(receiveRule)) || {};
     const { type } = receiveJson;
     const { iosUrl, androidUrl, weChatUrl } = json;
-    if (taskStatus === '0') {
-      return (
-        <div
-          className="growPop_body_btn growPop_body_btn1"
-          onClick={() => {
-            try {
-              if (type !== 'invite') {
-                linkTo({
-                  wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods` },
-                  ios: {
-                    path: iosUrl,
-                    param: { strapId, browserType: 'pickUpMerge' },
-                  },
-                  android: {
-                    path: androidUrl,
-                    browserType: 'pickUpMerge',
-                    strapId,
-                  },
-                });
-              } else {
-                if (deviceName() === 'miniProgram') {
-                  linkTo({
-                    wechat: {
-                      url: `/pages/share/gameHelp/index?subType=signTaskHelp&shareId=${strapId}`,
-                    },
-                  });
-                  return;
-                }
-                fetchCommand({
-                  commandType: 'signTaskHelp',
-                  token: token,
-                  relateId: strapId,
-                }).then((val) => {
-                  if (val) {
-                    const { command } = val.content;
-                    cobyInfo(command, () => {
-                      openWork(() => {
-                        return {
-                          visible: true,
-                          work: strapId,
-                        };
-                      });
-                    });
-                  }
-                });
-              }
-            } catch (e) {
-              console.log(e);
-            }
-          }}
-        >
-          去完成
-        </div>
-      );
-    } else if (taskStatus === '1') {
-      return (
-        <div
-          onClick={() => {
-            fetchTaskReward({
-              token: token,
-              strapId,
-              taskId,
-              gameName: 'signGame',
-            }).then((val) => {
-              if (val) {
-                toast('领取成功');
-                reload();
-                fetchTask();
-              }
-            });
-          }}
-          className="growPop_body_btn growPop_body_btn2"
-        >
-          领取
-        </div>
-      );
+    if (type === 'mysterious') {
+      if (ableReceiveFlag === '0') {
+        return (
+          <div className="growPop_body_btn growPop_body_btn1">还差{7 - continuitySignDay}天</div>
+        );
+      } else if (ableReceiveFlag === '1') {
+        <div className="growPop_body_btn growPop_body_btn2">签到领取</div>;
+      } else {
+        return <div className="growPop_body_btn growPop_body_btn3">已领取</div>;
+      }
     } else {
-      return (
-        <div
-          onClick={() => {
-            try {
-              if (type !== 'invite') {
-                linkTo({
-                  wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods` },
-                  ios: {
-                    path: iosUrl,
-                    param: { strapId },
-                  },
-                  android: {
-                    path: androidUrl,
-                    strapId,
-                  },
-                });
-              } else {
-                if (deviceName() === 'miniProgram') {
+      if (taskStatus === '0') {
+        return (
+          <div
+            className="growPop_body_btn growPop_body_btn1"
+            onClick={() => {
+              try {
+                if (type !== 'invite') {
                   linkTo({
-                    wechat: {
-                      url: `/pages/share/gameHelp/index?subType=signTaskHelp&shareId=${strapId}`,
+                    wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods` },
+                    ios: {
+                      path: iosUrl,
+                      param: { strapId, browserType: 'pickUpMerge' },
+                    },
+                    android: {
+                      path: androidUrl,
+                      browserType: 'pickUpMerge',
+                      strapId,
                     },
                   });
-                  return;
-                }
-                fetchCommand({
-                  commandType: 'signTaskHelp',
-                  token: token,
-                  relateId: strapId,
-                }).then((val) => {
-                  if (val) {
-                    const { command } = val.content;
-                    cobyInfo(command, () => {
-                      openWork(() => {
-                        return {
-                          visible: true,
-                          work: strapId,
-                        };
-                      });
+                } else {
+                  if (deviceName() === 'miniProgram') {
+                    linkTo({
+                      wechat: {
+                        url: `/pages/share/gameHelp/index?subType=signTaskHelp&shareId=${strapId}`,
+                      },
                     });
+                    return;
                   }
-                });
+                  fetchCommand({
+                    commandType: 'signTaskHelp',
+                    token: token,
+                    relateId: strapId,
+                  }).then((val) => {
+                    if (val) {
+                      const { command } = val.content;
+                      cobyInfo(command, () => {
+                        openWork(() => {
+                          return {
+                            visible: true,
+                            work: strapId,
+                          };
+                        });
+                      });
+                    }
+                  });
+                }
+              } catch (e) {
+                console.log(e);
               }
-            } catch (e) {
-              console.log(e);
-            }
-          }}
-          className="growPop_body_btn growPop_body_btn3"
-        >
-          已领取
-        </div>
-      );
+            }}
+          >
+            去完成
+          </div>
+        );
+      } else if (taskStatus === '1') {
+        return (
+          <div
+            onClick={() => {
+              fetchTaskReward({
+                token: token,
+                strapId,
+                taskId,
+                gameName: 'signGame',
+              }).then((val) => {
+                if (val) {
+                  toast('领取成功');
+                  reload();
+                  fetchTask();
+                }
+              });
+            }}
+            className="growPop_body_btn growPop_body_btn2"
+          >
+            领取
+          </div>
+        );
+      } else {
+        return (
+          <div
+            onClick={() => {
+              try {
+                if (type !== 'invite') {
+                  linkTo({
+                    wechat: { url: '/' + weChatUrl + `?strapId=${strapId}&type=goods` },
+                    ios: {
+                      path: iosUrl,
+                      param: { strapId },
+                    },
+                    android: {
+                      path: androidUrl,
+                      strapId,
+                    },
+                  });
+                } else {
+                  if (deviceName() === 'miniProgram') {
+                    linkTo({
+                      wechat: {
+                        url: `/pages/share/gameHelp/index?subType=signTaskHelp&shareId=${strapId}`,
+                      },
+                    });
+                    return;
+                  }
+                  fetchCommand({
+                    commandType: 'signTaskHelp',
+                    token: token,
+                    relateId: strapId,
+                  }).then((val) => {
+                    if (val) {
+                      const { command } = val.content;
+                      cobyInfo(command, () => {
+                        openWork(() => {
+                          return {
+                            visible: true,
+                            work: strapId,
+                          };
+                        });
+                      });
+                    }
+                  });
+                }
+              } catch (e) {
+                console.log(e);
+              }
+            }}
+            className="growPop_body_btn growPop_body_btn3"
+          >
+            已领取
+          </div>
+        );
+      }
     }
   };
   const fetchTask = () => {

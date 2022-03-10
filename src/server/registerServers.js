@@ -11,7 +11,6 @@ export function fetchSignInfo(params) {
     params,
   });
 }
-// VnoOSpWzwrwqpjPMWekDgCOs9nDBNpjkU5p5ZYpBjSzIlsy2ODYQVlSY1W4lSmlC
 export function fetchFoodList(params) {
   return request('/user/sign/game/getFoodList', {
     params,

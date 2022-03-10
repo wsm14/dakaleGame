@@ -243,7 +243,7 @@ export default (props) => {
                 return (
                   <div
                     key={index}
-                    className="checkPop_reg_last"
+                    className={ableReceiveFlag === '1' ? 'checkPop_reg_gif' : 'checkPop_reg_last'}
                     onClick={() => {
                       if (ableReceiveFlag === '0') {
                         setSignPrize({
