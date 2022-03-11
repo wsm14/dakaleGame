@@ -9,7 +9,7 @@ import { toast, cobyInfo, reloadTab } from '@/utils/utils';
 export default (props) => {
   const { onClose, token, show, openWork, reload, data, listData } = props;
   const { continuitySignDay } = data;
-  const { ableReceiveFlag } = listData;
+  const { ableReceiveFlag, signRecordList = [] } = listData;
   const [reloading, setReloading] = useState(false);
   useEffect(() => {
     if (show) {
@@ -35,7 +35,17 @@ export default (props) => {
     if (type === 'mysterious') {
       if (ableReceiveFlag === '0') {
         return (
-          <div className="growPop_body_btn growPop_body_btn1">还差{7 - continuitySignDay}天</div>
+          <div className="growPop_body_btn growPop_body_btn1">
+            还差
+            {7 -
+              signRecordList.reduce((item, val) => {
+                const { signStatus } = val;
+                if (signStatus === '1') {
+                  return item + 1;
+                } else return item;
+              }, 0)}
+            天
+          </div>
         );
       } else if (ableReceiveFlag === '1') {
         <div className="growPop_body_btn growPop_body_btn2">签到领取</div>;

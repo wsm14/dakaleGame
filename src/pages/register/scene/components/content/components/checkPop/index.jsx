@@ -111,6 +111,14 @@ export default (props) => {
           });
           return false;
         });
+      } else {
+        setMaskVisible(() => {
+          setMaskData({
+            type: 'card',
+            data: {},
+          });
+          return false;
+        });
       }
     });
   };
