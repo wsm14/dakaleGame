@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import PopupModal from '@/components/PopupModal';
 import { Popup, Toast } from 'antd-mobile';
 import { linkTo } from '@/utils/birdgeContent';
-import { useUpdateEffect } from 'ahooks';
+import { useUpdateEffect, useDebounceFn } from 'ahooks';
 import {
   fetchFreeGoodGetSignRecord,
   fetchFreeGoodSaveSign,
@@ -21,6 +21,7 @@ import taskClose from '@public/usual/taskClose.png';
 import starOn from '@public/usual/starOn.png';
 import starOff from '@public/usual/starOff.png';
 import taskOn from '@public/usual/taskOn.png';
+import resize from '@public/usual/resize.png';
 
 let timer = null;
 
@@ -118,7 +119,7 @@ function index(props) {
     });
     taskList.push({
       content: '重新选择商品后当前进度将会清空',
-      image: 'https://resource-new.dakale.net/common/game/task/freeTask/share.png',
+      image: resize,
       name: '商品重置',
       taskType: 'reset',
       strapId: '14',
@@ -270,6 +271,15 @@ function index(props) {
     setRestVisible(false);
   };
 
+  const { run } = useDebounceFn(
+    () => {
+      resetGame();
+    },
+    {
+      wait: 500,
+    },
+  );
+
   //兑换星豆
   const exchangeBean = async () => {
     const res = await fetchTaskExchangeBalance({
@@ -386,12 +396,11 @@ function index(props) {
         visible={restVisible}
         leftButton="确定"
         rightButton="再想想"
-        title="确定要重新选择奖品吗，确定
-后当前奖品进度将会清除"
+        title="确定要重新选择奖品吗，确定后当前奖品进度将会清除"
         onClose={() => {
           setRestVisible(false);
         }}
-        onOk={resetGame}
+        onOk={run}
       />
 
       {/* 兑换弹窗 */}

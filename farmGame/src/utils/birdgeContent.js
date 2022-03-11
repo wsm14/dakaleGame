@@ -319,10 +319,10 @@ export const linkWatchTv = () => {
 export const linkToSecret = () => {
   linkTo({
     ios: {
-      path: 'https://web-new.dakale.net/dev/game/collectGame/index.html#/secret',
+      path: 'https://web-new.dakale.net/dev/game/farmGame/index.html#/secret',
     },
     android: {
-      path: 'https://web-new.dakale.net/dev/game/collectGame/index.html#/secret',
+      path: 'https://web-new.dakale.net/dev/game/farmGame/index.html#/secret',
     },
   });
 };
