@@ -118,7 +118,7 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
     SpriteLoading = new Hilo.Sprite({
       id: scene.load.id,
       currentFrame: 0,
-      loop: false,
+      // loop: false,
       interval: 24,
       timeBased: true,
       width: conversionSize(scene.width),
@@ -134,12 +134,35 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
       scene.height,
       scene.load.id,
     );
+    SpriteStart = new Hilo.Sprite({
+      id: scene.start.id,
+      currentFrame: 0,
+      interval: 24,
+      timeBased: true,
+      visible: false,
+      width: conversionSize(scene.width),
+      height: conversionSize(scene.height),
+      x: conversionSize(scene.x),
+      y: conversionSize(scene.y),
+    });
+    let trunkAnimate2 = HiloCreateSpirit(
+      scene.start.img,
+      scene.start.num,
+      scene.start.lineNum,
+      scene.width,
+      scene.height,
+      scene.start.id,
+    );
     SpriteLoading.addFrame(trunkAnimate.getSprite(scene.load.id));
+    SpriteLoading.addFrame(trunkAnimate2.getSprite(scene.start.id));
+    console.log(
+      trunkAnimate.getSprite(scene.load.id).length,
+      trunkAnimate2.getSprite(scene.start.id),
+      SpriteLoading.getNumFrames() - 1,
+      SpriteLoading,
+    );
     SpriteLoading.setFrameCallback(SpriteLoading.getNumFrames() - 1, () => {
-      SpriteStart.visible = true;
-      SpriteStart.play();
-      SpriteLoading.visible = false;
-      SpriteLoading.removeFromParent(stage);
+      SpriteLoading.goto(trunkAnimate.getSprite(scene.load.id).length);
     });
     stage.addChild(SpriteLoading);
   };
@@ -183,7 +206,6 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
       interval: 24,
       loop: false,
       timeBased: true,
-      visible: false,
       width: conversionSize(scene.width),
       height: conversionSize(scene.height),
       x: conversionSize(scene.x),
@@ -198,28 +220,21 @@ export const TrunkScene = (stage, imgObj, type = 'smallTree') => {
       scene.end.id,
     );
     SpriteEnd.addFrame(trunkAnimate3.getSprite(scene.end.id));
-    SpriteEnd.stop();
+    SpriteLoading.visible = false;
+    SpriteEnd.setFrameCallback(SpriteEnd.getNumFrames() - 1, () => {
+      SpriteEnd.removeFromParent(stage);
+      console.log(SpriteLoading);
+      SpriteLoading.visible = true;
+    });
     stage.addChild(SpriteEnd);
   };
 
   const endClick = () => {
-    SpriteStart.goto(0, true);
-    SpriteStart.visible = false;
-    SpriteEnd.goto(0);
-    SpriteEnd.play();
-    SpriteEnd.visible = true;
-    SpriteEnd.setFrameCallback(SpriteEnd.getNumFrames() - 1, () => {
-      SpriteStart.visible = true;
-      SpriteStart.play();
-      setTimeout(() => {
-        SpriteEnd.stop();
-        SpriteEnd.visible = false;
-      });
-    });
+    creatTrunkEnd();
   };
   creatTrunkPrepare();
-  creatTrunkStart();
-  creatTrunkEnd();
+  // creatTrunkStart();
+  // creatTrunkEnd();
   console.log(SpriteStart);
   SpriteObj = { SpriteLoading, SpriteStart, SpriteEnd };
   console.log(SpriteObj);
