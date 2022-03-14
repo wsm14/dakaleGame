@@ -80,9 +80,6 @@ export default (props) => {
         await reload();
         await setTime(5);
         await onOpen();
-        if (deviceName() === 'miniProgram' && !getUrlKey('device')) {
-          await setImperMask(true);
-        }
       }
     });
   };

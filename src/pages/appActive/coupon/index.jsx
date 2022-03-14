@@ -119,7 +119,6 @@ export default ({}) => {
         <div className="appActive_title appActive_title_style2"></div>
 
         <div className="appActive_content_vertion">
-          <div className="appActive_vertion_info" onClick={linkToPhone}></div>
           <div className="appActive_vertion_info" onClick={linkToMember}></div>
         </div>
         {list.length > 0 && (

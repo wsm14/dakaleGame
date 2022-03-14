@@ -381,9 +381,6 @@ export default ({ userInfo }) => {
             <Swiper.Item className="swiper_box public_center">
               卡豆可以在平台消费时抵扣使用
             </Swiper.Item>
-            <Swiper.Item className="swiper_box public_center">
-              卡豆在平台消费时最高可抵扣90%
-            </Swiper.Item>
           </Swiper>
         </div>
       </div>
