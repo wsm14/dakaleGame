@@ -24,6 +24,9 @@ const LoginForm = {
       const response = yield call(fetchFreeGoodMainPage, payload);
       if (!response) return;
       const { content } = response;
+      if (content.freeGoodList) {
+        content.freeGoodList = content.freeGoodList.reverse();
+      }
       yield put({
         type: 'save',
         payload: {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'umi';
 import './index.less';
 import { Button, Toast } from 'antd-mobile';
+import { useDebounceFn } from 'ahooks';
 import SwiperReceive from './components/SwiperReceive';
 import ScrollGoods from './components/ScrollGoods';
 import TitleBlock from '@/components/TitleBlock';
@@ -23,7 +24,16 @@ function index(props) {
   const [barrageList, setBarrageList] = useState([]); //游戏弹幕
   const [addressVisible, setAddressVisible] = useState(false);
   const cardLength = Object.keys(cardInfo).length;
-
+  const { run } = useDebounceFn(
+    () => {
+      cardsOk();
+    },
+    {
+      wait: 1000,
+      leading: true,
+      trailing: false,
+    },
+  );
   useEffect(() => {
     // getBrrageList();
   }, []);
@@ -44,6 +54,7 @@ function index(props) {
 
   //确认按钮
   const cardsOk = async () => {
+    console.log('111');
     if (Object.keys(addressObj).length) {
       const res = await fetchBeginGatherGame({
         identification: cardInfo.identification,
@@ -69,7 +80,7 @@ function index(props) {
       {/*左滑*/}
       <ScrollGoods list={cardList} checkCard={checkCard}></ScrollGoods>
       {/* 确认按钮 */}
-      <div className="mailButton" onClick={cardLength ? cardsOk : null}>
+      <div className="mailButton" onClick={cardLength ? run : null}>
         <div style={{ opacity: cardLength ? '1' : '0.5' }}>确认领取，开始集福豆</div>
       </div>
       {/* 领取轮播 */}

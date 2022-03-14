@@ -109,7 +109,7 @@ function index(props) {
       <div className="container_rules">
         <Rules></Rules>
       </div>
-      <div className="container_text">商品已打包完毕，准备配送</div>
+      <div className="container_text">水果已打包完毕，准备配送</div>
       <div className="container_text1">送你100星豆，快去补给运输吧</div>
     </>
   );
