@@ -1,10 +1,5 @@
 export default [
   {
-    path: '/index',
-    name: '路由',
-    component: './index',
-  },
-  {
     path: '/register',
     name: '签到',
     component: './register/scene',
@@ -18,5 +13,10 @@ export default [
     path: '/coupon',
     name: '新人专享福利',
     component: './appActive/coupon',
+  },
+  {
+    path: '/donation',
+    name: '新人专享福利',
+    component: './appActive/donation',
   },
 ];
