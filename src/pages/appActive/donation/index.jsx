@@ -1,23 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'umi';
 import { Swiper } from 'antd-mobile';
-import {} from '@/server/appActiveServers';
 import { getToken, linkToMember, linkToPhone, linkTo } from '@/utils/birdgeContent';
 import Mask1 from './components/saveBean';
 import Mask2 from './components/keep';
+import { fetchLoveDonateRecord } from '@/server/appActiveServers';
 import { backgroundObj } from '@/utils/utils';
 import './index.less';
 export default () => {
-  const list = [];
+  const [list, setList] = useState([]);
+  const [useData, setUserDate] = useState({ list: [], userBean: 0 });
   const [maskBean, setMaskBean] = useState(false);
   const [maskKeep, setShowKeep] = useState(false);
+  useEffect(() => {
+    fetchLoveDonateRecord({ page: 1, limit: 100, ownerFlag: '0' }).then((val) => {
+      if (val) {
+        const { loveDonateList = [] } = val.content;
+        setList(loveDonateList);
+      }
+    });
+  }, []);
   const handleBean = () => {
     getToken(() => {
+      fetchLoveDonateRecord({ page: 1, limit: 100, ownerFlag: '1' }).then((val) => {
+        if (val) {
+          const { loveDonateList = [], userBean = 0 } = val.content;
+          setUserDate({ list: loveDonateList, userBean });
+        }
+      });
       setMaskBean(true);
     });
   };
   const handleKeep = () => {
     getToken(() => {
+      fetchLoveDonateRecord({ page: 1, limit: 100, ownerFlag: '1' }).then((val) => {
+        if (val) {
+          const { loveDonateList = [], userBean = 0 } = val.content;
+          setUserDate({ list: loveDonateList, userBean });
+        }
+      });
       setShowKeep(true);
     });
   };
@@ -47,7 +68,7 @@ export default () => {
         <Swiper
           className="donation_swiper"
           indicator={(total, num) => {
-            return indicator(total, num);
+            return false;
           }}
           allowTouchMove={false}
           loop
@@ -58,11 +79,35 @@ export default () => {
         </Swiper>
         <div className="donation_title">项目名称：云帆计划 杨帆起航</div>
         <div className="donation_card">
-          <div className="donation_card_content">
-            <div className="donation_card_time">2022/03/04 09:20:38</div>
-            <div className="donation_card_name">哒卡乐徐伟峰</div>
-            <div className="donation_card_count">10000000000000000卡豆</div>
-          </div>
+          <Swiper
+            autoplay
+            direction="vertical"
+            loop
+            indicator={() => {
+              return null;
+            }}
+            className="donation_card_content"
+          >
+            {list.map((item) => {
+              const { createTime, donateBean, userName } = item;
+              return (
+                <Swiper.Item>
+                  <div className="donation_card_time">
+                    <span className="donation_color_title">捐赠时间: </span>
+                    {createTime}
+                  </div>
+                  <div className="donation_card_name">
+                    <span className="donation_color_title">捐献人: </span>
+                    {userName}
+                  </div>
+                  <div className="donation_card_count">
+                    <span className="donation_color_title">捐献数量: </span>
+                    {donateBean}卡豆
+                  </div>
+                </Swiper.Item>
+              );
+            })}
+          </Swiper>
         </div>
         <div className="donation_desc_info">
           <div className="donation_job_title">项目内容</div>
@@ -89,13 +134,14 @@ export default () => {
           onClose={() => {
             setMaskBean(false);
           }}
+          data={useData}
         ></Mask1>
         <Mask2
           show={maskKeep}
           onClose={() => {
             setShowKeep(false);
           }}
-          list={[1, 2, 3, 4, 5, 4, 3, 2, 1]}
+          data={useData}
         ></Mask2>
       </div>
     </>

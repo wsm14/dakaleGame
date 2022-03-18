@@ -13,3 +13,17 @@ export function fetchUserPopUpCommerceGoods(params) {
   });
 }
 //获取券详情
+
+export function fetchLoveDonateRecord(params) {
+  return request('/user/loveDonate/listUserLoveDonateRecord', {
+    params,
+  });
+}
+//获取用户捐赠记录
+export function fakeLoveDonate(data) {
+  return request('/user/loveDonate/userBeanLoveDonate', {
+    method: 'POST',
+    data,
+  });
+}
+//用户捐赠

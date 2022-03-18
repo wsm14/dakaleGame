@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Mask from '@/components/mask';
-import { linkTo } from '@/utils/birdgeContent';
 import className from 'classnames';
+import { fakeLoveDonate } from '@/server/appActiveServers';
 import './index.less';
+import { toast } from '@/utils/utils';
 export default (props) => {
-  const { onClose } = props;
+  const { onClose, data } = props;
   const [checkIndex, setChenkIndex] = useState(0);
+  const { userBean } = data;
   const list = [
     { key: 0, val: 10 },
     { key: 0, val: 50 },
@@ -22,6 +24,9 @@ export default (props) => {
           {list.map((item, index) => {
             return (
               <div
+                onClick={() => {
+                  setChenkIndex(index);
+                }}
                 className={className(
                   checkIndex === index
                     ? 'save_bean_selectBox save_bean_selectColor2'
@@ -34,8 +39,22 @@ export default (props) => {
           })}
         </div>
         <div className="save_bean_video">卡豆不足，可刷视频捡豆</div>
-        <div className="save_bean_btn">我要捐赠</div>
-        <div className="save_bean_yn">卡豆余额：3000000</div>
+        <div
+          className="save_bean_btn"
+          onClick={() => {
+            fakeLoveDonate({
+              donateBean: list[checkIndex].val,
+            }).then((val) => {
+              if (val) {
+                toast('捐赠成功');
+                onClose();
+              }
+            });
+          }}
+        >
+          我要捐赠
+        </div>
+        <div className="save_bean_yn">卡豆余额：{userBean}</div>
       </div>
     </Mask>
   );
