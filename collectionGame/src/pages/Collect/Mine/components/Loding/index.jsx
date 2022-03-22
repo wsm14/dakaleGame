@@ -12,9 +12,9 @@ function index({ state, imgList = [] }) {
             style={{ width: `${(state / imgList.length) * 100}%` }}
           ></div>
         </div>
-        <div className="loading_title">哒卡集福豆 赢2022一整年生活费</div>
+        <div className="loading_title">哒卡集碎片，好运来来来</div>
       </div>
-      <Cloud></Cloud>
+      {/* <Cloud></Cloud> */}
     </div>
   );
 }

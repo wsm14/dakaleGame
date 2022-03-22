@@ -66,7 +66,7 @@ const index = (props) => {
               {travelInfo.prizeType === 'image' ? '炫耀一下' : '立即收下'}
             </div>
             <div className="TravelModal_button TravelModal_buttonStyle1" onClick={linkWatchTv}>
-              看视频领广告豆
+              看视频领豆
             </div>
           </div>
         </div>

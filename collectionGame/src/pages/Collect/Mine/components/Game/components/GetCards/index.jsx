@@ -63,7 +63,7 @@ function index(props) {
           <TaskCloumn getGameDetail={getGameDetail}></TaskCloumn>
         </div>
       </div>
-      <Cloud></Cloud>
+      {/* <Cloud></Cloud> */}
     </>
   );
 }

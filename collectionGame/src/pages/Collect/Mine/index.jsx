@@ -37,11 +37,13 @@ function index() {
         setState(e);
       },
       (_, val) => {
-        getToken((e) => {
-          if (e) {
-            getGameDetail();
-          }
-        });
+        if (Object.keys(val).length === imgList.length) {
+          getToken((e) => {
+            if (e) {
+              getGameDetail();
+            }
+          });
+        }
       },
     );
   };

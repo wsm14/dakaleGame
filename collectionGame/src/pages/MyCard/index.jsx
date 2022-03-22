@@ -215,7 +215,7 @@ function index() {
               <div className="myCardInfo_alreadySynthesis">恭喜您已合成</div>
             ) : (
               <div className="myCardInfo_synthesis" onClick={cardFlag ? closeCard : null}>
-                <div style={{ opacity: cardFlag ? '1' : '0.5' }}>合成福豆卡</div>
+                <div style={{ opacity: cardFlag ? '1' : '0.5' }}>合成完整卡</div>
               </div>
             )}
 
@@ -296,7 +296,7 @@ function index() {
         data={exchangeItem}
         getCardDetail={getCardDetail}
       ></TipsModal>
-      <Cloud></Cloud>
+      {/* <Cloud></Cloud> */}
     </>
   );
 }

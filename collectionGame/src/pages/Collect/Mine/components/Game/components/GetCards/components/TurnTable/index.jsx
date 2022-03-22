@@ -133,7 +133,7 @@ function index(props) {
               swiperRef.current?.swipeTo(0);
             }}
           >
-            <div>转福盘抽福豆卡</div>
+            <div>大转盘抽碎片</div>
           </div>
           <div
             className={`cardNavigation_line ${
@@ -144,7 +144,7 @@ function index(props) {
               swiperRef.current?.swipeTo(1);
             }}
           >
-            <div>邀请好友送福豆卡</div>
+            <div>邀请好友送碎片</div>
           </div>
           <div
             className={`cardNavigation_check ${
@@ -209,7 +209,7 @@ function index(props) {
               <img src={contentWord2} alt="" className="getCardsRight_word" />
               <img src={reunion} alt="" className="getCardsRight_reunion" />
               <div className="getCardsRight_button" onClick={makePoster}>
-                邀请好友送福豆
+                你的好运 好友承包
               </div>
             </div>
           </Swiper.Item>

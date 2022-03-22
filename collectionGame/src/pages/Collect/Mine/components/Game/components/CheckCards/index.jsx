@@ -81,12 +81,12 @@ function index(props) {
       <ScrollGoods list={cardList} checkCard={checkCard}></ScrollGoods>
       {/* 确认按钮 */}
       <div className="mailButton" onClick={cardLength ? run : null}>
-        <div style={{ opacity: cardLength ? '1' : '0.5' }}>确认领取，开始集福豆</div>
+        <div style={{ opacity: cardLength ? '1' : '0.5' }}>确认领取，开始集碎片</div>
       </div>
       {/* 领取轮播 */}
       {/* <SwiperReceive list={[1, 2, 3, 4]}></SwiperReceive> */}
       {/* 云 */}
-      <Cloud></Cloud>
+      {/* <Cloud></Cloud> */}
 
       {/* 确认地址弹窗 */}
       <AddressModal
