@@ -6,12 +6,13 @@ import {
   fetchFarmSpreadManure,
   fetchFarmGetReceiveTravelReward,
 } from '@/services/game';
-import { nativeClose, linkToMyGoods } from '@/utils/birdgeContent';
+import { nativeClose, linkToMyGoods, deviceName } from '@/utils/birdgeContent';
 import { createBitmap, conversionSize, HiloCreateSpirit, getLevel } from '@/utils/game';
 import evens from '@/utils/evens';
 import { reloadTab } from '@/utils/utils';
 import { TrunkScene } from './components/Scene/index';
 import { history } from 'umi';
+import Track from '@/components/tracking';
 import TitleBlock from '@/components/TitleBlock';
 import BottomContent from './components/BottomContent';
 import TopLayer from './components/TopLayer';
@@ -47,6 +48,7 @@ const index = (props) => {
   const [invitaVisible, setInvitaVisible] = useState(false); //合种弹窗
   const [taskVisible, setTaskVisible] = useState(false); //任务弹窗
   const containerRef = useRef(); //canvas的ref
+  const numRef = useRef(); //埋点ref
   const {
     gameProcessStrapInfo = {},
     gameInfo = {},
@@ -447,6 +449,13 @@ const index = (props) => {
       console.log(difference);
       if (difference === 0) {
         if (status == 1) {
+          // 施肥埋点
+          numRef.current.setHandleOpen({
+            name: 'blifertilizernd',
+            args: {
+              device: deviceName(),
+            },
+          });
           e.preventDefault();
           localStorage.setItem('hand', '1');
           handSprite && handSprite.removeFromParent(stage);
@@ -730,6 +739,8 @@ const index = (props) => {
         processId={progressIdStr}
         getGameDetail={getGameDetail}
       ></TaskCloumn>
+      {/* 埋点数据 */}
+      <Track cRef={numRef}></Track>
     </>
   );
 };
