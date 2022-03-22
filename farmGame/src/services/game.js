@@ -211,3 +211,11 @@ export const fetchRightGoods = (params, headerOther) => {
     headerOther,
   });
 };
+
+//数据埋点
+export const fakeOperatingLog = (params, headerOther) => {
+  return request('/common/operatingLog/saveOperatingSystemLog', {
+    params,
+    headerOther,
+  });
+};

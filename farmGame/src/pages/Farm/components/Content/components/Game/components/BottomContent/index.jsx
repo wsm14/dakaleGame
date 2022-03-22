@@ -3,6 +3,8 @@ import { Swiper } from 'antd-mobile';
 import { getLocation, linkTo } from '@/utils/birdgeContent';
 import { fetchFilterType, fetchSelfTourGoods, fetchRightGoods } from '@/services/game';
 import { GetDistance, computedPrice, backgroundObj } from '@/utils/utils';
+import { deviceName } from '@/utils/birdgeContent';
+import Track from '@/components/tracking';
 import './index.less';
 import classNames from 'classnames';
 export default ({ userInfo }) => {
@@ -174,59 +176,72 @@ export default ({ userInfo }) => {
       specialActivityIdString,
     } = item;
     return (
-      <div
-        className="bottom_shop_box"
-        key={specialActivityIdString}
-        onClick={() => {
-          linkTo({
-            ios: {
-              path: 'DKLAroundDiscountGoodsDetailViewController',
-              param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
-            },
-            android: {
-              path: 'AroundGood',
-              specialActivityId: specialActivityIdString,
-              ownerId: ownerIdString,
-            },
-            wechat: {
-              url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
-            },
-          });
+      <Track
+        name="specal_shop"
+        args={{
+          ...item,
+          device: deviceName(),
         }}
       >
-        <div className="bottom_shop_img" style={backgroundObj(goodsImg)}></div>
-        <div className="bottom_shop_content">
-          <div className="bottom_shop_goodsName font_noHide">{goodsName}</div>
-          <div className="bottom_shop_user font_hide">
-            <div
-              className={classNames('bottom_shop_profile', !merchantLogo && 'merchant_dakale_logo')}
-              style={backgroundObj(merchantLogo)}
-            ></div>
-            <div className="bottom_shop_name font_hide">{merchantName}</div>
-            <div className="bottom_shop_limit">｜{GetDistance(lat, lnt, city.lat, city.lnt)}</div>
-          </div>
-          <div className="bottom_shop_realPrice">
-            <div className="bottom_shop_realLabel">优惠价:</div>
-            <div className="bottom_shop_price">¥{realPrice}</div>
-          </div>
-          <div className="bottom_shop_oldPrice">
-            <div className="bottom_shop_oldLabel">原价:</div>
-            <div className="bottom_shop_oldcout">¥{oriPrice}</div>
-          </div>
-          <div className="bottom_kol_info">
-            <div className="bottom_kol_s">
-              <div className="bottom_kol_bean">¥{computedPrice(realPrice, payBeanCommission)}</div>
+        <div
+          className="bottom_shop_box"
+          key={specialActivityIdString}
+          onClick={() => {
+            linkTo({
+              ios: {
+                path: 'DKLAroundDiscountGoodsDetailViewController',
+                param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
+              },
+              android: {
+                path: 'AroundGood',
+                specialActivityId: specialActivityIdString,
+                ownerId: ownerIdString,
+              },
+              wechat: {
+                url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
+              },
+            });
+          }}
+        >
+          <div className="bottom_shop_img" style={backgroundObj(goodsImg)}></div>
+          <div className="bottom_shop_content">
+            <div className="bottom_shop_goodsName font_noHide">{goodsName}</div>
+            <div className="bottom_shop_user font_hide">
+              <div
+                className={classNames(
+                  'bottom_shop_profile',
+                  !merchantLogo && 'merchant_dakale_logo',
+                )}
+                style={backgroundObj(merchantLogo)}
+              ></div>
+              <div className="bottom_shop_name font_hide">{merchantName}</div>
+              <div className="bottom_shop_limit">｜{GetDistance(lat, lnt, city.lat, city.lnt)}</div>
             </div>
-            {shareCommission > 0 && commission > 0 && (
-              <div className="bottom_kol_z font_hide">
-                <div className="bottom_kol_money font_hide">
-                  ¥{computedPrice(commission, shareCommission)}
+            <div className="bottom_shop_realPrice">
+              <div className="bottom_shop_realLabel">优惠价:</div>
+              <div className="bottom_shop_price">¥{realPrice}</div>
+            </div>
+            <div className="bottom_shop_oldPrice">
+              <div className="bottom_shop_oldLabel">原价:</div>
+              <div className="bottom_shop_oldcout">¥{oriPrice}</div>
+            </div>
+            <div className="bottom_kol_info">
+              <div className="bottom_kol_s">
+                <div className="bottom_kol_bean">
+                  ¥{computedPrice(realPrice, payBeanCommission)}
                 </div>
               </div>
-            )}
+              {shareCommission > 0 && commission > 0 && (
+                <div className="bottom_kol_z font_hide">
+                  <div className="bottom_kol_money font_hide">
+                    ¥{computedPrice(commission, shareCommission)}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </Track>
     );
   };
   const templateRight = (item) => {
@@ -310,51 +325,61 @@ export default ({ userInfo }) => {
       specialActivityIdString,
     } = item;
     return (
-      <div
-        key={specialActivityIdString}
-        className="bottom_shop_box"
-        onClick={() => {
-          linkTo({
-            ios: {
-              path: 'DKLAroundDiscountGoodsDetailViewController',
-              param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
-            },
-            android: {
-              path: 'AroundGood',
-              specialActivityId: specialActivityIdString,
-              ownerId: ownerIdString,
-            },
-            wechat: {
-              url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
-            },
-          });
+      <Track
+        name="self_shop"
+        args={{
+          ...item,
+          device: deviceName(),
         }}
       >
-        <div className="bottom_shop_img" style={backgroundObj(goodsImg)}></div>
-        <div className="bottom_shop_content">
-          <div className="bottom_shop_goodsName font_noHide">{goodsName}</div>
-          <div className="bottom_shop_realPrice">
-            <div className="bottom_shop_realLabel">优惠价:</div>
-            <div className="bottom_shop_price">¥{realPrice}</div>
-          </div>
-          <div className="bottom_shop_oldPrice">
-            <div className="bottom_shop_oldLabel">原价:</div>
-            <div className="bottom_shop_oldcout">¥{oriPrice}</div>
-          </div>
-          <div className="bottom_kol_info">
-            <div className="bottom_kol_s">
-              <div className="bottom_kol_bean">¥{computedPrice(realPrice, payBeanCommission)}</div>
+        <div
+          key={specialActivityIdString}
+          className="bottom_shop_box"
+          onClick={() => {
+            linkTo({
+              ios: {
+                path: 'DKLAroundDiscountGoodsDetailViewController',
+                param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
+              },
+              android: {
+                path: 'AroundGood',
+                specialActivityId: specialActivityIdString,
+                ownerId: ownerIdString,
+              },
+              wechat: {
+                url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
+              },
+            });
+          }}
+        >
+          <div className="bottom_shop_img" style={backgroundObj(goodsImg)}></div>
+          <div className="bottom_shop_content">
+            <div className="bottom_shop_goodsName font_noHide">{goodsName}</div>
+            <div className="bottom_shop_realPrice">
+              <div className="bottom_shop_realLabel">优惠价:</div>
+              <div className="bottom_shop_price">¥{realPrice}</div>
             </div>
-            {shareCommission > 0 && commission > 0 && (
-              <div className="bottom_kol_z font_hide">
-                <div className="bottom_kol_money font_hide">
-                  ¥{computedPrice(commission, shareCommission)}
+            <div className="bottom_shop_oldPrice">
+              <div className="bottom_shop_oldLabel">原价:</div>
+              <div className="bottom_shop_oldcout">¥{oriPrice}</div>
+            </div>
+            <div className="bottom_kol_info">
+              <div className="bottom_kol_s">
+                <div className="bottom_kol_bean">
+                  ¥{computedPrice(realPrice, payBeanCommission)}
                 </div>
               </div>
-            )}
+              {shareCommission > 0 && commission > 0 && (
+                <div className="bottom_kol_z font_hide">
+                  <div className="bottom_kol_money font_hide">
+                    ¥{computedPrice(commission, shareCommission)}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </Track>
     );
   };
   return (
