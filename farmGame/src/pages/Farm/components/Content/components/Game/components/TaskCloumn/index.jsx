@@ -5,6 +5,7 @@ import { reloadTab } from '@/utils/utils';
 import { deviceName, linkTo } from '@/utils/birdgeContent';
 import { fetchCommandGetCommand } from '@/services/game';
 import { cobyInfo } from '@/utils/utils';
+import Track from '@/components/tracking';
 import ShareModal from '@/components/ShareModal';
 import './index.less';
 import taskTitle from '@/asstes/common/taskTitle.png';
@@ -114,14 +115,16 @@ function index(props) {
       }
     } else if (taskStatus === '1') {
       return (
-        <div
-          className="taskLine_right taskLine_button2"
-          onClick={() => {
-            receiveRewards(item);
-          }}
-        >
-          领取
-        </div>
+        <Track name="farm_task" args={{ ...item, device: deviceName() }}>
+          <div
+            className="taskLine_right taskLine_button2"
+            onClick={() => {
+              receiveRewards(item);
+            }}
+          >
+            领取
+          </div>
+        </Track>
       );
     } else if (taskStatus === '2') {
       return (

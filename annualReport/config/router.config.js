@@ -13,4 +13,14 @@ export default [
     name: '哒卡乐2021年度账单',
     component: './report',
   },
+  {
+    path: '/brand',
+    name: '品牌详情',
+    component: './SinglePage/Meled',
+  },
+  {
+    path: '/brandInfo',
+    name: '品牌介绍',
+    component: './SinglePage/MeledInfo',
+  },
 ];

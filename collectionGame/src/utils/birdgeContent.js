@@ -315,10 +315,10 @@ export const linkToAddress = () => {
 export const linkToSecret = () => {
   linkTo({
     ios: {
-      path: 'https://web-new.dakale.net/dev/game/collectGame/index.html#/secret',
+      path: 'https://web-new.dakale.net/product/game/collectGame/index.html#/secret',
     },
     android: {
-      path: 'https://web-new.dakale.net/dev/game/collectGame/index.html#/secret',
+      path: 'https://web-new.dakale.net/product/game/collectGame/index.html#/secret',
     },
   });
 };

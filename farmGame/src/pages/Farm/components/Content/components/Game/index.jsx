@@ -194,6 +194,12 @@ const index = (props) => {
         ticker.removeTick(stage);
         ticker.removeTick(Hilo.Tween);
         ticker = null;
+        numRef.current.setHandleOpen({
+          name: 'footPrint',
+          args: {
+            device: deviceName(),
+          },
+        });
         history.push('/footer');
       });
     });
@@ -449,9 +455,10 @@ const index = (props) => {
       console.log(difference);
       if (difference === 0) {
         if (status == 1) {
+          console.log(deviceName());
           // 施肥埋点
           numRef.current.setHandleOpen({
-            name: 'blifertilizernd',
+            name: 'fertilizer',
             args: {
               device: deviceName(),
             },

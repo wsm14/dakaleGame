@@ -177,7 +177,7 @@ export default ({ userInfo }) => {
     } = item;
     return (
       <Track
-        name="specal_shop"
+        name="farmGoods"
         args={{
           ...item,
           device: deviceName(),
@@ -326,7 +326,7 @@ export default ({ userInfo }) => {
     } = item;
     return (
       <Track
-        name="self_shop"
+        name="farmGoods"
         args={{
           ...item,
           device: deviceName(),

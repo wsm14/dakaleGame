@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import BasicModal from '@/components/BasicModal';
 import FooterModal from '@/components/FooterModal';
-import { linkWatchTv } from '@/utils/birdgeContent';
+import Track from '@/components/tracking';
+import { linkWatchTv, deviceName } from '@/utils/birdgeContent';
 import { fetchShareGetNewShareInfo } from '@/services/game';
 import './index.less';
 
@@ -52,23 +53,25 @@ const index = (props) => {
               ? '纪念照*1'
               : `${travelInfo.prizeName}*${travelInfo.prize || 1}`}
           </div>
-          <div className="TravelModal_bottom">
-            <div
-              className="TravelModal_button TravelModal_buttonStyle"
-              onClick={
-                travelInfo.prizeType === 'image'
-                  ? () => {
-                      setFootVisible(true);
-                    }
-                  : onClose
-              }
-            >
-              {travelInfo.prizeType === 'image' ? '炫耀一下' : '立即收下'}
+          <Track name="reward" args={{ device: deviceName() }}>
+            <div className="TravelModal_bottom">
+              <div
+                className="TravelModal_button TravelModal_buttonStyle"
+                onClick={
+                  travelInfo.prizeType === 'image'
+                    ? () => {
+                        setFootVisible(true);
+                      }
+                    : onClose
+                }
+              >
+                {travelInfo.prizeType === 'image' ? '炫耀一下' : '立即收下'}
+              </div>
+              <div className="TravelModal_button TravelModal_buttonStyle1" onClick={linkWatchTv}>
+                看视频领豆
+              </div>
             </div>
-            <div className="TravelModal_button TravelModal_buttonStyle1" onClick={linkWatchTv}>
-              看视频领豆
-            </div>
-          </div>
+          </Track>
         </div>
       </BasicModal>
       <FooterModal

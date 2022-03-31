@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Mask } from 'antd-mobile';
 import html2canvas from 'html2canvas';
+import Track from '@/components/tracking';
 import { makeReport, deviceName, linkTo } from '@/utils/birdgeContent';
 import './index.less';
 
@@ -44,9 +45,11 @@ const index = (props) => {
               </div>
             </div>
           </div>
-          <div className="footerModal_button" onClick={makeImage}>
-            炫耀一下
-          </div>
+          <Track name="showOff" args={{ device: deviceName() }}>
+            <div className="footerModal_button" onClick={makeImage}>
+              炫耀一下
+            </div>
+          </Track>
         </div>
       </Mask>
     </>

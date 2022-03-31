@@ -23,14 +23,14 @@ const index = forwardRef((props, ref) => {
   } = annualReport;
 
   const getShareImg = async () => {
-   setTimeout(() => {
-    const res = await fetchShareGetNewShareInfo({
-      shareType: 'annualReport',
-    });
-    const { content = {} } = res;
-    const { shareInfo = {} } = content;
-    setShareImg(shareInfo.qcodeUrl);
-   }, 1000);
+    setTimeout(async () => {
+      const res = await fetchShareGetNewShareInfo({
+        shareType: 'annualReport',
+      });
+      const { content = {} } = res;
+      const { shareInfo = {} } = content;
+      setShareImg(shareInfo.qcodeUrl);
+    }, 1000);
   };
 
   return (

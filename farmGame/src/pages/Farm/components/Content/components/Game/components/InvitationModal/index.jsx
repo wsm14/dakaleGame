@@ -6,6 +6,7 @@ import { deviceName, linkTo } from '@/utils/birdgeContent';
 import { fetchCommandGetCommand } from '@/services/game';
 import { filterList } from '@/utils/game';
 import { cobyInfo } from '@/utils/utils';
+import Track from '@/components/tracking';
 import SignOutModal from '@/components/SignOutModal';
 import ShareModal from '@/components/ShareModal';
 import './index.less';

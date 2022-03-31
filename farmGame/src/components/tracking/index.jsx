@@ -25,11 +25,11 @@ export default ({ children, type = 'click', args = {}, name, style, blockName, c
       pageName: pageName,
       ...obj,
     };
-    console.log(list, 'list');
     const list =
       (window.sessionStorage.getItem('operatingLog') &&
         JSON.parse(window.sessionStorage.getItem('operatingLog'))) ||
       [];
+
     list.push(userData, cRef);
     if (list.length > 20) {
       fakeOperatingLog({

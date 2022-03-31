@@ -1,6 +1,8 @@
 import React from 'react';
 import './index.less';
+import Track from '@/components/tracking';
 import { fetchFarmQuitTeam } from '@/services/game';
+import { deviceName } from '@/utils/birdgeContent';
 import { Toast } from 'antd-mobile';
 import BasicModal from '@/components/BasicModal';
 
@@ -36,14 +38,16 @@ function index(props) {
           <div className="signOutModal_content_sign">温馨提示</div>
           <div className="signOutModal_content_title">是否确认退出小队？</div>
           <div className="signOutModal_doubleButton">
-            <div
-              className="signOutModal_content_button"
-              onClick={() => {
-                signOut();
-              }}
-            >
-              立即退出
-            </div>
+            <Track name="farm_signOut" args={{ device: deviceName() }}>
+              <div
+                className="signOutModal_content_button"
+                onClick={() => {
+                  signOut();
+                }}
+              >
+                立即退出
+              </div>
+            </Track>
             <div
               className="signOutModal_content_button1"
               onClick={() => {
