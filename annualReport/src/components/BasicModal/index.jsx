@@ -2,7 +2,7 @@ import React from 'react';
 import './index.less';
 import { Mask } from 'antd-mobile-v5';
 import { useDispatch } from 'umi';
-import closeIcon from '@public/closeIcon.png';
+import closeIcon from '@public/image/close.png';
 
 function index(props) {
   const { children, modalProps } = props;

@@ -4,23 +4,28 @@ export default [
     redirect: '/index',
   },
   {
-    path: '/homePage',
-    name: '哒卡乐2021年度账单',
-    component: './homePage',
-  },
-  {
-    path: '/report',
-    name: '哒卡乐2021年度账单',
-    component: './report',
-  },
-  {
     path: '/brand',
-    name: '品牌详情',
+    name: '商品详情',
     component: './SinglePage/Meled',
   },
   {
     path: '/brandInfo',
     name: '品牌介绍',
     component: './SinglePage/MeledInfo',
+  },
+  {
+    path: '/homePage',
+    name: '',
+    component: './homePage',
+  },
+  {
+    path: '/report',
+    name: '',
+    component: './report',
+  },
+  {
+    path: '/demo',
+    name: '',
+    component: './Demo',
   },
 ];

@@ -46,9 +46,9 @@ export const getToken = (fn) => {
   } catch (e) {
     sessionStorage.setItem(
       'dakaleToken',
-      'VyRTcn6pLRmlrFSmAwymahVE8S6LsHhY2uZmuqCTeyXIUcVqVkgu5A5H2HuFfXIh',
+      'zpP0VPdkpFn5xeqOAf4cQ0sXxEWitUdodNIViubxTnhKscNmxcMATCdMET3VXDvw',
     );
-    fn && fn('VyRTcn6pLRmlrFSmAwymahVE8S6LsHhY2uZmuqCTeyXIUcVqVkgu5A5H2HuFfXIh');
+    fn && fn('zpP0VPdkpFn5xeqOAf4cQ0sXxEWitUdodNIViubxTnhKscNmxcMATCdMET3VXDvw');
   }
 };
 //获取token
@@ -313,6 +313,85 @@ export const linkToAddress = () => {
     },
   });
 };
+
+//跳转地图
+export const linkToMap = (val) => {
+  native.nativeInit('mapGo', {
+    android: {
+      lat: val.lat,
+      lnt: val.lnt,
+      merchantAddress: val.address,
+    },
+    ios: {
+      lat: val.lat,
+      lnt: val.lnt,
+      merchantAddress: val.address,
+    },
+  });
+};
+
+//跳转订单页面
+export const linkToBuy = (val) => {
+  const { specialActivityId, merchantId, ownerId, identification } = val;
+  linkTo({
+    ios: {
+      path: 'DKLAroundDiscountGoodsDetailViewController',
+      param: {
+        specialActivityId: specialActivityId,
+        ownerId,
+        commissionIdentification: identification,
+      },
+    },
+    android: {
+      path: 'AroundGood',
+      specialActivityId,
+      ownerId,
+      identification,
+    },
+    wechat: {
+      url: `/pages/goods/favourOrder/index?merchantId=${merchantId}&specialActivityId=${specialActivityId}&identification=${identification}`,
+    },
+  });
+};
+
+//美莱分享好友
+export const nativeMeledShareWork = (shareId) => {
+  // shareKey url
+  native.nativeInit('goShare', {
+    android: {
+      shareId: shareId,
+      shareType: 'shareH5',
+      subType: 'meilai',
+      callType: 'native',
+      wechatType: 'h5',
+      // operateItem: 'savePhoto',
+      nativeShowPlatform: 'wechatFriend,wechatMoment',
+      sharePlatform: 'SharePlatformDialog',
+    },
+    ios: {
+      shareId: shareId,
+      shareType: 'shareH5',
+      subType: 'meilai',
+      callType: 'native',
+      wechatType: 'h5',
+      // operateItem: 'savePhoto',
+      nativeShowPlatform: 'wechatFriend,wechatMoment',
+      sharePlatform: 'SharePlatformDialog',
+    },
+  });
+};
+//秘籍
+export const linkToPhone = () => {
+  linkTo({
+    ios: {
+      path: 'tel:4000876600-0761',
+    },
+    android: {
+      path: 'tel:4000876600-0761',
+    },
+  });
+};
+
 //生成海报
 export const makeReport = (val) => {
   native.nativeInit('saveFile', {

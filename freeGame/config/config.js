@@ -14,12 +14,6 @@ export default defineConfig({
       exclude: /node_modules|folder_name/i, //过滤插件
     }),
   ],
-  headScripts: [
-    {
-      src: './jweixin.js',
-      defer: true,
-    },
-  ],
   hash: true,
   fastRefresh: {},
   history: { type: 'hash' },

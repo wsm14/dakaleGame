@@ -329,5 +329,27 @@ export const makeReport = (val) => {
     url: val,
   });
 };
+//首页右上角分享
+export const homeShare = () => {
+  native.nativeInit('goShare', {
+    android: {
+      param: {
+        shareType: 'platformGame',
+        subType: 'gatherGame',
+      },
+      sharePlatform: 'SharePlatformWechatMiniProgram',
+    },
+    ios: {
+      sharePlatform: 'wechatFriend',
+      param: {
+        shareType: 'platformGame',
+        subType: 'gatherGame',
+      },
+    },
+    wechat: {
+      url: `/pages/share/gameHelp/index?subType=gatherGame`,
+    },
+  });
+};
 
 //关闭安卓动画

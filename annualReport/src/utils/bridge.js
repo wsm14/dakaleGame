@@ -153,10 +153,14 @@ function nativeOther() {
     redirectTo: 'redirectTo',
   };
   this.getPhone = function () {
-    const u = navigator.userAgent.toLowerCase();
-    if (/miniProgram/i.test(u)) return 'miniProgram'; // 小程序
-    if (u.indexOf('ios/dakale') > -1) return 'dakaleIOS'; // 用户端ios
-    if (u.indexOf('android/dakale') > -1) return 'dakaleAndroid'; // 用户端android
+    var u = navigator.userAgent.toLowerCase();
+    if (/miniProgram/i.test(u)) return 'miniProgram';
+    // 小程序
+    else if (u.indexOf('ios/dakale') > -1) return 'dakaleIOS';
+    // 用户端ios
+    else if (u.indexOf('android/dakale') > -1) return 'dakaleAndroid';
+    // 用户端android
+    else if (u.indexOf('micromessenger') > -1) return 'wxChatWebView'; // 微信浏览器
     return false;
   };
   this.dsBridgeSynchro = function (fnName, params) {

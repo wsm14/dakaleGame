@@ -341,6 +341,29 @@ export const linkToAddress = () => {
     },
   });
 };
+
+//首页右上角分享
+export const homeShare = () => {
+  native.nativeInit('goShare', {
+    android: {
+      param: {
+        shareType: 'platformGame',
+        subType: 'farmGame',
+      },
+      sharePlatform: 'SharePlatformWechatMiniProgram',
+    },
+    ios: {
+      sharePlatform: 'wechatFriend',
+      param: {
+        shareType: 'platformGame',
+        subType: 'farmGame',
+      },
+    },
+    wechat: {
+      url: `/pages/share/gameHelp/index?subType=farmGame`,
+    },
+  });
+};
 //生成海报
 export const makeReport = (val) => {
   native.nativeInit('saveFile', {

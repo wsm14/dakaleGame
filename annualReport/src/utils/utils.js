@@ -69,6 +69,9 @@ export const filterLimit = (number) => {
     return number * 1000 + 'm';
   } else return number + 'km';
 };
+function Rad(d) {
+  return (d * Math.PI) / 180.0; //经纬度转换成三角函数中度分表形式。
+}
 export const GetDistance = function (lat1, lng1, lat2, lng2) {
   let radLat1 = Rad(lat1) || Rad(30.264561);
   let radLat2 = Rad(lat2);
@@ -92,4 +95,24 @@ export const GetDistance = function (lat1, lng1, lat2, lng2) {
   } else {
     return null;
   }
+};
+
+// 打开地图
+export const openMap = (lat, lnt, name) => {
+  if (!lat || !lnt) return;
+  window.location.href = `https://uri.amap.com/marker?position=${lnt},${lat}&name=${name}`;
+};
+
+//换算价格计算
+export const computedPrice = (price, scale) => {
+  let size = (price * (scale / 100)).toFixed(3);
+  size = size.substring(0, size.length - 1);
+  if (size === '0.00') {
+    return 0.01;
+  } else return size;
+};
+
+//获取随机数
+export const getNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
 };

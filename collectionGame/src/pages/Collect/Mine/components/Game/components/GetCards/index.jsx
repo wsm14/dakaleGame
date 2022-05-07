@@ -5,10 +5,11 @@ import TitleBlock from '@/components/TitleBlock';
 import Cloud from '@/components/Cloud';
 import TurnTable from './components/TurnTable';
 import TaskCloumn from './components/TaskCloumn';
-import { nativeClose, linkToSecret, deviceName } from '@/utils/birdgeContent';
+import { nativeClose, linkToSecret, deviceName, homeShare } from '@/utils/birdgeContent';
 
 import getCard_button from '@public/loading/getCard_button.png';
 import getCard_script from '@public/loading/getCard_script.png';
+import homeShareIcon from '@public/image/homeShareIcon.png';
 
 function index(props) {
   const { openModal, gameDetail, getGameDetail } = props;
@@ -46,6 +47,14 @@ function index(props) {
                 }
               }}
             />
+            {deviceName() !== 'miniProgram' && (
+              <img
+                src={homeShareIcon}
+                alt=""
+                className="getCards_homeShareIcon"
+                onClick={homeShare}
+              />
+            )}
           </div>
         </div>
 
