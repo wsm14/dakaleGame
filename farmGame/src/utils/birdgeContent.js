@@ -5,6 +5,10 @@ export const hideTitle = (data) => {
     native.nativeInit('hideTitle');
   } catch (e) {}
 };
+export const filterFacility = (obj) => {
+  let key = native.getUrlKey('device') || 'wechat';
+  return obj[key];
+};
 export const linkTo = (data) => {
   native.nativeInit('linkTo', {
     ...data,
@@ -368,6 +372,50 @@ export const homeShare = () => {
 export const makeReport = (val) => {
   native.nativeInit('saveFile', {
     url: val,
+  });
+};
+
+export const linkToShopActive = () => {
+  linkTo({
+    ios: {
+      path: 'DKLExquisiteChosenHomeViewController',
+    },
+    android: {
+      path: 'ShopAround',
+    },
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/perimeter/goodThings/index`,
+      },
+      mark: {
+        url: `/pages/Dakale/goodThings/index`,
+      },
+    }),
+  });
+};
+
+export const shopDetails = (ownerIdString, specialActivityIdString, activityType) => {
+  linkTo({
+    ios: {
+      path: {
+        specialGoods: 'DKLAroundDiscountGoodsDetailViewController',
+        commerceGoods: 'commerceGoodsDetailPage',
+      }[activityType],
+      param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
+    },
+    android: {
+      path: 'AroundGood',
+      goodsId: specialActivityIdString,
+      ownerId: ownerIdString,
+    },
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
+      },
+      mark: {
+        url: `/pages/Dakale/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
+      },
+    }),
   });
 };
 

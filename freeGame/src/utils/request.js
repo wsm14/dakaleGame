@@ -6,7 +6,7 @@ import { extend } from 'umi-request';
 import { notification, Modal } from 'antd';
 import { history } from 'umi';
 import { encrypt } from './encrypt';
-import { getLogin } from './birdgeContent';
+import { getLogin, deviceName } from './birdgeContent';
 import { Toast } from 'antd-mobile';
 
 notification.config({
@@ -88,6 +88,8 @@ request.interceptors.request.use(async (url, options) => {
     'Content-Type': 'application/json;charset=utf-8',
     Accept: 'application/json',
     appType: 'user',
+    version: '1',
+    device: deviceName() === 'miniProgram' ? 'weChat' : '',
   };
 
   return {

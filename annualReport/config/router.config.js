@@ -28,4 +28,9 @@ export default [
     name: '',
     component: './Demo',
   },
+  {
+    path: '/topic',
+    name: '',
+    component: './SinglePage/TopicGame',
+  },
 ];

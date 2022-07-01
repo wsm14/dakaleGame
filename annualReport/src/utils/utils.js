@@ -116,3 +116,36 @@ export const computedPrice = (price, scale) => {
 export const getNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
+
+function isAndroid() {
+  var u = navigator.userAgent;
+  if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1 || u.indexOf('Adr') > -1) {
+    return true;
+  }
+  return false;
+}
+function isIos() {
+  var u = navigator.userAgent;
+  if (u.indexOf('iPhone') > -1 || u.indexOf('iOS') > -1 || u.indexOf('Mac OS') > -1) {
+    return true;
+  }
+  return false;
+}
+export function getDownload() {
+  var ua = navigator.userAgent.toLowerCase();
+  if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+    alert('请点击右上角打开浏览器下载');
+    return;
+  } else {
+    if (isAndroid()) {
+      if (environment == 'dev') {
+        return (window.location.href =
+          'https://bundle.dakale.net/android/dev/dakale-android-lastest.apk');
+      }
+      return (window.location.href =
+        'https://buddle-new.dakale.net/android/product/dakale-android-lastest.apk');
+    } else if (isIos()) {
+      window.location.href = 'https://itunes.apple.com/cn/app/id1521276175?mt=8';
+    }
+  }
+}

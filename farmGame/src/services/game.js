@@ -219,3 +219,17 @@ export const fakeOperatingLog = (params, headerOther) => {
     headerOther,
   });
 };
+
+export const fetchEsOnlineGoodsByDisplay = (params) => {
+  return request('/user/online/goods/listEsOnlineGoodsByDisplay', {
+    params,
+  });
+};
+//线上电商品商品列表
+
+export const fetchEsOfflineGoodsByDisplay = (params) => {
+  return request('/user/offline/goods/listEsOfflineGoodsByDisplay', {
+    params,
+  });
+};
+//本地生活品商品列表;

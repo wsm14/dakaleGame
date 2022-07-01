@@ -1,12 +1,8 @@
-@font-face {
-  font-family: 'HeiTi'; // --自定义名字就好
-  src: url('https://dakale-web-new.oss-cn-hangzhou.aliyuncs.com/dev/game/Lottie/font/font.ttf'); // --下载的字体文件路径
-}
 .BottomContent_box {
   position: relative;
   z-index: 10;
-  height: 674px;
-  margin-top: -48px;
+  min-height: 674px;
+  margin-top: -30px;
   padding: 0px 24px 0;
   background: linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%);
   border-radius: 40px 40px 0px 0px;
@@ -128,13 +124,114 @@
       no-repeat !important;
     background-size: 100% 100% !important;
   }
+  .tabulation_shop_box:nth-child(2n) {
+    margin-right: 0;
+  }
+  .merchant_dakale_logo {
+    flex-shrink: 1;
+    background: url('https://wechat-config.dakale.net/miniprogram/image/merchant_dakale.png')
+      no-repeat;
+    background-size: 100% 100%;
+  }
+  .tabulation_shop_box {
+    flex-shrink: 0;
+    width: 343px;
+    margin: 0 0 16px;
+    margin-right: 16px;
+    background: #ffffff;
+    border-radius: 8px;
+    .tabulation_shop_img {
+      width: 343px;
+      height: 274px;
+    }
+    .tabulation_shop_content {
+      padding: 16px 16px 24px;
+      .tabulation_shop_title {
+        width: 311px;
+        max-height: 80px;
+        color: #333333;
+        font-weight: 600;
+        font-size: 32px;
+        line-height: 40px;
+      }
+      .tabulation_shop_userInfo {
+        display: flex;
+        align-items: center;
+        width: 311px;
+        margin-top: 12px;
+        .tabulation_shop_userprofile {
+          flex-shrink: 0;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+        }
+        .tabulation_shop_userDesc {
+          margin-left: 8px;
+          color: #999999;
+          font-weight: 400;
+          font-size: 24px;
+        }
+        .tabulation_shop_limit {
+          flex-shrink: 0;
+          color: #999999;
+          font-weight: 400;
+          font-size: 24px;
+        }
+      }
+      .tabulation_shop_price {
+        display: flex;
+        align-items: flex-end;
+        width: 311px;
+        margin-top: 24px;
+        .tabulation_price_real {
+          color: #333333;
+          font-weight: bold;
+          font-size: 32px;
+        }
+        .tabulation_price_old {
+          margin-right: 4px;
+        }
+        .tabulation_price_oldInfo {
+          color: #999999;
+          font-weight: bold;
+          font-size: 26px;
+          text-decoration: line-through;
+        }
+      }
+    }
+    .tabulation_kol_s {
+      display: inline-flex;
+      flex-shrink: 0;
+      align-items: center;
+      height: 36px;
+      margin-top: 12px;
+      margin-right: 8px;
+      padding: 0 8px 0 0;
+      background: #fef1f4;
+      border-radius: 4px;
+    }
+    .tabulation_kol_s::before {
+      display: block;
+      width: 69px;
+      height: 36px;
+      margin-right: 14px;
+      background: url(https://wechat-config.dakale.net/miniprogram/image/icon895.png) no-repeat;
+      background-size: 100% 100%;
+      content: '';
+    }
+    .tabulation_kol_bean {
+      color: rgba(239, 71, 111, 1);
+      font-weight: bold;
+      font-size: 28px;
+    }
+  }
+
   .bottom_shop {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 26px;
-    padding: 0.06rem;
     .bottom_shop_box {
-      width: 335px;
+      width: 332px;
       line-height: 1;
       background: #ffffff;
       border-radius: 8px;
@@ -143,7 +240,7 @@
       margin-right: 0px;
     }
     .bottom_shop_img {
-      width: 335px;
+      width: 332px;
       height: 268px;
       background: #d8d8d8;
       border-radius: 8px 8px 0 0;
@@ -278,7 +375,6 @@
     .bottom_kol_bean {
       color: #ffb41c;
       font-weight: bold;
-      font-family: 'HeiTi';
       font-size: 28px;
       font-family: Alternate;
     }
@@ -304,7 +400,7 @@
       color: #ef476f;
       font-weight: bold;
       font-size: 28px;
-      font-family: 'HeiTi';
+      font-family: Alternate;
     }
   }
 
@@ -317,5 +413,16 @@
   }
   .bottom_dakale_height {
     height: 48px;
+  }
+  .font_hide {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    display: -webkit-box;
+
+    -webkit-box-orient: vertical;
+
+    -webkit-line-clamp: 2;
   }
 }
