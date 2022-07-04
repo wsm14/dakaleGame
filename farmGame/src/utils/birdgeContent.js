@@ -404,16 +404,19 @@ export const shopDetails = (ownerIdString, specialActivityIdString, activityType
       param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
     },
     android: {
-      path: 'AroundGood',
+      path: {
+        specialGoods: 'AroundGood',
+        commerceGoods: 'ECGood',
+      }[activityType],
       goodsId: specialActivityIdString,
       ownerId: ownerIdString,
     },
     wechat: filterFacility({
       wechat: {
-        url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
+        url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}&activityType=${activityType}`,
       },
       mark: {
-        url: `/pages/Dakale/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}`,
+        url: `/pages/Dakale/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}&activityType=${activityType}`,
       },
     }),
   });

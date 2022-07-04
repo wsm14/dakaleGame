@@ -226,7 +226,6 @@ export const fetchEsOnlineGoodsByDisplay = (params) => {
   });
 };
 //线上电商品商品列表
-
 export const fetchEsOfflineGoodsByDisplay = (params) => {
   return request('/user/offline/goods/listEsOfflineGoodsByDisplay', {
     params,

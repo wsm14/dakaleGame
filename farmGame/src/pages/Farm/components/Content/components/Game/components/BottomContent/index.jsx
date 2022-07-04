@@ -8,6 +8,7 @@ import {
   linkToShopActive,
 } from '@/utils/birdgeContent';
 import { fetchEsOfflineGoodsByDisplay, fetchEsOnlineGoodsByDisplay } from '@/services/game';
+import { InfiniteScroll } from 'antd-mobile';
 import { GetDistance, computedPrice, backgroundObj } from '@/utils/utils';
 import Track from '@/components/tracking';
 import './index.less';
@@ -18,6 +19,8 @@ export default ({ userInfo }) => {
   const [beanList, setBeanList] = useState([]);
   const [gameList, setGameList] = useState([]);
   const { payBeanCommission = 50, shareCommission = 0 } = userInfo;
+  const [hasMore, setHasMore] = useState(true);
+  const [pageNum, setPageNum] = useState(1);
 
   useEffect(() => {
     getLocation(setcity);
@@ -25,26 +28,20 @@ export default ({ userInfo }) => {
   useEffect(() => {
     if (city) {
       fetchSpecialGoods(city);
-      fetchzbyw(city);
+      // fetchzbyw(city);
     }
   }, [city]);
-  const fetchSpecialGoods = (city) => {
-    const { lat, lnt, city_code } = city;
-    fetchEsOfflineGoodsByDisplay(
-      {
-        page: 1,
-        limit: 2,
-        displayFilterTags: 'taskchwl',
-      },
-      {
-        lat,
-        lnt,
-        'city-code': city_code,
-      },
-    ).then((val) => {
+  const fetchSpecialGoods = async () => {
+    return fetchEsOnlineGoodsByDisplay({
+      page: pageNum,
+      limit: 10,
+      displayFilterTags: 'taskjxhw',
+    }).then((val) => {
       if (val) {
-        const { offlineStrapInfos = [] } = val.content;
-        setHotList(offlineStrapInfos);
+        const { onlineStrapInfos = [] } = val.content;
+        setHotList([...hotList, ...onlineStrapInfos]);
+        setHasMore(onlineStrapInfos.length > 0);
+        setPageNum(pageNum + 1);
       }
     });
   };
@@ -132,7 +129,7 @@ export default ({ userInfo }) => {
             <div className="tabulation_shop_img" style={backgroundObj(goodsImg)}></div>
             <div className="tabulation_shop_content">
               <div className="tabulation_shop_title font_noHide">{goodsName}</div>
-              {listType === 'specal' && (
+              {/* {listType === 'specal' && (
                 <div className="tabulation_shop_userInfo font_hide">
                   <div
                     className="tabulation_shop_userprofile merchant_dakale_logo"
@@ -143,7 +140,7 @@ export default ({ userInfo }) => {
                     ｜{GetDistance(lat, lnt, city.lat, city.lnt)}
                   </div>
                 </div>
-              )}
+              )} */}
               {RenderPrice}
               {type === 'defaultMode' && (
                 <div className="tabulation_kol_s">
@@ -158,11 +155,27 @@ export default ({ userInfo }) => {
       );
     };
     return (
-      <div className="bottom_shop">
-        {list.map((item) => {
-          return <Template item={item}></Template>;
-        })}
-      </div>
+      <>
+        <div className="tabulation_box">
+          <div className="tabulation_left">
+            {list.map((item, index) => {
+              if (index % 2 === 0) {
+                return <Template item={item} key={item.goodsId}></Template>;
+              }
+              return null;
+            })}
+          </div>
+          <div className="tabulation_right">
+            {list.map((item, index) => {
+              if (index % 2 === 1) {
+                return <Template item={item} key={item.goodsId}></Template>;
+              }
+              return null;
+            })}
+          </div>
+        </div>
+        <InfiniteScroll loadMore={fetchSpecialGoods} hasMore={hasMore} />
+      </>
     );
   };
   //宫格模式列表
@@ -200,14 +213,14 @@ export default ({ userInfo }) => {
           <div className="BottomContent_goods_box">
             <div className="BottomContent_goods_title">
               <div className="BottomContent_goods_sm">小豆精选</div>
-              <div
+              {/* <div
                 className="link_go"
                 onClick={() => {
                   linkToShopActive();
                 }}
               >
                 <div>更多</div>
-              </div>
+              </div> */}
             </div>
           </div>
           <TabulationShop list={hotList} configUserLevelInfo={userInfo}></TabulationShop>
@@ -245,7 +258,7 @@ export default ({ userInfo }) => {
           </div>
         </>
       )} */}
-      {gameList.length > 0 && (
+      {/* {gameList.length > 0 && (
         <>
           <div className="BottomContent_goods_box">
             <div className="BottomContent_goods_title">
@@ -262,7 +275,7 @@ export default ({ userInfo }) => {
           </div>
           <TabulationShop list={gameList} configUserLevelInfo={userInfo}></TabulationShop>
         </>
-      )}
+      )} */}
       <div className="bottom_dakale_logo"></div>
       <div className="bottom_dakale_height"></div>
     </div>
