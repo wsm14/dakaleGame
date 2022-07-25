@@ -114,7 +114,7 @@ request.interceptors.response.use(async (response) => {
     getLogin();
     return false;
   }
-  if (!success && response.status == 200) {
+  if (!success && response.status == 200 && resultCode != '5238' && resultCode != '5242') {
     Toast.show({ content: resultDesc || errorHandler(response) });
     // notification.info({
     //   message: '提示',

@@ -33,7 +33,7 @@ export const createBitmap = ({ list }) => {
 export const HiloCreateSpirit = (path, length, num, width, height, id) => {
   // path:图片地址
   //length:所有的个数
-  //num:精灵图一张的个数
+  //num:精灵图一行的个数
   //width:宽度
   //height:高度
   //id:精灵图的id

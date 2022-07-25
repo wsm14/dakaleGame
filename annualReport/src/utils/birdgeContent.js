@@ -10,6 +10,10 @@ export const linkTo = (data) => {
     ...data,
   });
 };
+export const filterFacility = (obj) => {
+  let key = native.getUrlKey('device') || 'wechat';
+  return obj[key];
+};
 //跳转对应页面
 // ios: {
 //   path: 'DKLAroundDiscountConfirmOrderViewController',
@@ -46,9 +50,9 @@ export const getToken = (fn) => {
   } catch (e) {
     sessionStorage.setItem(
       'dakaleToken',
-      'zpP0VPdkpFn5xeqOAf4cQ0sXxEWitUdodNIViubxTnhKscNmxcMATCdMET3VXDvw',
+      'PFBfMZIQL1617pGAnmvdhZfd32rw5F5fJwhstRWrhvUM59iD9xosGjTLziIVtFcI',
     );
-    fn && fn('zpP0VPdkpFn5xeqOAf4cQ0sXxEWitUdodNIViubxTnhKscNmxcMATCdMET3VXDvw');
+    fn && fn('PFBfMZIQL1617pGAnmvdhZfd32rw5F5fJwhstRWrhvUM59iD9xosGjTLziIVtFcI');
   }
 };
 //获取token
@@ -399,4 +403,70 @@ export const makeReport = (val) => {
   });
 };
 
-//关闭安卓动画
+export const shopDetails = (ownerIdString, specialActivityIdString, activityType) => {
+  linkTo({
+    ios: {
+      path: {
+        specialGoods: 'DKLAroundDiscountGoodsDetailViewController',
+        commerceGoods: 'commerceGoodsDetailPage',
+      }[activityType],
+      param: { specialActivityId: specialActivityIdString, ownerId: ownerIdString },
+    },
+    android: {
+      path: {
+        specialGoods: 'AroundGood',
+        commerceGoods: 'ECGood',
+      }[activityType],
+      goodsId: specialActivityIdString,
+      ownerId: ownerIdString,
+    },
+    wechat: filterFacility({
+      wechat: {
+        url: `/pages/perimeter/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}&activityType=${activityType}`,
+      },
+      mark: {
+        url: `/pages/Dakale/favourableDetails/index?merchantId=${ownerIdString}&specialActivityId=${specialActivityIdString}&activityType=${activityType}`,
+      },
+    }),
+  });
+};
+
+//跳转我的收货
+export const linkToGoods = (type) => {
+  linkTo({
+    ios: {
+      path: 'smallClockRewardList',
+      param: {
+        channelStyle: type,
+      },
+    },
+    android: {
+      path: 'ScanClockPrize',
+      type: type,
+    },
+  });
+};
+
+//跳转助力商品列表页面
+export const linkToHelpGood = () => {
+  linkTo({
+    ios: {
+      path: 'shareToHelpGoods',
+    },
+    android: {
+      path: 'HelpGetFreeGoods',
+    },
+  });
+};
+
+//跳转助力商品列表页面
+export const linkToHelpCoupon = () => {
+  linkTo({
+    ios: {
+      path: 'shareToHelpCoupon',
+    },
+    android: {
+      path: 'HelpGetCoupons',
+    },
+  });
+};

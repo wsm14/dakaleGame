@@ -1,0 +1,161 @@
+.topImg {
+  width: 100%;
+  height: 600px;
+  background: url(~@public/help/free1.png) no-repeat;
+  background-size: 100% 100%;
+}
+.freeRules {
+  width: 50px;
+  height: 136px;
+  position: absolute;
+  right: 0;
+  top: 118px;
+}
+.freeShare {
+  width: 50px;
+  height: 96px;
+  position: absolute;
+  right: 0;
+  top: 270px;
+}
+.freeContent {
+  background: #9bdb00;
+  border: 1px solid transparent;
+  padding-bottom: 100px;
+  .freeGood {
+    width: 100%;
+    padding-bottom: 70px;
+    background: url(~@public/help/free4.png) no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -100px;
+    .freeGood_time {
+      font-size: 26px;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 37px;
+      text-align: center;
+      padding-top: 22px;
+    }
+    .freeGood_img {
+      width: 600px;
+      height: 240px;
+      margin-top: 112px;
+      border-radius: 8px;
+    }
+    .freeGood_remain {
+      width: 480px;
+      height: 96px;
+      background: url(~@public/help/remain.png) no-repeat;
+      background-size: 100% 100%;
+      font-size: 40px;
+      font-weight: 800;
+      color: #ffffff;
+      text-align: center;
+      line-height: 90px;
+      margin-top: 88px;
+      animation: freeScale 2s linear infinite;
+    }
+    .freeGood_receive {
+      width: 480px;
+      height: 96px;
+      background: url(~@public/help/free6.png) no-repeat;
+      background-size: 100% 100%;
+      font-size: 40px;
+      font-weight: 800;
+      color: #ffffff;
+      text-align: center;
+      line-height: 90px;
+      margin-top: 88px;
+      animation: freeScale 2s linear infinite;
+    }
+    .freeGood_phone {
+      margin-top: 26px;
+      span {
+        color: #3695fe;
+      }
+    }
+  }
+
+  .freeTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+
+    img {
+      width: 62px;
+      height: 9px;
+    }
+    .freeTitleNum {
+      font-size: 28px;
+      font-weight: 600;
+      color: #333333;
+      line-height: 40px;
+      margin: 0 20px;
+      span {
+        color: #ef3636;
+        font-size: 40px;
+      }
+    }
+  }
+
+  .freePeople {
+    display: flex;
+    max-width: 700px;
+    flex-wrap: wrap;
+    padding-left: 20px;
+    justify-content: center;
+    margin-top: 63px;
+    img {
+      width: 96px;
+      height: 96px;
+      margin-right: 40px;
+      border-radius: 100%;
+    }
+    img:nth-child(n + 5) {
+      margin-top: 10px;
+    }
+  }
+
+  .freeActivity {
+    width: 702px;
+    background: #fffaf2;
+    border-radius: 20px;
+    margin: 14px auto 0;
+    padding: 40px 28px;
+    .freeActivity_title {
+      width: 180px;
+      height: 50px;
+      font-size: 36px;
+      font-weight: 600;
+      color: #333333;
+      line-height: 50px;
+    }
+    img {
+      width: 100%;
+      margin-top: 20px;
+    }
+  }
+
+  .bottomIcon {
+    width: 372px;
+    height: 56px;
+    display: block;
+    margin: 48px auto 0;
+  }
+}
+
+@keyframes freeScale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

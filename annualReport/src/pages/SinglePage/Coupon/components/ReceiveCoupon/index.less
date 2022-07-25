@@ -1,0 +1,99 @@
+.couponModal {
+  width: 600px;
+  height: 608px;
+  background: url(~@public/help/coupon3.png) no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 64px;
+  .couponModalTitle1 {
+    font-size: 40px;
+    font-weight: 500;
+    color: #333333;
+    line-height: 40px;
+  }
+  .couponModalTitle2 {
+    font-size: 24px;
+    font-weight: 400;
+    color: #999999;
+    line-height: 24px;
+    margin-top: 16px;
+  }
+  .couponModal_content {
+    width: 536px;
+    height: 184px;
+    background: url(~@public/help/coupon4.png) no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 56px;
+    .couponModal_left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .couponModal_leftPrice {
+        font-size: 32px;
+        font-weight: bold;
+        color: #ff4040;
+        line-height: 56px;
+      }
+      .couponModal_leftLimit {
+        font-size: 28px;
+        font-weight: 400;
+        color: #ff4040;
+        line-height: 28px;
+        display: inline-block;
+      }
+    }
+
+    .couponModal_middle {
+      width: 1px;
+      height: 129px;
+      background-image: linear-gradient(
+        #ffcccc 35%,
+        rgba(255, 255, 255, 0) 0%
+      ); /* 35%设置虚线点y轴上的长度 */
+      background-position: left; /* right配置右边框位置的虚线 */
+      background-size: 1px 10px; /* 第一个参数设置虚线点x轴上的长度；第二个参数设置虚线点的间距 */
+      background-repeat: repeat-y;
+      margin: 0 32px 0 20px;
+    }
+
+    .couponModal_right {
+      display: flex;
+      flex-direction: column;
+      .couponModal_rightName {
+        width: 253px;
+        font-size: 36px;
+        font-weight: 500;
+        line-height: 36px;
+        overflow: hidden; //超出的文本隐藏
+        text-overflow: ellipsis; //溢出用省略号显示
+        white-space: nowrap; //溢出则不换行
+      }
+      .couponModal_rightLabel {
+        width: 253px;
+        font-size: 24px;
+        font-weight: 400;
+        margin-top: 23px;
+        overflow: hidden; //超出的文本隐藏
+        text-overflow: ellipsis; //溢出用省略号显示
+        white-space: nowrap; //溢出则不换行
+      }
+    }
+  }
+  .couponModalButton {
+    width: 420px;
+    height: 80px;
+    background: url(~@public/help/coupon5.png) no-repeat;
+    background-size: 100% 100%;
+    font-size: 32px;
+    font-weight: 500;
+    color: #ff4035;
+    text-align: center;
+    line-height: 80px;
+    margin-top: 80px;
+  }
+}

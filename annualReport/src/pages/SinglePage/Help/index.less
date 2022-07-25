@@ -1,0 +1,128 @@
+.helpBac {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(#020101, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .helpContent {
+    width: 658px;
+    height: 750px;
+    position: relative;
+    background: url(~@public/help/animation1.png) no-repeat;
+    background-size: 100% 100%;
+    padding-top: 119px;
+    position: relative;
+    z-index: 2;
+    .helpInfo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .helpHeadImg {
+        width: 120px;
+        height: 120px;
+        border: 1px solid #ffffff;
+        border-radius: 100%;
+        overflow: hidden;
+      }
+      .helpNickName {
+        width: 140px;
+        padding: 3px 10px;
+        background: linear-gradient(128deg, #fff1c4 0%, #ffe392 100%);
+        border-radius: 23px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 500;
+        color: #f73a3a;
+        overflow: hidden; //超出的文本隐藏
+        text-overflow: ellipsis; //溢出用省略号显示
+        white-space: nowrap; //溢出则不换行
+        margin-top: -20px;
+      }
+    }
+    .helpTileImg {
+      width: 279px;
+      height: 93px;
+      display: block;
+      margin: 50px auto 0;
+    }
+    .helpLottie {
+      width: 500px;
+      position: absolute;
+      top: 260px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .helpHandImg {
+      width: 114px;
+      height: 137px;
+      position: absolute;
+      bottom: 84px;
+      right: 166px;
+    }
+  }
+}
+
+.animation {
+  animation: shake 3s linear infinite;
+}
+.animation2 {
+  animation: scale 0.5s linear forwards;
+}
+
+@keyframes shake {
+  70%,
+  80% {
+    transform: rotate(7deg);
+  }
+  75% {
+    transform: rotate(-7deg);
+  }
+
+  65%,
+  85% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes scaleBig {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.helpAnimation {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  .helpAnimationButton {
+    width: 420px;
+    height: 98px;
+    background: url(~@public/help/animationButton.png) no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    left: 150px;
+    top: 1150px;
+    font-size: 36px;
+    font-weight: 600;
+    color: #fee2b3;
+    text-shadow: 0px 2px 2px #ba0000;
+    text-align: center;
+    line-height: 98px;
+    animation: scaleBig 0.5s linear forwards;
+  }
+}

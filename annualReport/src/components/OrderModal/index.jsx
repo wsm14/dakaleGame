@@ -2,34 +2,33 @@ import React, { useState, useEffect } from 'react';
 import './index.less';
 import { Mask, Button, Toast } from 'antd-mobile';
 import { useSelector, useDispatch, history } from 'umi';
-import {
-  fetchUserDefaultAddress,
-  fetchFreeGoodGetFreeGoodInfo,
-  fetchFreeGoodSetRewardAddress,
-} from '@/services/address';
+import { fetchUserDefaultAddress, fetchReceiveReward } from '@/services/single';
 import { checkCityName } from '@/utils/utils';
-import closeIcon from '@public/closeIcon.png';
-import address from '@public/usual/address.png';
-import rightPng from '@public/right.png';
-import { set } from '@umijs/deps/compiled/lodash';
+import closeIcon from '@public/help/closeIcon.png';
+import address from '@public/help/address.png';
+import rightPng from '@public/help/right.png';
 
 function index(props) {
-  const { visible = false, onClose, query = {}, pageFlag, getHomeDetail, time } = props;
-  const { packageObj = {}, addressObj, homeDetail } = useSelector((state) => state.receiveGoods); //商品信息  地址信息
-  const { gameInfo = {} } = homeDetail;
-  const { addressId, processId } = gameInfo;
+  const {
+    visible = false,
+    onClose,
+    goodDetail = {},
+    openSuccess,
+    fissionId,
+    fetchGetDetail,
+  } = props;
+  const { addressObj, addressBol } = useSelector((state) => state.receiveGoods); //商品信息  地址信息
 
   const dispatch = useDispatch();
 
   const addressLength = Object.keys(addressObj).length;
+
   useEffect(() => {
-    if (time) {
-      !addressLength && getAddress();
-      if (!addressId && processId) {
-        getGoodsDetail();
-      }
+    if (visible) {
+      getAddress();
     }
-  }, [time, addressId, processId]);
+  }, [visible]);
+
   //获取默认地址
   const getAddress = async () => {
     const res = await fetchUserDefaultAddress();
@@ -41,42 +40,17 @@ function index(props) {
     });
   };
 
-  //或者商品信息
-  const getGoodsDetail = async () => {
-    const res = await fetchFreeGoodGetFreeGoodInfo({
-      processId: processId,
-    });
-    const { content = {} } = res;
-    const { goodInfo } = content;
-    dispatch({
-      type: 'receiveGoods/save',
-      payload: { packageObj: goodInfo, orderVisible: true },
-    });
-  };
-
   const confirmAddress = async () => {
     if (addressLength) {
-      if (!addressId && processId) {
-        const { userAddressId } = addressObj;
-        const res = await fetchFreeGoodSetRewardAddress({
-          gameProcessId: processId,
-          addressId: userAddressId,
-        });
-        dispatch({
-          type: 'receiveGoods/save',
-          payload: {
-            orderVisible: false,
-          },
-        });
-        getHomeDetail();
-      } else {
+      const { userAddressId } = addressObj;
+      const res = await fetchReceiveReward({
+        fissionId: fissionId,
+        userAddressId,
+      });
+      if (res.success) {
+        fetchGetDetail();
         onClose();
-        dispatch({
-          type: 'receiveGoods/save',
-          payload: {
-            type: 'startSupply',
-          },
-        });
+        openSuccess();
       }
     } else {
       Toast.show({
@@ -86,10 +60,10 @@ function index(props) {
   };
   return (
     <>
-      <Mask visible={visible} onMaskClick={onClose} opacity="0.8">
+      <Mask visible={addressBol} onMaskClick={onClose} opacity="0.8">
         <div className="overlay">
           <div className="overlayContent">
-            <div className="overlayContent_title">确认订单</div>
+            <div className="overlayContent_title">确认收获地址</div>
             <div
               className="receiveInfo"
               onClick={() => {
@@ -118,9 +92,9 @@ function index(props) {
             <div className="overlayContent_line"></div>
 
             <div className="overlay_goods">
-              <img src={packageObj.packageImg}></img>
+              <img src={goodDetail.goodsImg}></img>
               <div className="overlay_goods_right">
-                <div className="overlay_goods_name">{packageObj.packageName}</div>
+                <div className="overlay_goods_name">{goodDetail.goodsName}</div>
                 {/* <div className="overlay_goods_remark">一袋/250g</div> */}
                 <div className="overlay_goods_label">100%超容易获得</div>
               </div>

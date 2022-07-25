@@ -33,4 +33,24 @@ export default [
     name: '',
     component: './SinglePage/TopicGame',
   },
+  {
+    path: '/free',
+    name: '哒卡乐翻天',
+    component: './SinglePage/freeCharge',
+  },
+  {
+    path: '/coupon',
+    name: '哒卡乐翻天',
+    component: './SinglePage/Coupon',
+  },
+  {
+    path: '/help',
+    name: '助力',
+    component: './SinglePage/Help',
+  },
+  {
+    path: '/address',
+    name: '地址列表',
+    component: './SinglePage/Address',
+  },
 ];

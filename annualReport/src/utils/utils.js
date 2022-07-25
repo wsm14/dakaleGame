@@ -149,3 +149,23 @@ export function getDownload() {
     }
   }
 }
+
+export const backgroundObj = function (url) {
+  if (url) {
+    return {
+      background: `url(${url}) no-repeat center/cover`,
+    };
+  }
+  return {};
+};
+
+//邀请人的数组
+export const filterList = (oldList, count = 2) => {
+  let list = [];
+  for (let i = 0; i < count; i++) {
+    if (oldList[i]) {
+      list.push(oldList[i]);
+    } else list.push({});
+  }
+  return list;
+};
